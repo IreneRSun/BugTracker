@@ -7,6 +7,9 @@
 --> The characteristics of each interface between the software and hardware components of the system, such as supported device types and communication protocols.
 
 ## 3.3 Software Interfaces
+The bug tracker connects to the MongoDB Atlas database for storing .
+There is a 
+
 --> The connections between your product and other software components, including databases, libraries, and operating systems.
 
 ## 3.4 Communications Interfaces
