@@ -1,19 +1,37 @@
 ﻿# 3. External Interface Requirements
 
 ## 3.1 User Interfaces
---> The key to application usability that includes content presentation, application navigation, and user assistance, among other components.
+
+### Content Presentation
+Content is presented using a web application template from ASP.NET.
+
+### Application Navigation
+Navigation bars are present for navigating between pages.
+
+### User Assistance
+Users can find developer contact information on the Contact page of the Bug Tracker website.
+Users can also use the website itself to report bugs by making a bug report on the Bug Tracker project.
 
 ## 3.2 Hardware Interfaces
---> The characteristics of each interface between the software and hardware components of the system, such as supported device types and communication protocols.
+Supported Device Types
+- Desktop
+- Mobile
+
+Communication Protocols
+- Internet, for browser connection, API calls, and database connection
 
 ## 3.3 Software Interfaces
-The bug tracker connects to the MongoDB Atlas database for storing .
-There is a 
-
---> The connections between your product and other software components, including databases, libraries, and operating systems.
+| Softwares Used | Usage |
+| --- | --- |
+| MySQL database | Storing user, project, and bug report information |
+| Auth0 API | Authentication and authorization for login and registration |
+| ASP.NET MVC Template | Template for bug tracker program |
+| C# Language | Connecting various other software interfaces and implementing bug tracker functionalities |
+| HTML Language | Creating web pages |
+| CSS | Website design |
+| Javascript | Controlling logic of web pages |
+| Browser that supports HTML, CSS, and Javascript | Host bug tracking program |
+* add other libraries and APIs that are used in the bug tracker program
 
 ## 3.4 Communications Interfaces
---> The requirements for the communication functions your product will use, like emails or embedded forms.
-
-* Embedded systems rely on external interface requirements. 
-* You should include things like screen layouts, button functions, and a description of how your product depends on other systems.
+N/A

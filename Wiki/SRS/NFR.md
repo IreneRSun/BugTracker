@@ -20,5 +20,3 @@
 
 ## 4.7 Usability
 --> How easy it is to use the product.
-
-* May also include performance, regulatory, and environmental requirements.

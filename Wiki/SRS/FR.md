@@ -1,6 +1,7 @@
 ﻿# 2. Functional Requirements
 
 ## Product Features
+
 ### Navigation Bar (Not Signed In)
 This navigation bar is located at the top of all pages where the user is not signed in.
 It provides navigation to the following pages: Home, About, Privacy, Contact, Login, and Sign Up
@@ -133,8 +134,7 @@ Under a good internet connection, the following conditions should be met:
 - Assigning and un-assigning developers should take less than 1 second
 - Assigning a priority level, severity level, or status to a bug should take less than 1 second
 - Removing a user from a project should take less than 1 second
-
-The project should work on both mobile and desktop.
+To this end, the database uses data normalization to reduce redundancy and indexing to reduce search time.
 
 ## Regulatory and Compliance Needs
 Any user data is used solely for the functionalities described above and will not be disclosed to third-parties.
