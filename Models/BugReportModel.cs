@@ -2,7 +2,7 @@
 
 namespace BugTracker.Models
 {
-    public class BugReport
+    public class BugReportModel
     {
         private DatabaseContext context;
 

@@ -1,6 +1,11 @@
-﻿using BugTracker.Models;
+﻿using Auth0.AspNetCore.Authentication;
+using BugTracker.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace BugTracker.Controllers
 {

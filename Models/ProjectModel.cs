@@ -1,6 +1,6 @@
 ﻿namespace BugTracker.Models
 {
-    public class Project
+    public class ProjectModel
     {
         private DatabaseContext context;
         

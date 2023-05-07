@@ -14,11 +14,9 @@ namespace BugTracker.Controllers
         public async Task Login(string returnUrl = "/")
         {
             var authenticationProperties = new LoginAuthenticationPropertiesBuilder()
-              // Indicate here where Auth0 should redirect the user after a login.
-              // Note that the resulting absolute Uri must be added to the
-              // **Allowed Callback URLs** settings for the app.
               .WithRedirectUri(returnUrl)
               .Build();
+            System.Diagnostics.Debug.WriteLine(returnUrl);
 
             await HttpContext.ChallengeAsync(
               Auth0Constants.AuthenticationScheme,
@@ -31,7 +29,7 @@ namespace BugTracker.Controllers
         {
             return View(new
             {
-                Name = User.Identity.Name,
+                Username = User.Identity.Name,
                 EmailAddress = User.Claims
                 .FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
                 ProfileImage = User.Claims
@@ -43,9 +41,6 @@ namespace BugTracker.Controllers
         public async Task Logout()
         {
             var authenticationProperties = new LogoutAuthenticationPropertiesBuilder()
-              // Indicate here where Auth0 should redirect the user after a logout.
-              // Note that the resulting absolute Uri must be added to the
-              // **Allowed Logout URLs** settings for the app.
               .WithRedirectUri(Url.Action("Index", "Home"))
               .Build();
 
