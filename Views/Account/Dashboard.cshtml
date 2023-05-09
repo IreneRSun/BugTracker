@@ -6,19 +6,6 @@
     ViewData["Title"] = "Dashboard";
 }
 
-<div>
-    <div>
-        <div class="row">
-            <h2>@ViewData["Title"]</h2>
-            <div>
-                <img src="@Model.ProfileImage" alt=""/>
-            </div>
-            <div>
-                <h3>@Model.Username</h3>
-                <p>
-                    @Model.EmailAddress
-                </p>
-            </div>
-        </div>
-    </div>
-</div>
+<h2>@ViewData["Title"]</h2>
+<img src="@Model.ProfileImage" alt="" />
+<h3>@Model.Username</h3>

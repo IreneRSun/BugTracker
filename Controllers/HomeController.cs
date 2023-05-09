@@ -1,11 +1,6 @@
-﻿using Auth0.AspNetCore.Authentication;
-using BugTracker.Models;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
+﻿using BugTracker.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using System.Security.Claims;
 
 namespace BugTracker.Controllers
 {
@@ -22,8 +17,22 @@ namespace BugTracker.Controllers
         {
             return View();
         }
+        public IActionResult About()
+        {
+            return View();
+        }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult Contact()
+        {
+            return View();
+        }
+
+        public IActionResult Logout()
         {
             return View();
         }

@@ -10,7 +10,5 @@ namespace BugTracker.Models
 
         // replace this, get from Dicebears instead
         public string ProfileImage { get; set; }
-        // remove this
-        public string EmailAddress { get; set; }
     }
 }

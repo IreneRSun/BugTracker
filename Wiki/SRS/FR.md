@@ -1,6 +1,6 @@
 ﻿# 2. Functional Requirements
 
-## Product Features
+## Details of Operations for Each Page
 
 ### Navigation Bar (Not Signed In)
 This navigation bar is located at the top of all pages where the user is not signed in.
@@ -112,9 +112,6 @@ Meanwhile, developers, who are users that are part of a project, in addition to 
 - Assign and un-assign developers to work on bugs
 - Assign priority level, severity level, and status to bugs
 - Remove themselves from projects
-
-## Details of Operations
---> Should have one for every main screen
 
 ## Data Handling
 User account data is handled by the Auth0 service, while other data is stored in a MySQL database. The MySQL database schema is represented by the following physical database entity-relationship model:
