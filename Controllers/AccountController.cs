@@ -5,7 +5,6 @@ using BugTracker.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using System.Security.Policy;
 
 namespace BugTracker.Controllers
 {
@@ -25,13 +24,39 @@ namespace BugTracker.Controllers
         }
 
         [Authorize]
-        public IActionResult Profile()
+        public IActionResult Dashboard()
         {
-            return View(new
+            return View(new UserModel()
             {
                 Username = User.Identity.Name,
                 EmailAddress = User.Claims
                 .FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
+                ProfileImage = User.Claims
+                .FirstOrDefault(c => c.Type == "picture")?.Value
+            });
+        }
+
+        [Authorize]
+        public IActionResult Profile()
+        {
+            return View(new UserModel()
+            {
+                EmailAddress = User.Claims
+                .FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
+                Username = User.Identity.Name,
+                ProfileImage = User.Claims
+                .FirstOrDefault(c => c.Type == "picture")?.Value
+            });
+        }
+
+        [Authorize]
+        public IActionResult Tasks()
+        {
+            return View(new UserModel()
+            {
+                EmailAddress = User.Claims
+                .FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
+                Username = User.Identity.Name,
                 ProfileImage = User.Claims
                 .FirstOrDefault(c => c.Type == "picture")?.Value
             });

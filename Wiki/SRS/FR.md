@@ -21,20 +21,13 @@ The contact page contains the contact information of the project developer(s), s
 ### Login Page
 The login page integrates the Auth0 API, which boasts multi-factor identification and anomaly detection, for authentication and authorization.
 The user can login with their unique username and password, their Google account, or their Github account.
-
-### Sign Up Page
-The registration page, like the login page, also integrates the Auth0 API.
-The user can to sign up using a unique username and password, their Google account, or their Github account.
+If the user does not have a registered account, the user can select to sign up.
 
 ### Signed Out Page
 After the user signs out of their account, they are directed to this page, which displays a message confirming their sign out.
 
-### Header (When Signed In)
-The header is located at the top of every page while the user is signed in.
-It contains a New Project button, which allows the user to create a new project.
-
 ### Navigation Bar (When Signed In)
-This navigation bar is located on the left of every page while the user is signed in.
+This navigation bar is located at the top of every page while the user is signed in.
 It provides navigation to the following pages: My Dashboard, My Profile, My Tasks
 
 ### My Dashboard Page
@@ -43,6 +36,7 @@ It displays the following user statistics: the number of unfinished assigned tas
 Beneath the statistics, projects that the user is a part of are displayed, and clicking on a project directs the user to the corresponding project's dashboard.
 If the user is not part of any projects, then under the projects section is the message "Create a new project or join one".
 The searchbar at the top of the page allows user to search for projects.
+To the right of the searchbar, there is a New Project button, which allows the user to create a new project.
 
 ### My Profile Page
 This page displays the user's profile information, which includes the user's username and profile photo.
@@ -115,7 +109,8 @@ Meanwhile, developers, who are users that are part of a project, in addition to 
 
 ## Data Handling
 User account data is handled by the Auth0 service, while other data is stored in a MySQL database. The MySQL database schema is represented by the following physical database entity-relationship model:
-![ER Model](/BugTracker/Wiki/SRS/Bug Tracker Physical ER Diagram.png?raw=true "Bug Tracker Entity-Relationship Model")
+![ER Model](/BugTracker/Wiki/SRS/https://github.com/IreneRSun/BugTracker/blob/main/Wiki/SRS/Bug%20Tracker%20Physical%20ER%20Diagram.png?raw=true "Bug Tracker Entity-Relationship Model")
+Note that here we assume that emails are unique for each user and hence functions as a natural key.
 
 ## Performance Requirements
 This project assumes a medium sized database.

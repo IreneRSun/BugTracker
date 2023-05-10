@@ -1,10 +1,8 @@
-﻿using System.Reflection.Metadata;
-
-namespace BugTracker.Models
+﻿namespace BugTracker.Models
 {
     public class UserModel
     {
-        public string UserId { get; set; }
+        public string EmailAddress { get; set; }
 
         public string Username { get; set; }
 

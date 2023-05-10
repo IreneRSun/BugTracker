@@ -1,11 +1,9 @@
 ﻿@model BugTracker.Models.UserModel
 @{
-    Layout = "_Layout";
-}
-@{
     ViewData["Title"] = "Dashboard";
 }
 
 <h2>@ViewData["Title"]</h2>
 <img src="@Model.ProfileImage" alt="" />
 <h3>@Model.Username</h3>
+<h3>@Model.EmailAddress</h3>
