@@ -109,7 +109,7 @@ Meanwhile, developers, who are users that are part of a project, in addition to 
 
 ## Data Handling
 User account data is handled by the Auth0 service, while other data is stored in a MySQL database. The MySQL database schema is represented by the following physical database entity-relationship model:
-![ER Model](/BugTracker/Wiki/SRS/https://github.com/IreneRSun/BugTracker/blob/main/Wiki/SRS/Bug%20Tracker%20Physical%20ER%20Diagram.png?raw=true "Bug Tracker Entity-Relationship Model")
+![ER Model](https://github.com/IreneRSun/BugTracker/blob/main/Wiki/SRS/Bug%20Tracker%20Physical%20ER%20Diagram.png "Bug Tracker Entity-Relationship Model")
 Note that here we assume that emails are unique for each user and hence functions as a natural key.
 
 ## Performance Requirements
