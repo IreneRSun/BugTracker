@@ -1,8 +1,5 @@
 using Auth0.AspNetCore.Authentication;
-using BugTracker.Controllers;
 using BugTracker.Models;
-using Microsoft.AspNetCore.Mvc;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,11 +8,18 @@ builder.Services.AddControllersWithViews();
 // Database services
 builder.Services.Add(new ServiceDescriptor(typeof(DatabaseContext), new DatabaseContext(builder.Configuration.GetConnectionString("DefaultConnection"))));
 // Auth0 services
-builder.Services.AddAuth0WebAppAuthentication(options =>
-{
-    options.Domain = builder.Configuration["Auth0:Domain"];
-    options.ClientId = builder.Configuration["Auth0:ClientId"];
-});
+builder.Services
+    .AddAuth0WebAppAuthentication(options =>
+    {
+        options.Domain = builder.Configuration["Auth0:Domain"];
+        options.ClientId = builder.Configuration["Auth0:ClientId"];
+        options.ClientSecret = builder.Configuration["Auth0:ClientSecret"];
+        options.Scope = "openid profile email";
+    })
+    .WithAccessToken(options =>
+    {
+        options.Audience = builder.Configuration["Auth0:Audience"];
+    });
 
 var app = builder.Build();
 

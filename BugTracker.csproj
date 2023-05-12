@@ -8,7 +8,9 @@
 
   <ItemGroup>
     <PackageReference Include="Auth0.AspNetCore.Authentication" Version="1.2.0" />
+    <PackageReference Include="Auth0.ManagementApi" Version="7.19.1" />
     <PackageReference Include="MySql.Data" Version="8.0.33" />
+    <PackageReference Include="RestSharp" Version="110.2.0" />
   </ItemGroup>
 
 </Project>

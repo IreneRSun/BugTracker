@@ -2,8 +2,27 @@
 @{
     ViewData["Title"] = "Profile";
 }
-
 <h2>@ViewData["Title"]</h2>
-<img src="@Model.ProfileImage" alt="" />
-<h3>@Model.Username</h3>
-<h3>@Model.EmailAddress</h3>
+
+<form method="post" asp-controller="Account" asp-action="UpdateProfile">
+    <div class="mt-sm-2">
+        <img class="rounded-circle" src="@Model.ProfileImage" alt=""/>
+    </div>
+    <div class="mt-sm-2">
+        <h5>Email</h5>
+        <label>@Model.EmailAddress</label>
+    </div>
+    <div class="mt-sm-2">
+        <h5>Username</h5>
+        <input type="text" name="username" value="@Model.UserName"/>
+    </div>
+    <div class="mt-sm-4">
+        <button type="submit" class="border-light rounded-pill">
+            <span class="material-symbols-outlined">edit</span> Update Profile
+        </button>
+    </div>
+</form>
+<form method="post" onSubmit="return confirm('Are you sure you wish to delete your account? This action is not cannot be undone.');" class="mt-sm-5" asp-controller="Account" asp-action="DeleteAccount">
+    <button class="btn-danger">Delete Account</button>
+</form>
+

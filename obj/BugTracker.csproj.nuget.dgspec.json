@@ -44,9 +44,17 @@
               "target": "Package",
               "version": "[1.2.0, )"
             },
+            "Auth0.ManagementApi": {
+              "target": "Package",
+              "version": "[7.19.1, )"
+            },
             "MySql.Data": {
               "target": "Package",
               "version": "[8.0.33, )"
+            },
+            "RestSharp": {
+              "target": "Package",
+              "version": "[110.2.0, )"
             }
           },
           "imports": [

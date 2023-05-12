@@ -9,7 +9,9 @@
       "BugTracker/1.0.0": {
         "dependencies": {
           "Auth0.AspNetCore.Authentication": "1.2.0",
-          "MySql.Data": "8.0.33"
+          "Auth0.ManagementApi": "7.19.1",
+          "MySql.Data": "8.0.33",
+          "RestSharp": "110.2.0"
         },
         "runtime": {
           "BugTracker.dll": {}
@@ -25,6 +27,28 @@
           "lib/net6.0/Auth0.AspNetCore.Authentication.dll": {
             "assemblyVersion": "1.2.0.0",
             "fileVersion": "1.2.0.0"
+          }
+        }
+      },
+      "Auth0.Core/7.19.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Auth0.Core.dll": {
+            "assemblyVersion": "7.19.1.0",
+            "fileVersion": "7.19.1.0"
+          }
+        }
+      },
+      "Auth0.ManagementApi/7.19.1": {
+        "dependencies": {
+          "Auth0.Core": "7.19.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Auth0.ManagementApi.dll": {
+            "assemblyVersion": "7.19.1.0",
+            "fileVersion": "7.19.1.0"
           }
         }
       },
@@ -90,7 +114,7 @@
           "Microsoft.IdentityModel.Tokens": "6.27.0",
           "System.Text.Encoding": "4.3.0",
           "System.Text.Encodings.Web": "7.0.0",
-          "System.Text.Json": "7.0.1"
+          "System.Text.Json": "7.0.2"
         },
         "runtime": {
           "lib/net6.0/Microsoft.IdentityModel.JsonWebTokens.dll": {
@@ -179,7 +203,7 @@
           "System.Runtime.Loader": "4.3.0",
           "System.Security.Permissions": "4.7.0",
           "System.Text.Encoding.CodePages": "4.4.0",
-          "System.Text.Json": "7.0.1",
+          "System.Text.Json": "7.0.2",
           "System.Threading.Tasks.Extensions": "4.5.4"
         },
         "runtime": {
@@ -216,11 +240,30 @@
           }
         }
       },
+      "Newtonsoft.Json/13.0.1": {
+        "runtime": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "13.0.0.0",
+            "fileVersion": "13.0.1.25517"
+          }
+        }
+      },
       "Portable.BouncyCastle/1.9.0": {
         "runtime": {
           "lib/netstandard2.0/BouncyCastle.Crypto.dll": {
             "assemblyVersion": "1.9.0.0",
             "fileVersion": "1.9.0.1"
+          }
+        }
+      },
+      "RestSharp/110.2.0": {
+        "dependencies": {
+          "System.Text.Json": "7.0.2"
+        },
+        "runtime": {
+          "lib/net6.0/RestSharp.dll": {
+            "assemblyVersion": "110.2.0.0",
+            "fileVersion": "110.2.0.0"
           }
         }
       },
@@ -388,7 +431,7 @@
           }
         }
       },
-      "System.Text.Json/7.0.1": {
+      "System.Text.Json/7.0.2": {
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "6.0.0",
           "System.Text.Encodings.Web": "7.0.0"
@@ -396,7 +439,7 @@
         "runtime": {
           "lib/net6.0/System.Text.Json.dll": {
             "assemblyVersion": "7.0.0.0",
-            "fileVersion": "7.0.122.56804"
+            "fileVersion": "7.0.323.6910"
           }
         }
       },
@@ -441,6 +484,20 @@
       "sha512": "sha512-/s0zYx/dVa+o01sLyQhLBmD853UnbAr+GtznbKtI4FawlvlPB3H++02Tjx6so8eKrIa8+4us6ug3FcqrMleK9g==",
       "path": "auth0.aspnetcore.authentication/1.2.0",
       "hashPath": "auth0.aspnetcore.authentication.1.2.0.nupkg.sha512"
+    },
+    "Auth0.Core/7.19.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-nfKidOEpCXM4fKkZ/WwkHpoplUh1HNGrVZpRwCF+q/PEHJoYHggSkfoeoqmRLOq5HSPAH1S+tsG7VmJA6sGDQQ==",
+      "path": "auth0.core/7.19.1",
+      "hashPath": "auth0.core.7.19.1.nupkg.sha512"
+    },
+    "Auth0.ManagementApi/7.19.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-8NmPY5uYlAOpAxIby2hGaLHNbAMBCQTgqw/tk4WDxMKUBOQ3vKlzKbjoMcrf1EaOlwe3TusjrBztGG3aBgynnQ==",
+      "path": "auth0.managementapi/7.19.1",
+      "hashPath": "auth0.managementapi.7.19.1.nupkg.sha512"
     },
     "Google.Protobuf/3.21.9": {
       "type": "package",
@@ -554,12 +611,26 @@
       "path": "mysql.data/8.0.33",
       "hashPath": "mysql.data.8.0.33.nupkg.sha512"
     },
+    "Newtonsoft.Json/13.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A==",
+      "path": "newtonsoft.json/13.0.1",
+      "hashPath": "newtonsoft.json.13.0.1.nupkg.sha512"
+    },
     "Portable.BouncyCastle/1.9.0": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-eZZBCABzVOek+id9Xy04HhmgykF0wZg9wpByzrWN7q8qEI0Qen9b7tfd7w8VA3dOeesumMG7C5ZPy0jk7PSRHw==",
       "path": "portable.bouncycastle/1.9.0",
       "hashPath": "portable.bouncycastle.1.9.0.nupkg.sha512"
+    },
+    "RestSharp/110.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-FXGw0IMcqY7yO/hzS9QrD3iNswNgb9UxJnxWmfOxmGs4kRlZWqdtBoGPLuhlbgsDzX1RFo4WKui8TGGKXWKalw==",
+      "path": "restsharp/110.2.0",
+      "hashPath": "restsharp.110.2.0.nupkg.sha512"
     },
     "System.Buffers/4.5.1": {
       "type": "package",
@@ -694,12 +765,12 @@
       "path": "system.text.encodings.web/7.0.0",
       "hashPath": "system.text.encodings.web.7.0.0.nupkg.sha512"
     },
-    "System.Text.Json/7.0.1": {
+    "System.Text.Json/7.0.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-OtDEmCCiNl8JAduFKZ/r0Sw6XZNHwIicUYy/mXgMDGeOsZLshH37qi3oPRzFYiryVktiMoQLByMGPtRCEMYbeQ==",
-      "path": "system.text.json/7.0.1",
-      "hashPath": "system.text.json.7.0.1.nupkg.sha512"
+      "sha512": "sha512-/LZf/JrGyilojqwpaywb+sSz8Tew7ij4K/Sk+UW8AKfAK7KRhR6mKpKtTm06cYA7bCpGTWfYksIW+mVsdxPegQ==",
+      "path": "system.text.json/7.0.2",
+      "hashPath": "system.text.json.7.0.2.nupkg.sha512"
     },
     "System.Threading.Tasks/4.3.0": {
       "type": "package",
