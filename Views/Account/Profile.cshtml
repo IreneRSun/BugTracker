@@ -4,25 +4,32 @@
 }
 <h2>@ViewData["Title"]</h2>
 
+<!-- edit profile form -->
 <form method="post" asp-controller="Account" asp-action="UpdateProfile">
+    <!-- image upload -->
     <div class="mt-sm-2">
-        <img class="rounded-circle" src="@Model.ProfileImage" alt=""/>
+        <img id="avatar" src="@Model.Avatar" alt="" class="rounded-circle" width="100px" height="100px" />
+        <input type="file" id="image-file" onchange="previewImage()" />
     </div>
-    <div class="mt-sm-2">
+    <!-- email -->
+    <div class="mt-sm-4">
         <h5>Email</h5>
-        <label>@Model.EmailAddress</label>
+        <label name="email">@Model.EmailAddress</label>
     </div>
+    <!-- username edit -->
     <div class="mt-sm-2">
         <h5>Username</h5>
         <input type="text" name="username" value="@Model.UserName"/>
     </div>
+    <!-- update profile button -->
     <div class="mt-sm-4">
         <button type="submit" class="border-light rounded-pill">
             <span class="material-symbols-outlined">edit</span> Update Profile
         </button>
     </div>
 </form>
-<form method="post" onSubmit="return confirm('Are you sure you wish to delete your account? This action is not cannot be undone.');" class="mt-sm-5" asp-controller="Account" asp-action="DeleteAccount">
+
+<!-- account deletion form -->
+<form method="post" onSubmit="return confirm('This action is not cannot be undone. Are you sure you wish to proceed?');" class="mt-sm-5" asp-controller="Account" asp-action="DeleteAccount">
     <button class="btn-danger">Delete Account</button>
 </form>
-

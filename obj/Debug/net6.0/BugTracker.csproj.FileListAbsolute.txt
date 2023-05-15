@@ -69,3 +69,9 @@ C:\Users\irene\VS\repos\BugTracker\obj\Debug\net6.0\BugTracker.pdb
 C:\Users\irene\VS\repos\BugTracker\obj\Debug\net6.0\BugTracker.genruntimeconfig.cache
 C:\Users\irene\VS\repos\BugTracker\obj\Debug\net6.0\ref\BugTracker.dll
 C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\RestSharp.dll
+C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\System.Web.Razor.dll
+C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\System.Web.Helpers.dll
+C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\System.Web.WebPages.Deployment.dll
+C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\System.Web.WebPages.Razor.dll
+C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\System.Web.WebPages.dll
+C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\Microsoft.Web.Infrastructure.dll

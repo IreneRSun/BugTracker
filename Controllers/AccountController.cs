@@ -9,7 +9,6 @@ using Auth0.ManagementApi;
 using Auth0.ManagementApi.Models;
 using RestSharp;
 using Newtonsoft.Json;
-using System.Net.Mail;
 
 namespace BugTracker.Controllers
 {
@@ -35,7 +34,7 @@ namespace BugTracker.Controllers
                 UserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value,
                 EmailAddress = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
                 UserName = User.Claims.FirstOrDefault(c => c.Type == "name")?.Value,
-                ProfileImage = User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value
+                Avatar = User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value
             });
         }
 
@@ -47,7 +46,7 @@ namespace BugTracker.Controllers
                 UserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value,
                 EmailAddress = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
                 UserName = User.Claims.FirstOrDefault(c => c.Type == "name")?.Value,
-                ProfileImage = User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value
+                Avatar = User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value
             });
         }
 
@@ -59,7 +58,7 @@ namespace BugTracker.Controllers
                 UserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value,
                 EmailAddress = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
                 UserName = User.Claims.FirstOrDefault(c => c.Type == "name")?.Value,
-                ProfileImage = User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value
+                Avatar = User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value
             });
         }
 
@@ -104,10 +103,6 @@ namespace BugTracker.Controllers
             var accessToken = getAccessToken();
             var client = new ManagementApiClient(accessToken, "dev-pa5n40m7s26hur07.us.auth0.com");
 
-            /* check if the new name is the same as the old one
-            var oldName = User.Claims.FirstOrDefault(c => c.Type == "name")?.Value;
-            if (oldName == name) return; */
-
             // request username update
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             var request = new UserUpdateRequest
@@ -115,6 +110,10 @@ namespace BugTracker.Controllers
                 FullName = newName
             };
             await client.Users.UpdateAsync(userId, request);
+
+            // refresh profile data
+            await Logout();
+            await Login();
         }
 
         [HttpPost]
@@ -127,8 +126,6 @@ namespace BugTracker.Controllers
             await UpdateUsername(username);
 
             // return to updated profile page
-            await Logout();
-            await Login();
             return RedirectToAction("Profile", "Account");
         }
 

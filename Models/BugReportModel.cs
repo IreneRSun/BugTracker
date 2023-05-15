@@ -6,7 +6,7 @@ namespace BugTracker.Models
     {
         private DatabaseContext context;
 
-        public string ReportId { get; set; }
+        public string ReportId { get; }
 
         public string ReporterId { get; set; }
 

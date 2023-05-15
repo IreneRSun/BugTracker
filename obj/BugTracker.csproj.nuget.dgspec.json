@@ -48,6 +48,10 @@
               "target": "Package",
               "version": "[7.19.1, )"
             },
+            "Microsoft.AspNet.WebPages": {
+              "target": "Package",
+              "version": "[3.2.9, )"
+            },
             "MySql.Data": {
               "target": "Package",
               "version": "[8.0.33, )"
