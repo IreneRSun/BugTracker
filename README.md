@@ -1,5 +1,12 @@
 # BugTracker
 
+## Setup
+### App Dependencies Setup
+...
+
+### MySQL Database Setup
+...
+
 ## Tutorials/Guides
 Name: How to write a software requirement document (with template) </br>
 Author: Team Asana </br>

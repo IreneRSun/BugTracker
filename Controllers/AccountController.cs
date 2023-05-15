@@ -12,8 +12,15 @@ using Newtonsoft.Json;
 
 namespace BugTracker.Controllers
 {
+    /// <summary>
+    /// Class <c>AccountController</c> is a controller handling user-account related actions.
+    /// </summary>
     public class AccountController : Controller
     {
+        /// <summary>
+        /// Method <c>Login</c> handles the login of the user.
+        /// </summary>
+        /// <param name="returnUrl">The location to send the user after authentication.</param>
         public async Task Login(string returnUrl = "/")
         {
             var authenticationProperties = new LoginAuthenticationPropertiesBuilder()
@@ -26,6 +33,10 @@ namespace BugTracker.Controllers
             );
         }
 
+        /// <summary>
+        /// Method <c>Dashboard</c> gets the dashboard for the user.
+        /// </summary>
+        /// <returns>The user dashboard action result.</returns>
         [Authorize]
         public IActionResult Dashboard()
         {
@@ -38,6 +49,10 @@ namespace BugTracker.Controllers
             });
         }
 
+        /// <summary>
+        /// Method <c>Profile</c> gets the profile for the user.
+        /// </summary>
+        /// <returns>The user profile action result.</returns>
         [Authorize]
         public IActionResult Profile()
         {
@@ -50,6 +65,10 @@ namespace BugTracker.Controllers
             });
         }
 
+        /// <summary>
+        /// Method <c>Tasks</c> gets the tasks for the user.
+        /// </summary>
+        /// <returns>The user tasks action result.</returns>
         [Authorize]
         public IActionResult Tasks()
         {
@@ -62,6 +81,9 @@ namespace BugTracker.Controllers
             });
         }
 
+        /// <summary>
+        /// Method <c>Logout</c> handles the logout of the user.
+        /// </summary>
         [Authorize]
         public async Task Logout()
         {
@@ -80,7 +102,11 @@ namespace BugTracker.Controllers
             );
         }
 
-        private string getAccessToken()
+        /// <summary>
+        /// Method <c>getAccessToken</c> fetches the Auth0 access token.
+        /// </summary>
+        /// <returns>The Auth0 access token.</returns>
+        private static string GetAccessToken()
         {
             // request token
             var client = new RestClient("https://dev-pa5n40m7s26hur07.us.auth0.com");
@@ -96,11 +122,15 @@ namespace BugTracker.Controllers
             return token;
         }
 
+        /// <summary>
+        /// Method <c>UpdateUsername</c> updates the username of the user in the Auth0 database.
+        /// </summary>
+        /// <param name="newName">The new name to update the username to.</param>
         [Authorize]
         private async Task UpdateUsername(string newName)
         {
             // create API client
-            var accessToken = getAccessToken();
+            var accessToken = GetAccessToken();
             var client = new ManagementApiClient(accessToken, "dev-pa5n40m7s26hur07.us.auth0.com");
 
             // request username update
@@ -110,12 +140,12 @@ namespace BugTracker.Controllers
                 FullName = newName
             };
             await client.Users.UpdateAsync(userId, request);
-
-            // refresh profile data
-            await Logout();
-            await Login();
         }
 
+        /// <summary>
+        /// Method <c>UpdateProfile</c> handles user profile updates.
+        /// </summary>
+        /// <returns>The updated profile action result.</returns>
         [HttpPost]
         public async Task<IActionResult> UpdateProfile()
         {
@@ -126,14 +156,19 @@ namespace BugTracker.Controllers
             await UpdateUsername(username);
 
             // return to updated profile page
+            await Logout();  // to refresh User.Claims data
+            await Login();  // to refresh User.Claims data
             return RedirectToAction("Profile", "Account");
         }
 
+        /// <summary>
+        /// Method <c>DeleteAccount</c> handles the deletion of the user account.
+        /// </summary>
         [Authorize]
         public async Task DeleteAccount()
         {
             // create API client
-            var accessToken = getAccessToken();
+            var accessToken = GetAccessToken();
             var client = new ManagementApiClient(accessToken, "dev-pa5n40m7s26hur07.us.auth0.com");
 
             // request account deletion

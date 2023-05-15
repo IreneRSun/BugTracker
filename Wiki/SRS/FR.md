@@ -60,14 +60,13 @@ If the user is the only developer of the project, clicking on the delete button 
 Else, the developer is simply removed from the project, though their contributions remain.
 
 ### Bug Report Popup Fields
-Summary: This field is for a summary of the bug. It has a word limit, and is a required field.
+Summary: This field is for a summary of the bug. It has a character limit, and is a required field.
 Software Version: This field is for the software version of the project the user was using when they experienced the bug. This is a required field.
 Device: This field is for the device the user experienced the bug on. It is not a required field.
 OS: This field is for the operating system the user experienced the bug on. It is not a required field.
 Expected Result: This field is for what result the user expected the project's software to do. This is a required field that has a word limit.
 Actual Result: This field is for what actually happened. This is a required field that has a word limit.
 Steps to Reproduce Bug: This field is for the steps to reproduce the bug described. This is a required field without a word limit.
-Evidence: This field is for any screenshots or videos the user may want to include. This is not a required field.
 Other Details: This field is for other details that may be relevant to the bug. It does not have a word limit, and is not a required field.
 
 ### Project Bug Reports Page

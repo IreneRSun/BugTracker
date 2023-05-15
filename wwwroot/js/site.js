@@ -3,7 +3,7 @@
 
 // Write your JavaScript code.
 
-// for previewing uploaded image on profile page
+/** Updates the profile image on the profile page to the uploaded image for previewing */
 function previewImage() {
     const input = document.getElementById('image-file');
     const avatar = document.getElementById('avatar');
