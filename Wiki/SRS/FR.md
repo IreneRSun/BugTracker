@@ -4,7 +4,7 @@
 
 ### Navigation Bar (Not Signed In)
 This navigation bar is located at the top of all pages where the user is not signed in.
-It provides navigation to the following pages: Home, About, Privacy, Contact, Login, and Sign Up
+It provides navigation to the following pages: Home, About, Privacy, Contact, and Login.
 
 ### Home Page
 This it the first page the user sees when opening the web application and it welcomes the user.
@@ -36,13 +36,14 @@ It displays the following user statistics: the number of unfinished assigned tas
 Beneath the statistics, projects that the user is a part of are displayed, and clicking on a project directs the user to the corresponding project's dashboard.
 If the user is not part of any projects, then under the projects section is the message "Create a new project or join one".
 The searchbar at the top of the page allows user to search for projects.
-To the right of the searchbar, there is a New Project button, which allows the user to create a new project.
+To the right of the searchbar, there is a "New Project" button, which allows the user to create a new project.
 
 ### My Profile Page
-This page displays the user's profile information, which includes the user's username and profile photo.
-Clicking on the edit username button allows you to enter a new username, and clicking on the upload photo button allows you to upload a new photo to change your profile photo to.
-After editing your profile information, clicking the "Save" button changes your profile information or notify you of any issues with your changes.
-There is also a delete account button, which when clicked on asks you to confirm the deletion before deleting your account.
+This page displays the user's profile information, which includes the user's username, email, and profile photo.
+Clicking on the username allows you to enter a new username, and clicking on "Browse" allows you to upload a new photo to change your profile photo to.
+When uploading a new photo, a preview of the new profile image is provided.
+After editing your profile information, clicking the "Save" button changes your profile information or notifies you of any issues with your changes.
+There is also a "Delete Account" button, which when clicked on asks you to confirm the deletion before deleting your account.
 
 ### My Tasks
 This page displays all the issues(bug reports) assigned to the user.
