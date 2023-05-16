@@ -118,7 +118,7 @@ namespace BugTracker.Controllers
 
             // get token from request
             var json = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Content);
-            var token = json["access_token"];
+            string? token = json["access_token"];
             return token;
         }
 
@@ -130,11 +130,11 @@ namespace BugTracker.Controllers
         private async Task UpdateUsername(string newName)
         {
             // create API client
-            var accessToken = GetAccessToken();
+            string accessToken = GetAccessToken();
             var client = new ManagementApiClient(accessToken, "dev-pa5n40m7s26hur07.us.auth0.com");
 
             // request username update
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            string? userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             var request = new UserUpdateRequest
             {
                 FullName = newName
@@ -168,11 +168,11 @@ namespace BugTracker.Controllers
         public async Task DeleteAccount()
         {
             // create API client
-            var accessToken = GetAccessToken();
+            string accessToken = GetAccessToken();
             var client = new ManagementApiClient(accessToken, "dev-pa5n40m7s26hur07.us.auth0.com");
 
             // request account deletion
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            string? userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             await client.Users.DeleteAsync(userId);
 
             // log the user out
