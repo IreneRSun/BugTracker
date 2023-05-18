@@ -1,8 +1,5 @@
-﻿using Auth0.ManagementApi.Models;
-using crypto;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using System.Data;
-using System.Security.Cryptography;
 
 namespace BugTracker.Models
 {
@@ -52,8 +49,9 @@ namespace BugTracker.Models
             return hash;
         }
 
-        public string? GetUserAvatar(string userId)
+        public string? GetAvatar(string userId)
         {
+            System.Diagnostics.Debug.WriteLine("getting avatar");
             // connect to database
             using MySqlConnection connection = GetConnection();
             connection.Open();
@@ -80,8 +78,9 @@ namespace BugTracker.Models
             return avatar;
         }
 
-        public void SetUserAvatar(string userId, byte[] imageData)
+        public void SetAvatar(string userId, byte[] imageData)
         {
+            System.Diagnostics.Debug.WriteLine("setting avatar");
             // connect to database
             using MySqlConnection connection = GetConnection();
             connection.Open();
@@ -91,8 +90,10 @@ namespace BugTracker.Models
             using var query_cmd = new MySqlCommand(user_query, connection);
             query_cmd.Parameters.AddWithValue("@uid", userId);
             using MySqlDataReader reader = query_cmd.ExecuteReader();
+            bool userExists = reader.HasRows;
+            reader.Close();
 
-            if (reader.HasRows)
+            if (userExists)
             {
                 // update user data
                 var sql = "UPDATE users SET avatar = @imageData WHERE uid = @uid";
@@ -112,7 +113,6 @@ namespace BugTracker.Models
             }
 
             // close the connection
-            reader.Close();
             connection.Close();
         }
 

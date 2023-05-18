@@ -56,12 +56,17 @@ namespace BugTracker.Controllers
         [Authorize]
         public IActionResult Profile()
         {
+            // get avatar from database, if any
+            DatabaseContext dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+            string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            string? avatar = dbContext.GetAvatar(userId);
+            if (avatar == null) { avatar = User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value; }
             return View(new UserModel()
             {
-                UserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value,
+                UserId = userId,
                 EmailAddress = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
                 UserName = User.Claims.FirstOrDefault(c => c.Type == "name")?.Value,
-                Avatar = User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value
+                Avatar = avatar
             });
         }
 
@@ -110,11 +115,10 @@ namespace BugTracker.Controllers
         {
             // request token
             var client = new RestClient("https://dev-pa5n40m7s26hur07.us.auth0.com");
-            var request = new RestRequest("/oauth/token", RestSharp.Method.Post);
+            var request = new RestRequest("/oauth/token", Method.Post);
             request.AddHeader("content-type", "application/json");
             request.AddParameter("application/json", "{\"client_id\":\"KPnNd3t1fcZ7YStDTSLNI12jy3W4B1Ue\",\"client_secret\":\"LEdemPNNQanSER5vvzPszqGrBU6HA_KOaA957daICIl7Cz81pDGeIc6ITRPo_aMs\",\"audience\":\"https://dev-pa5n40m7s26hur07.us.auth0.com/api/v2/\",\"grant_type\":\"client_credentials\"}", ParameterType.RequestBody);
             RestResponse response = client.Execute(request);
-            System.Diagnostics.Debug.WriteLine(response.Content);
 
             // get token from request
             var json = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Content);
@@ -142,6 +146,22 @@ namespace BugTracker.Controllers
             await client.Users.UpdateAsync(userId, request);
         }
 
+        private async Task UpdateAvatar(IFormFile? fileInput)
+        {
+            long fileSize = fileInput.Length;
+            double fileFizeMB = fileSize / (1024.0 * 1024.0);
+            if (fileInput != null && fileSize > 0 && fileFizeMB < 16)
+            {
+                // convert input into byte array
+                using var memoryStream = new MemoryStream();
+                await fileInput.CopyToAsync(memoryStream);
+                byte[] fileData = memoryStream.ToArray();
+                // add data to database
+                DatabaseContext dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+                dbContext.SetAvatar(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value, fileData);
+            }
+        }
+
         /// <summary>
         /// Method <c>UpdateProfile</c> handles user profile updates.
         /// </summary>
@@ -151,9 +171,12 @@ namespace BugTracker.Controllers
         {
             // get input from form
             string username = Request.Form["username"];
+            IFormFile? fileInput = HttpContext.Request.Form.Files["image-file"];
+            System.Diagnostics.Debug.WriteLine(fileInput == null);
 
-            // update fields
+            // update fields in database
             await UpdateUsername(username);
+            await UpdateAvatar(fileInput);
 
             // return to updated profile page
             await Logout();  // to refresh User.Claims data

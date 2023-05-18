@@ -9,7 +9,8 @@
     <!-- image upload -->
     <div class="mt-sm-2">
         <img id="avatar" src="@Model.Avatar" alt="" class="rounded-circle" width="100px" height="100px" />
-        <input type="file" id="image-file" onchange="previewImage()" />
+        <input type="file" id="image-file" name="image-file" onchange="previewImage()" />
+        <label id="file-size-warning" style="display: none;">File size too large. Select a file smaller than 16MB.</label>
     </div>
     <!-- email -->
     <div class="mt-sm-4">

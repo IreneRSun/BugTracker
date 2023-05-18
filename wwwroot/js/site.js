@@ -5,18 +5,30 @@
 
 /** Updates the profile image on the profile page to the uploaded image for previewing */
 function previewImage() {
-    const input = document.getElementById('image-file');
-    const avatar = document.getElementById('avatar');
+    const input = document.getElementById("image-file");
+    const avatar = document.getElementById("avatar");
+    const warning = document.getElementById("file-size-warning");
 
     // set up file reader
     const reader = new FileReader();
     reader.onload = () => {
-        avatar.setAttribute('src', reader.result);
+        avatar.setAttribute("src", reader.result);
     }
 
-    // read the file input, if a file was selected
+    // read the file input or warn the user if a file was selected
     if (input.files && input.files.length) {
         const selectedFile = input.files[0];
+
+        // check the file size
+        const fileSizeMb = selectedFile.size / (1024 * 1024);
+        if (fileSizeMB > 16) {
+            warning.style.display = "block";
+            return;
+        } else {
+            warning.style.display = "none";
+        }
+
+        // read the file
         if (selectedFile) {
             reader.readAsDataURL(selectedFile);
         }
