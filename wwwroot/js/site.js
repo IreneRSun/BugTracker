@@ -15,7 +15,7 @@ function previewImage() {
     }
 
     // read the file input, if a file was selected
-    if (input.files) {
+    if (input.files && input.files.length) {
         const selectedFile = input.files[0];
         if (selectedFile) {
             reader.readAsDataURL(selectedFile);

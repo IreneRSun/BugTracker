@@ -6,7 +6,7 @@ namespace BugTracker.Models
     {
         private DatabaseContext context;
 
-        public string ReportId { get; }
+        public string ReportId { get; set; }
 
         public string ReporterId { get; set; }
 
@@ -14,7 +14,7 @@ namespace BugTracker.Models
 
         public string Summary { get; set; }
 
-        public float SoftwareVersion { get; set; }
+        public decimal SoftwareVersion { get; set; }
 
         public string Device { get; set; }
 

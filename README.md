@@ -36,36 +36,36 @@ priority CHAR,
 severity TINYINT,
 status VARCHAR(30),
 date DATETIME DEFAULT CURRENT_TIMESTAMP,
-FOREIGN KEY (reportee) REFERENCES users(uid),
-FOREIGN KEY (project) REFERENCES projects(pid)
+FOREIGN KEY (reportee) REFERENCES users(uid) ON DELETE SET NULL,
+FOREIGN KEY (project) REFERENCES projects(pid) ON DELETE CASCADE
 );
 
 CREATE TABLE comments (
 cid CHAR(64) PRIMARY KEY,
 commenter VARCHAR(64),
-bug_report CHAR(64),
+bug_report CHAR(64) NOT NULL,
 reply_to CHAR(64),
 comment TEXT NOT NULL,
 date DATETIME DEFAULT CURRENT_TIMESTAMP,
-FOREIGN KEY (commenter) REFERENCES users(uid),
-FOREIGN KEY (bug_report) REFERENCES bug_reports(bid),
-FOREIGN KEY (reply_to) REFERENCES comments(cid)
+FOREIGN KEY (commenter) REFERENCES users(uid) ON DELETE SET NULL,
+FOREIGN KEY (bug_report) REFERENCES bug_reports(bid) ON DELETE CASCADE,
+FOREIGN KEY (reply_to) REFERENCES comments(cid) ON DELETE CASCADE
 );
 
 CREATE TABLE developments (
 did CHAR(64) PRIMARY KEY,
-project_id CHAR(64),
-user_id VARCHAR(64),
-FOREIGN KEY (project_id) REFERENCES projects(pid),
-FOREIGN KEY (user_id) REFERENCES users(uid)
+project CHAR(64) NOT NULL,
+developer VARCHAR(64),
+FOREIGN KEY (project) REFERENCES projects(pid) ON DELETE CASCADE,
+FOREIGN KEY (developer) REFERENCES users(uid) ON DELETE SET NULL
 );
 
 CREATE TABLE assignments (
 aid CHAR(64) PRIMARY KEY,
 assignee VARCHAR(64),
 bug_report CHAR(64),
-FOREIGN KEY (assignee) REFERENCES users(uid),
-FOREIGN KEY (bug_report) REFERENCES bug_reports(bid)
+FOREIGN KEY (assignee) REFERENCES users(uid) ON DELETE SET NULL,
+FOREIGN KEY (bug_report) REFERENCES bug_reports(bid) ON DELETE SET NULL
 );
 
 ## Tutorials/Guides

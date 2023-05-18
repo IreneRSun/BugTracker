@@ -5,7 +5,7 @@
 <h2>@ViewData["Title"]</h2>
 
 <!-- edit profile form -->
-<form method="post" asp-controller="Account" asp-action="UpdateProfile">
+<form method="post" enctype="multipart/form-data" asp-controller="Account" asp-action="UpdateProfile">
     <!-- image upload -->
     <div class="mt-sm-2">
         <img id="avatar" src="@Model.Avatar" alt="" class="rounded-circle" width="100px" height="100px" />
