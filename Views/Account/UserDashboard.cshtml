@@ -1,0 +1,19 @@
+﻿@model BugTracker.Models.UserModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="btn-toolbar">
+    <form>
+        <input type="text" class="col" placeholder="Search for projects ... ">
+        <button type="submit" class="material-symbols-outlined">search</button>
+    </form>
+    <button class="offset-1">New Project</button>
+</div>
+
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    <h3>Welcome @Model.UserName</h3>
+    <img src="@Model.Avatar" alt="" class="offset-1" />
+</div>

@@ -20,7 +20,7 @@ function previewImage() {
         const selectedFile = input.files[0];
 
         // check the file size
-        const fileSizeMb = selectedFile.size / (1024 * 1024);
+        const fileSizeMB = selectedFile.size / (1024 * 1024);
         if (fileSizeMB > 16) {
             warning.style.display = "block";
             return;

@@ -9,6 +9,7 @@ using Auth0.ManagementApi;
 using Auth0.ManagementApi.Models;
 using RestSharp;
 using Newtonsoft.Json;
+using System.Net.Mail;
 
 namespace BugTracker.Controllers
 {
@@ -34,19 +35,40 @@ namespace BugTracker.Controllers
         }
 
         /// <summary>
+        /// Method <c>GetUser</c> gets a UserModel representing the currently logged in user.
+        /// </summary>
+        /// <returns>The UserModel of the logged in user.</returns>
+        [Authorize]
+        private async Task<UserModel> GetUser()
+        {
+            // get user data from Auth0
+            string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            string emailAddress = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            string userName = User.Claims.FirstOrDefault(c => c.Type == "name")?.Value;
+
+            // get corresponding avatar from database, if any
+            DatabaseContext dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;            
+            string? avatar = await dbContext.GetAvatar(userId);
+            avatar ??= User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value;
+
+            // return the model of the user
+            return new UserModel()
+            {
+                UserId = userId,
+                EmailAddress = emailAddress,
+                UserName = userName,
+                Avatar = avatar
+            };
+        }
+
+        /// <summary>
         /// Method <c>Dashboard</c> gets the dashboard for the user.
         /// </summary>
         /// <returns>The user dashboard action result.</returns>
         [Authorize]
-        public IActionResult Dashboard()
+        public async Task<IActionResult> UserDashboard()
         {
-            return View(new UserModel()
-            {
-                UserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value,
-                EmailAddress = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
-                UserName = User.Claims.FirstOrDefault(c => c.Type == "name")?.Value,
-                Avatar = User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value
-            });
+            return View(await GetUser());
         }
 
         /// <summary>
@@ -54,36 +76,19 @@ namespace BugTracker.Controllers
         /// </summary>
         /// <returns>The user profile action result.</returns>
         [Authorize]
-        public IActionResult Profile()
+        public async Task<IActionResult> UserProfile()
         {
-            // get avatar from database, if any
-            DatabaseContext dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
-            string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            string? avatar = dbContext.GetAvatar(userId);
-            if (avatar == null) { avatar = User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value; }
-            return View(new UserModel()
-            {
-                UserId = userId,
-                EmailAddress = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
-                UserName = User.Claims.FirstOrDefault(c => c.Type == "name")?.Value,
-                Avatar = avatar
-            });
+            return View(await GetUser());
         }
 
         /// <summary>
-        /// Method <c>Tasks</c> gets the tasks for the user.
+        /// Method <c>Tasks</c> gets the tasks page for the user.
         /// </summary>
         /// <returns>The user tasks action result.</returns>
         [Authorize]
-        public IActionResult Tasks()
+        public async Task<IActionResult> UserTasks()
         {
-            return View(new UserModel()
-            {
-                UserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value,
-                EmailAddress = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
-                UserName = User.Claims.FirstOrDefault(c => c.Type == "name")?.Value,
-                Avatar = User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value
-            });
+            return View(GetUser());
         }
 
         /// <summary>
@@ -101,6 +106,7 @@ namespace BugTracker.Controllers
               Auth0Constants.AuthenticationScheme,
               authenticationProperties
             );
+
             // Logout from the application
             await HttpContext.SignOutAsync(
               CookieAuthenticationDefaults.AuthenticationScheme
@@ -172,7 +178,6 @@ namespace BugTracker.Controllers
             // get input from form
             string username = Request.Form["username"];
             IFormFile? fileInput = HttpContext.Request.Form.Files["image-file"];
-            System.Diagnostics.Debug.WriteLine(fileInput == null);
 
             // update fields in database
             await UpdateUsername(username);
@@ -181,7 +186,7 @@ namespace BugTracker.Controllers
             // return to updated profile page
             await Logout();  // to refresh User.Claims data
             await Login();  // to refresh User.Claims data
-            return RedirectToAction("Profile", "Account");
+            return RedirectToAction("UserProfile", "Account");
         }
 
         /// <summary>

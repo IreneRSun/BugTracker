@@ -26,8 +26,6 @@ namespace BugTracker.Models
 
         public string Steps { get; set; }
 
-        public Blob Evidence { get; set; }
-
         public string Details { get; set; }
 
         public string Priority { get; set; }
