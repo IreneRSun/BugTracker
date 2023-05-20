@@ -37,7 +37,7 @@ namespace BugTracker.Models
         }
 
         /// <summary>
-        /// Method <c>FindUniqueHash</c> generates an unique hash for a table column.
+        /// Method <c>FindUniqueHash</c> generates an unique sha-256 hash for a table column.
         /// </summary>
         /// <param name="table">The table to find an unique hash for.</param>
         /// <param name="field">The name of the column to find an unique hash for.</param>
@@ -51,12 +51,10 @@ namespace BugTracker.Models
             // find unique hash
             var uniqueHashFound = false;
             string hash = Utils.GenerateHash();
-            var query = "SELECT * FROM @table WHERE @field = @hash";
+            var query = $"SELECT * FROM {table} WHERE {field} = @hash";
             while (!uniqueHashFound)
             {
                 using var cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@table", table);
-                cmd.Parameters.AddWithValue("@field", field);
                 cmd.Parameters.AddWithValue("@hash", hash);
                 using MySqlDataReader reader = cmd.ExecuteReader();
 
@@ -265,7 +263,7 @@ namespace BugTracker.Models
             string projectId = FindUniqueHash("projects", "pid");
 
             // build database update command
-            var sqlCmd = "INSERT INTO projects (pid, avatar) VALUES (@pid, @pname)";
+            var sqlCmd = "INSERT INTO projects (pid, name) VALUES (@pid, @pname)";
             var parameters = new Dictionary<string, string>
             {
                 { "@pid", projectId },

@@ -113,6 +113,16 @@ namespace BugTracker.Controllers
             );
         }
 
+        [Authorize, HttpPost]
+        public async Task<IActionResult> CreateProject()
+        {
+            string projectName = Request.Form["project-name"];
+            var user = await GetUser();
+            var dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+            await dbContext.AddProject(projectName, user.UserId);
+            return RedirectToAction("UserDashboard", "Account");
+        }
+
         /// <summary>
         /// Method <c>getAccessToken</c> fetches the Auth0 access token.
         /// </summary>
@@ -152,6 +162,10 @@ namespace BugTracker.Controllers
             await client.Users.UpdateAsync(userId, request);
         }
 
+        /// <summary>
+        /// Method <c>UpdateAvatar</c> updates the avatar of the user in the MySQL database with the uploaded image.
+        /// </summary>
+        /// <param name="fileInput">The uploaded image.</param>
         private async Task UpdateAvatar(IFormFile? fileInput)
         {
             long fileSize = fileInput.Length;

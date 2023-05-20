@@ -3,17 +3,42 @@
     ViewData["Title"] = "Dashboard";
 }
 
+<!-- header of page -->
 <div class="btn-toolbar">
     <form>
         <input type="text" class="col" placeholder="Search for projects ... ">
         <button type="submit" class="material-symbols-outlined">search</button>
     </form>
-    <button class="offset-1">New Project</button>
+    <button type="button" class="btn btn-primary offset-1" id="create-project-btn" data-bs-toggle="modal" data-bs-target="#create-project-dialog">New Project</button>
 </div>
 
+<!-- page title -->
 <h2>@ViewData["Title"]</h2>
 
+<!-- welcome message -->
 <div>
+    <img src="@Model.Avatar" alt="" class="rounded-circle" width="100px" height="100px" />
     <h3>Welcome @Model.UserName</h3>
-    <img src="@Model.Avatar" alt="" class="offset-1" />
+</div>
+
+<!-- project creation modal dialog -->
+<div class="modal fade" id="create-project-dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-controller="Account" asp-action="CreateProject">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Project</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label>Enter a name for the project: </label>
+                    <input type="text" name="project-name" placeholder="Project Name" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Create Project</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
