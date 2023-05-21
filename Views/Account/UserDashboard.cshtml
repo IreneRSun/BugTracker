@@ -1,4 +1,4 @@
-﻿@model BugTracker.Models.UserModel
+﻿@model Tuple<BugTracker.Models.UserModel, List<BugTracker.Models.ProjectModel>>
 @{
     ViewData["Title"] = "Dashboard";
 }
@@ -17,8 +17,8 @@
 
 <!-- welcome message -->
 <div>
-    <img src="@Model.Avatar" alt="" class="rounded-circle" width="100px" height="100px" />
-    <h3>Welcome @Model.UserName</h3>
+    <img src="@Model.Item1.Avatar" alt="" class="rounded-circle" width="100px" height="100px" />
+    <h3>Welcome @Model.Item1.UserName</h3>
 </div>
 
 <!-- project creation modal dialog -->
@@ -42,3 +42,23 @@
         </div>
     </div>
 </div>
+
+<!-- user's projects -->
+<h2>Projects</h2>
+<table class="table">
+  <tr>
+    <th>Project ID</th>
+    <th>Project Name</th>
+  </tr>
+  @foreach (var item in Model.Item2)
+  {
+    <tr>
+      <td>
+        @Html.DisplayFor(modelItem => item.ProjectId)
+      </td>
+      <td>
+        @Html.DisplayFor(modelItem => item.ProjectName)
+      </td>
+    </tr>
+  }
+</table>

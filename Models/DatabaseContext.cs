@@ -224,7 +224,7 @@ namespace BugTracker.Models
         public async Task<List<ProjectModel>> GetProjects(string userId)
         {
             // build query
-            var query = "SELECT * FROM projects WHERE pid IN (SELECT project FROM developments WHERE developer == @uid)";
+            var query = "SELECT * FROM projects WHERE pid IN (SELECT project FROM developments WHERE developer = @uid)";
             var parameters = new Dictionary<string, string> {
                 { "@uid", userId }
             };

@@ -9,7 +9,6 @@ using Auth0.ManagementApi;
 using Auth0.ManagementApi.Models;
 using RestSharp;
 using Newtonsoft.Json;
-using System.Net.Mail;
 
 namespace BugTracker.Controllers
 {
@@ -35,6 +34,15 @@ namespace BugTracker.Controllers
         }
 
         /// <summary>
+        /// Method <c>GetDBContext</c> gets the current MySQL database context.
+        /// </summary>
+        /// <returns>The database context.</returns>
+        private DatabaseContext GetDBContext()
+        {
+            return HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+        }
+
+        /// <summary>
         /// Method <c>GetUser</c> gets a UserModel representing the currently logged in user.
         /// </summary>
         /// <returns>The UserModel of the logged in user.</returns>
@@ -47,7 +55,7 @@ namespace BugTracker.Controllers
             string userName = User.Claims.FirstOrDefault(c => c.Type == "name")?.Value;
 
             // get corresponding avatar from database, if any
-            DatabaseContext dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;            
+            DatabaseContext dbContext = GetDBContext();            
             string? avatar = await dbContext.GetAvatar(userId);
             avatar ??= User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value;
 
@@ -68,7 +76,11 @@ namespace BugTracker.Controllers
         [Authorize]
         public async Task<IActionResult> UserDashboard()
         {
-            return View(await GetUser());
+            UserModel userModel = await GetUser();
+            DatabaseContext dbContext = GetDBContext();
+            List<ProjectModel> projectModels = await dbContext.GetProjects(userModel.UserId);
+            var viewPair = new Tuple<UserModel, List<ProjectModel>>(userModel, projectModels);
+            return View(viewPair);
         }
 
         /// <summary>
@@ -113,12 +125,16 @@ namespace BugTracker.Controllers
             );
         }
 
+        /// <summary>
+        /// Method <c>CreateProject</c> handles project creation from user input.
+        /// </summary>
+        /// <returns>The updated user dashboard action result.</returns>
         [Authorize, HttpPost]
         public async Task<IActionResult> CreateProject()
         {
             string projectName = Request.Form["project-name"];
             var user = await GetUser();
-            var dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+            var dbContext = GetDBContext();
             await dbContext.AddProject(projectName, user.UserId);
             return RedirectToAction("UserDashboard", "Account");
         }
@@ -177,7 +193,7 @@ namespace BugTracker.Controllers
                 await fileInput.CopyToAsync(memoryStream);
                 byte[] fileData = memoryStream.ToArray();
                 // add data to database
-                DatabaseContext dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+                DatabaseContext dbContext = GetDBContext();
                 dbContext.SetAvatar(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value, fileData);
             }
         }
@@ -185,7 +201,7 @@ namespace BugTracker.Controllers
         /// <summary>
         /// Method <c>UpdateProfile</c> handles user profile updates.
         /// </summary>
-        /// <returns>The updated profile action result.</returns>
+        /// <returns>The updated user profile action result.</returns>
         [HttpPost]
         public async Task<IActionResult> UpdateProfile()
         {
