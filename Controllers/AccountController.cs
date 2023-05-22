@@ -84,6 +84,21 @@ namespace BugTracker.Controllers
         }
 
         /// <summary>
+        /// Method <c>Dashboard</c> gets the project dashboard.
+        /// </summary>
+        /// <param name="projectId">The ID of the project to get the dashboard for.</param>
+        /// <returns>The project dashboard action result.</returns>
+        [Authorize]
+        public async Task<IActionResult> ProjectDashboard(string projectId)
+        {
+            DatabaseContext dbContext = GetDBContext();
+            ProjectModel project = await dbContext.GetProject(projectId);
+            List<UserModel> developers = await dbContext.GetDevelopers(projectId);
+            var viewPair = new Tuple<ProjectModel, List<UserModel>>(project, developers);
+            return View(viewPair);
+        }
+
+        /// <summary>
         /// Method <c>Profile</c> gets the profile for the user.
         /// </summary>
         /// <returns>The user profile action result.</returns>
@@ -136,6 +151,20 @@ namespace BugTracker.Controllers
             var user = await GetUser();
             var dbContext = GetDBContext();
             await dbContext.AddProject(projectName, user.UserId);
+            return RedirectToAction("UserDashboard", "Account");
+        }
+
+        /// <summary>
+        /// Method <c>DeleteProject</c> deletes the user from a project (if user is the only developer, the project is deleted as well)
+        /// </summary>
+        /// <param name="projectId">The ID of the project to delete the user from.</param>
+        /// <returns>The updated user dashboard action result.</returns>
+        [Authorize, HttpPost]
+        public async Task<IActionResult> DeleteProject(string projectId)
+        {
+            string userId = GetUser().Result.UserId;
+            DatabaseContext dbContext = GetDBContext();
+            await dbContext.DeleteProject(projectId, userId);
             return RedirectToAction("UserDashboard", "Account");
         }
 

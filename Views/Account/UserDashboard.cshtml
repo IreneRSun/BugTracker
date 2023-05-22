@@ -54,7 +54,7 @@
   {
     <tr>
       <td>
-        @Html.DisplayFor(modelItem => item.ProjectId)
+          <a href="@Url.Action("ProjectDashboard", "Account", new { projectId = item.ProjectId, userId = Model.Item1.UserId })">@Html.DisplayFor(modelItem => item.ProjectId)</a>
       </td>
       <td>
         @Html.DisplayFor(modelItem => item.ProjectName)

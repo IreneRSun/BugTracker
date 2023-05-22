@@ -247,6 +247,34 @@ namespace BugTracker.Models
             return await QueryDatabase<List<ProjectModel>>(query, parameters, queryParser);
         }
 
+        /// <summary>
+        /// Method <c>GetProject</c> gets the project associated with the given ID.
+        /// </summary>
+        /// <param name="projectId">The user ID of project to get.</param>
+        /// <returns>The project associated with the given ID.</returns>
+        public async Task<ProjectModel> GetProject(string projectId)
+        {
+            // build query
+            var query = "SELECT * FROM projects WHERE pid = @pid";
+            var parameters = new Dictionary<string, string> {
+                { "@pid", projectId }
+            };
+
+            // build query result parser
+            Func<MySqlDataReader, Task<ProjectModel>> queryParser = async (reader) =>
+            {
+                await reader.ReadAsync();
+                var project = new ProjectModel()
+                {
+                    ProjectId = reader.GetString("pid"),
+                    ProjectName = reader.GetString("name")
+                };
+                return project;
+            };
+
+            return await QueryDatabase<ProjectModel>(query, parameters, queryParser);
+        }
+
         public void SearchProjects(string query)
         {
 
