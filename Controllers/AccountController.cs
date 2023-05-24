@@ -70,7 +70,7 @@ namespace BugTracker.Controllers
             // get user data from Auth0
             string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             string emailAddress = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            string userName = User.Claims.FirstOrDefault(c => c.Type == "name")?.Value;
+            string userName = User.Claims.FirstOrDefault(c => c.Type == "nickname")?.Value;
 
             // get corresponding avatar from database, if any
             DatabaseContext dbContext = GetDBContext();

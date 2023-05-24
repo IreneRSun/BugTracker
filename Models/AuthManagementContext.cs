@@ -43,10 +43,10 @@ namespace BugTracker.Models
         }
 
         /// <summary>
-        /// Method <c>GetClient</c> gets the Auth0 Management API client.
+        /// Method <c>GetToken</c> gets the Auth0 access token.
         /// </summary>
-        /// <returns>The api client.</returns>
-        private ManagementApiClient GetClient()
+        /// <returns>The access token.</returns>
+        private string? GetToken()
         {
             // request token
             var client = new RestClient($"https://{domain}");
@@ -61,15 +61,14 @@ namespace BugTracker.Models
             string? token = null;
             if (response.Content != null)
             {
-                var json = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Content);
-                if (json != null)
+                var jsonResponse = JsonConvert.DeserializeObject<JObject>(response.Content);
+                if (jsonResponse != null)
                 {
-                    token = json["access_token"];
+                    token = jsonResponse["access_token"].ToString();
                 }
             }
 
-            // get management api client
-            return new ManagementApiClient(token, domain);
+            return token;
         }
 
         /// <summary>
@@ -81,13 +80,11 @@ namespace BugTracker.Models
         {
             if (userId != null)
             {
-                ManagementApiClient client = GetClient();
+                string? token = GetToken();
+                var client = new ManagementApiClient(token, domain);
                 var request = new UserUpdateRequest
                 {
-                    UserMetadata = new
-                    {
-                        name = newName
-                    }
+                    NickName = newName
                 };
                 await client.Users.UpdateAsync(userId, request);
             }  
@@ -101,7 +98,8 @@ namespace BugTracker.Models
         {
             if (userId != null)
             {
-                ManagementApiClient client = GetClient();
+                string? token = GetToken();
+                var client = new ManagementApiClient(token, domain);
                 await client.Users.DeleteAsync(userId);
             }
         }
@@ -112,42 +110,54 @@ namespace BugTracker.Models
         /// <param name="users">The list of users.</param>
         public async Task FillUserData(List<UserModel> users)
         {
-            ManagementApiClient client = GetClient();
+            string? token = GetToken();
+            var client = new ManagementApiClient(token, domain);
             foreach (var user in users)
             {
                 var userData = await client.Users.GetAsync(user.UserId);
-                user.UserName = userData.UserMetadata.name;
+                user.UserName = userData.NickName;
                 user.EmailAddress = userData.Email;
+                user.Avatar ??= userData.Picture;
             }
         }
 
         /// <summary>
-        /// Method <c>SearchUsers</c> searches for users whose usernames match the query (case-sensitive).
+        /// Method <c>SearchUsers</c> searches for users whose usernames match the query (case-insensitive).
         /// </summary>
         /// <param name="searchQuery">The search query.</param>
+        /// <param name="maxResults">The maximum number of users to return.</param>
         /// <returns>The list of users satisfying the criteria.</returns>
-        public async Task<List<UserModel>> SearchUsers(string searchQuery)
+        public async Task<List<UserModel>> SearchUsers(string searchQuery, int maxResults = 10)
         {
             // search for users
-            ManagementApiClient client = GetClient();
-            var request = new GetUsersRequest
-            {
-                Query = $"name: {searchQuery.ToLower()}*"
-            };
+            string query = searchQuery.Length > 2 ? $"*{searchQuery}*" : $"{searchQuery}*";
 
-            var queryResults = await client.Users.GetAllAsync(request);
+            string? token = GetToken();
+            var client = new RestClient($"https://{domain}");
+            var request = new RestRequest($"/api/v2/users?q=nickname%3A{query}&page=0&per_page={maxResults}&search_engine=v3", Method.Get);
+            request.AddHeader("authorization", $"Bearer {token}");
+            RestResponse response = client.Execute(request);
 
-            // parse result
+            // parse results
             var users = new List<UserModel>();
-            foreach (var result in queryResults)
+            if (response.Content != null)
             {
-                var user = new UserModel()
+                var json = JsonConvert.DeserializeObject<JObject>(response.Content);
+                if (json != null)
                 {
-                    UserId = result.UserId,
-                    EmailAddress = result.Email,
-                    UserName = result.UserMetadata.name
-                };
-                users.Add(user);
+                    var usersJObject = (JArray)json["users"];
+                    foreach (JObject userJObject in usersJObject)
+                    {
+                        var user = new UserModel()
+                        {
+                            UserId = userJObject["user_id"].ToString(),
+                            EmailAddress = userJObject["email"].ToString(),
+                            UserName = userJObject["nickname"].ToString(),
+                            Avatar = userJObject["picture"].ToString()
+                        };
+                        users.Add(user);
+                    }
+                }
             }
 
             return users;
