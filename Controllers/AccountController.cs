@@ -5,10 +5,6 @@ using BugTracker.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Auth0.ManagementApi;
-using Auth0.ManagementApi.Models;
-using RestSharp;
-using Newtonsoft.Json;
 
 namespace BugTracker.Controllers
 {
@@ -17,6 +13,19 @@ namespace BugTracker.Controllers
     /// </summary>
     public class AccountController : Controller
     {
+        /// <value>
+        /// Property <c>_configuration</c> is the appsettings configuration.
+        /// </value>
+        private readonly IConfiguration _configuration;
+
+        /// <summary>
+        /// Method <c>AccountController</c> initializes class with 
+        /// </summary>
+        /// <param name="configuration"></param>
+        public AccountController(IConfiguration configuration) {
+            _configuration = configuration;
+        }
+
         /// <summary>
         /// Method <c>Login</c> handles the login of the user.
         /// </summary>
@@ -43,6 +52,15 @@ namespace BugTracker.Controllers
         }
 
         /// <summary>
+        /// Method <c>GetAuthContext</c> gets the current Auth0 database context.
+        /// </summary>
+        /// <returns>The database context.</returns>
+        private AuthManagementContext GetAuthContext()
+        {
+            return new AuthManagementContext(_configuration);
+        }
+
+        /// <summary>
         /// Method <c>GetUser</c> gets a UserModel representing the currently logged in user.
         /// </summary>
         /// <returns>The UserModel of the logged in user.</returns>
@@ -55,7 +73,7 @@ namespace BugTracker.Controllers
             string userName = User.Claims.FirstOrDefault(c => c.Type == "name")?.Value;
 
             // get corresponding avatar from database, if any
-            DatabaseContext dbContext = GetDBContext();            
+            DatabaseContext dbContext = GetDBContext();
             string? avatar = await dbContext.GetAvatar(userId);
             avatar ??= User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value;
 
@@ -76,11 +94,13 @@ namespace BugTracker.Controllers
         [Authorize]
         public async Task<IActionResult> UserDashboard()
         {
-            UserModel userModel = await GetUser();
             DatabaseContext dbContext = GetDBContext();
+            
+            UserModel userModel = await GetUser();
             List<ProjectModel> projectModels = await dbContext.GetProjects(userModel.UserId);
-            var viewPair = new Tuple<UserModel, List<ProjectModel>>(userModel, projectModels);
-            return View(viewPair);
+
+            var viewModels = new Tuple<UserModel, List<ProjectModel>>(userModel, projectModels);
+            return View(viewModels);
         }
 
         /// <summary>
@@ -92,10 +112,14 @@ namespace BugTracker.Controllers
         public async Task<IActionResult> ProjectDashboard(string projectId)
         {
             DatabaseContext dbContext = GetDBContext();
+            AuthManagementContext authContext = GetAuthContext();
+
             ProjectModel project = await dbContext.GetProject(projectId);
             List<UserModel> developers = await dbContext.GetDevelopers(projectId);
-            var viewPair = new Tuple<ProjectModel, List<UserModel>>(project, developers);
-            return View(viewPair);
+            await authContext.FillUserData(developers);
+
+            var viewModels = new Tuple<ProjectModel, List<UserModel>>(project, developers);
+            return View(viewModels);
         }
 
         /// <summary>
@@ -149,7 +173,7 @@ namespace BugTracker.Controllers
         {
             string projectName = Request.Form["project-name"];
             var user = await GetUser();
-            var dbContext = GetDBContext();
+            DatabaseContext dbContext = GetDBContext();
             await dbContext.AddProject(projectName, user.UserId);
             return RedirectToAction("UserDashboard", "Account");
         }
@@ -169,61 +193,28 @@ namespace BugTracker.Controllers
         }
 
         /// <summary>
-        /// Method <c>getAccessToken</c> fetches the Auth0 access token.
-        /// </summary>
-        /// <returns>The Auth0 access token.</returns>
-        private static string GetAccessToken()
-        {
-            // request token
-            var client = new RestClient("https://dev-pa5n40m7s26hur07.us.auth0.com");
-            var request = new RestRequest("/oauth/token", Method.Post);
-            request.AddHeader("content-type", "application/json");
-            request.AddParameter("application/json", "{\"client_id\":\"KPnNd3t1fcZ7YStDTSLNI12jy3W4B1Ue\",\"client_secret\":\"LEdemPNNQanSER5vvzPszqGrBU6HA_KOaA957daICIl7Cz81pDGeIc6ITRPo_aMs\",\"audience\":\"https://dev-pa5n40m7s26hur07.us.auth0.com/api/v2/\",\"grant_type\":\"client_credentials\"}", ParameterType.RequestBody);
-            RestResponse response = client.Execute(request);
-
-            // get token from request
-            var json = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Content);
-            string? token = json["access_token"];
-            return token;
-        }
-
-        /// <summary>
-        /// Method <c>UpdateUsername</c> updates the username of the user in the Auth0 database.
-        /// </summary>
-        /// <param name="newName">The new name to update the username to.</param>
-        [Authorize]
-        private async Task UpdateUsername(string newName)
-        {
-            // create API client
-            string accessToken = GetAccessToken();
-            var client = new ManagementApiClient(accessToken, "dev-pa5n40m7s26hur07.us.auth0.com");
-
-            // request username update
-            string? userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            var request = new UserUpdateRequest
-            {
-                FullName = newName
-            };
-            await client.Users.UpdateAsync(userId, request);
-        }
-
-        /// <summary>
         /// Method <c>UpdateAvatar</c> updates the avatar of the user in the MySQL database with the uploaded image.
         /// </summary>
         /// <param name="fileInput">The uploaded image.</param>
         private async Task UpdateAvatar(IFormFile? fileInput)
         {
-            long fileSize = fileInput.Length;
-            double fileFizeMB = fileSize / (1024.0 * 1024.0);
-            if (fileInput != null && fileSize > 0 && fileFizeMB < 16)
+            if (fileInput != null)
             {
-                // convert input into byte array
-                using var memoryStream = new MemoryStream();
-                await fileInput.CopyToAsync(memoryStream);
-                byte[] fileData = memoryStream.ToArray();
-                // add data to database
-                DatabaseContext dbContext = GetDBContext();
-                dbContext.SetAvatar(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value, fileData);
+                // check file size
+                long fileSize = fileInput.Length;
+                double fileFizeMB = fileSize / (1024.0 * 1024.0);
+
+                if (fileSize > 0 && fileFizeMB < 16)
+                {
+                    // convert input into byte array
+                    using var memoryStream = new MemoryStream();
+                    await fileInput.CopyToAsync(memoryStream);
+                    byte[] fileData = memoryStream.ToArray();
+
+                    // add data to database
+                    DatabaseContext dbContext = GetDBContext();
+                    dbContext.SetAvatar(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value, fileData);
+                }
             }
         }
 
@@ -238,8 +229,12 @@ namespace BugTracker.Controllers
             string username = Request.Form["username"];
             IFormFile? fileInput = HttpContext.Request.Form.Files["image-file"];
 
-            // update fields in database
-            await UpdateUsername(username);
+            // request username update
+            string? userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            AuthManagementContext authContext = GetAuthContext();
+            await authContext.UpdateUsername(userId, username);
+
+            // request avatar update
             await UpdateAvatar(fileInput);
 
             // return to updated profile page
@@ -254,13 +249,10 @@ namespace BugTracker.Controllers
         [Authorize]
         public async Task DeleteAccount()
         {
-            // create API client
-            string accessToken = GetAccessToken();
-            var client = new ManagementApiClient(accessToken, "dev-pa5n40m7s26hur07.us.auth0.com");
-
             // request account deletion
             string? userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            await client.Users.DeleteAsync(userId);
+            AuthManagementContext authContext = GetAuthContext();
+            await authContext.DeleteUser(userId);
 
             // log the user out
             await Logout();

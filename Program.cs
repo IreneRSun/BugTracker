@@ -1,4 +1,5 @@
 using Auth0.AspNetCore.Authentication;
+using Microsoft.Extensions.Configuration;
 using BugTracker.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,13 @@ builder.Services
     {
         options.Audience = builder.Configuration["Auth0:Audience"];
     });
+
+// set up configuration access
+var configuration = new ConfigurationBuilder()
+            .SetBasePath(builder.Environment.ContentRootPath)
+            .AddJsonFile("appsettings.json")
+            .Build();
+builder.Services.AddSingleton(configuration);
 
 var app = builder.Build();
 

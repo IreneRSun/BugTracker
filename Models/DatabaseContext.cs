@@ -1,10 +1,5 @@
-﻿using Auth0.ManagementApi.Models;
-using MySql.Data.MySqlClient;
-using System;
+﻿using MySql.Data.MySqlClient;
 using System.Data;
-using System.Reflection.PortableExecutable;
-using System.Security.Cryptography;
-using System.Xml.Linq;
 
 namespace BugTracker.Models
 {
@@ -42,13 +37,13 @@ namespace BugTracker.Models
         /// <param name="table">The table to find an unique hash for.</param>
         /// <param name="field">The name of the column to find an unique hash for.</param>
         /// <returns>A unique hash for the table column.</returns>
-        private string FindUniqueHash(string table, string field)
+        private async Task<string> FindUniqueHash(string table, string field)
         {
             // connect to database
             using MySqlConnection connection = GetConnection();
-            connection.Open();
+            await connection.OpenAsync();
 
-            // find unique hash
+            // find an unique hash
             var uniqueHashFound = false;
             string hash = Utils.GenerateHash();
             var query = $"SELECT * FROM {table} WHERE {field} = @hash";
@@ -56,7 +51,7 @@ namespace BugTracker.Models
             {
                 using var cmd = new MySqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@hash", hash);
-                using MySqlDataReader reader = cmd.ExecuteReader();
+                using var reader = (MySqlDataReader)await cmd.ExecuteReaderAsync();
 
                 if (reader.HasRows) {
                     hash = Utils.GenerateHash();
@@ -67,7 +62,7 @@ namespace BugTracker.Models
             }
 
             // close the connection
-            connection.Close();
+            await connection.CloseAsync();
 
             return hash;
         }
@@ -94,14 +89,14 @@ namespace BugTracker.Models
                 var parameterValue = parameter.Value;
                 cmd.Parameters.AddWithValue(parameterName, parameterValue);
             }
-            using MySqlDataReader reader = (MySqlDataReader)await cmd.ExecuteReaderAsync();
+            using var reader = (MySqlDataReader)await cmd.ExecuteReaderAsync();
 
             // parse query results
             T result = await queryParserCallback(reader);
 
             // close the connection
-            reader.Close();
-            connection.Close();
+            await reader.CloseAsync();
+            await connection.CloseAsync();
 
             return result;
         }
@@ -217,6 +212,37 @@ namespace BugTracker.Models
         }
 
         /// <summary>
+        /// Method <c>SearchProjects</c> searches for projects that match the search query (case insensitive).
+        /// </summary>
+        /// <param name="searchInput">The search query.</param>
+        /// <returns>The list of projects matching the search.</returns>
+        public async Task<List<ProjectModel>> SearchProjects(string searchInput)
+        {
+            // build query
+            var query = "SELECT * FROM projects WHERE LOWER(name) = LOWER(@search)";
+            var parameters = new Dictionary<string, string> {
+                { "@search", $"%{searchInput}%" }
+            };
+
+            // build query result parser
+            Func<MySqlDataReader, Task<List<ProjectModel>>> queryParser = async (reader) =>
+            {
+                var projects = new List<ProjectModel>();
+                while (await reader.ReadAsync())
+                {
+                    projects.Add(new ProjectModel()
+                    {
+                        ProjectId = reader.GetString("pid"),
+                        ProjectName = reader.GetString("name")
+                    });
+                };
+                return projects;
+            };
+
+            return await QueryDatabase<List<ProjectModel>>(query, parameters, queryParser);
+        }
+
+        /// <summary>
         /// Method <c>GetProjects</c> gets the projects that the user is a developer of.
         /// </summary>
         /// <param name="userId">The user ID of the user to get the projects of.</param>
@@ -275,11 +301,6 @@ namespace BugTracker.Models
             return await QueryDatabase<ProjectModel>(query, parameters, queryParser);
         }
 
-        public void SearchProjects(string query)
-        {
-
-        }
-
         /// <summary>
         /// Method <c>AddProject</c> creates a project.
         /// </summary>
@@ -288,7 +309,7 @@ namespace BugTracker.Models
         public async Task AddProject(string projectName, string userId)
         {
             // find a unique hash for the new project
-            string projectId = FindUniqueHash("projects", "pid");
+            string projectId = await FindUniqueHash("projects", "pid");
 
             // build database update command
             var sqlCmd = "INSERT INTO projects (pid, name) VALUES (@pid, @pname)";
@@ -379,7 +400,7 @@ namespace BugTracker.Models
         public async Task AddDeveloper(string projectId, string developerId)
         {
             // find a unique hash for the new development relationship
-            string developmentId = FindUniqueHash("developments", "did");
+            string developmentId = await FindUniqueHash("developments", "did");
 
             // build database update command
             var sqlCmd = "INSERT INTO developments (did, project, developer) VALUES (@did, @pid, @uid)";
@@ -403,7 +424,7 @@ namespace BugTracker.Models
         public async Task AddReport(string projectId, string userId, Dictionary<string, string> reportFields)
         {
             // find a unique hash for the new development relationship
-            string reportId = FindUniqueHash("bug_reports", "bid");
+            string reportId = await FindUniqueHash("bug_reports", "bid");
 
             // build database update command
             var sqlCmd = "INSERT INTO bug_reports " +
@@ -437,7 +458,7 @@ namespace BugTracker.Models
         public async Task AddComment(string reportId, string userId, string comment, string? replyToID = null)
         {
             // find a unique hash for the comment
-            string commentId = FindUniqueHash("comments", "cid");
+            string commentId = await FindUniqueHash("comments", "cid");
 
             // add comment data to database
             // build database update command
@@ -506,7 +527,7 @@ namespace BugTracker.Models
         public async Task AddAssignment(string reportId, string developerId)
         {
             // find a unique hash for the assignment
-            string assignmentId = FindUniqueHash("assignments", "aid");
+            string assignmentId = await FindUniqueHash("assignments", "aid");
 
             // build database update command
             var sqlCmd = "INSERT INTO assignments (aid, assignee, bug_report) VALUES (@aid, @uid, @bid)";
