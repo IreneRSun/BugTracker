@@ -3,7 +3,12 @@
 
 // Write your JavaScript code.
 
-/** Updates the profile image on the profile page to the uploaded image for previewing */
+// Document logic for showing search results
+$(document).ready(() => {
+    $('#project-search-results').modal('show');
+});
+
+// Function updates the profile image on the profile page to the uploaded image for previewing when called
 function previewImage() {
     const input = document.getElementById("image-file");
     const avatar = document.getElementById("avatar");

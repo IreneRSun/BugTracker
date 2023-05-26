@@ -4,7 +4,7 @@
 }
 
 <!-- project creation button -->
-<button type="button" class="btn btn-primary" id="create-project-btn" data-bs-toggle="modal" data-bs-target="#create-project-dialog">New Project</button>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-project-dialog">New Project</button>
 
 <!-- project search bar -->
 <form method="get" class="mt-1" asp-controller="Account" asp-action="UserDashboard">
@@ -22,13 +22,13 @@
 </div>
 
 <!-- project creation modal dialog -->
-<div class="modal fade" id="create-project-dialog" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="create-project-dialog" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <form method="post" asp-controller="Account" asp-action="CreateProject" asp>
                 <div class="modal-header">
                     <h5 class="modal-title">Create Project</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <label>Enter a name for the project: </label>
@@ -46,7 +46,7 @@
 <!-- project search results modal dialog -->
 @if (Model.SearchQuery != null)
 {
-    <div class="modal d-block">
+    <div class="modal fade mt-2" id="project-search-results" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
