@@ -1,5 +1,4 @@
 using Auth0.AspNetCore.Authentication;
-using Microsoft.Extensions.Configuration;
 using BugTracker.Models;
 
 var builder = WebApplication.CreateBuilder(args);

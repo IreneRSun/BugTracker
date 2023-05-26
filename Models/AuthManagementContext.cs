@@ -127,7 +127,7 @@ namespace BugTracker.Models
         /// <param name="searchQuery">The search query.</param>
         /// <param name="maxResults">The maximum number of users to return.</param>
         /// <returns>The list of users satisfying the criteria.</returns>
-        public async Task<List<UserModel>> SearchUsers(string searchQuery, int maxResults = 10)
+        public async Task<List<UserModel>> SearchUsers(string searchQuery, int maxResults = 5)
         {
             // search for users
             string query = searchQuery.Length > 2 ? $"*{searchQuery}*" : $"{searchQuery}*";

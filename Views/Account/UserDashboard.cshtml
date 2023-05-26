@@ -1,31 +1,31 @@
-﻿@model Tuple<BugTracker.Models.UserModel, List<BugTracker.Models.ProjectModel>>
+﻿@model UserDashboardModels
 @{
     ViewData["Title"] = "Dashboard";
 }
 
-<!-- header of page -->
-<div class="btn-toolbar">
-    <form>
-        <input type="text" class="col" placeholder="Search for projects ... ">
-        <button type="submit" class="material-symbols-outlined">search</button>
-    </form>
-    <button type="button" class="btn btn-primary offset-1" id="create-project-btn" data-bs-toggle="modal" data-bs-target="#create-project-dialog">New Project</button>
-</div>
+<!-- project creation button -->
+<button type="button" class="btn btn-primary" id="create-project-btn" data-bs-toggle="modal" data-bs-target="#create-project-dialog">New Project</button>
+
+<!-- project search bar -->
+<form method="get" class="mt-1" asp-controller="Account" asp-action="UserDashboard">
+    <input type="text" name="searchQuery" placeholder="Search for projects ... " />
+    <button type="submit">Search</button>
+</form>
 
 <!-- page title -->
 <h2>@ViewData["Title"]</h2>
 
 <!-- welcome message -->
 <div>
-    <img src="@Model.Item1.Avatar" alt="" class="rounded-circle" width="100px" height="100px" />
-    <h3>Welcome @Model.Item1.UserName</h3>
+    <img src="@Model.User.Avatar" alt="" class="rounded-circle" width="100px" height="100px" />
+    <h3>Welcome @Model.User.UserName</h3>
 </div>
 
 <!-- project creation modal dialog -->
 <div class="modal fade" id="create-project-dialog" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="post" asp-controller="Account" asp-action="CreateProject">
+            <form method="post" asp-controller="Account" asp-action="CreateProject" asp>
                 <div class="modal-header">
                     <h5 class="modal-title">Create Project</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -43,6 +43,27 @@
     </div>
 </div>
 
+<!-- project search results modal dialog -->
+@if (Model.SearchQuery != null)
+{
+    <div class="modal d-block">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Search Results for "@Model.SearchQuery"</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @foreach (var item in Model.ProjectSearchResults)
+                    {
+                        <label>@Html.DisplayFor(modelItem => item.ProjectName)</label>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 <!-- user's projects -->
 <h2>Projects</h2>
 <table class="table">
@@ -50,11 +71,11 @@
     <th>Project ID</th>
     <th>Project Name</th>
   </tr>
-  @foreach (var item in Model.Item2)
+  @foreach (var item in Model.UserProjects)
   {
     <tr>
       <td>
-          <a href="@Url.Action("ProjectDashboard", "Account", new { projectId = item.ProjectId, userId = Model.Item1.UserId })">@Html.DisplayFor(modelItem => item.ProjectId)</a>
+          <a href="@Url.Action("ProjectDashboard", "Account", new { projectId = item.ProjectId, userId = Model.User.UserId })">@Html.DisplayFor(modelItem => item.ProjectId)</a>
       </td>
       <td>
         @Html.DisplayFor(modelItem => item.ProjectName)

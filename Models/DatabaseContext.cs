@@ -216,10 +216,10 @@ namespace BugTracker.Models
         /// </summary>
         /// <param name="searchInput">The search query.</param>
         /// <returns>The list of projects matching the search.</returns>
-        public async Task<List<ProjectModel>> SearchProjects(string searchInput, int maxResults = 10)
+        public async Task<List<ProjectModel>> SearchProjects(string searchInput)
         {
             // build query
-            var query = "SELECT * FROM projects WHERE LOWER(name) = LOWER(@search) LIMIT 10";
+            var query = "SELECT * FROM projects WHERE LOWER(name) LIKE LOWER(@search)";
             var parameters = new Dictionary<string, string> {
                 { "@search", $"%{searchInput}%" }
             };

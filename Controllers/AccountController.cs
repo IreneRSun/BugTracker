@@ -5,6 +5,7 @@ using BugTracker.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Collections.Generic;
 
 namespace BugTracker.Controllers
 {
@@ -90,17 +91,30 @@ namespace BugTracker.Controllers
         /// <summary>
         /// Method <c>Dashboard</c> gets the dashboard for the user.
         /// </summary>
+        /// <param name="searchQuery">The search query the user has entered for project search.</param>
         /// <returns>The user dashboard action result.</returns>
-        [Authorize]
-        public async Task<IActionResult> UserDashboard()
+        [Authorize, HttpGet]
+        public async Task<IActionResult> UserDashboard(string? searchQuery)
         {
             DatabaseContext dbContext = GetDBContext();
             
             UserModel userModel = await GetUser();
-            List<ProjectModel> projectModels = await dbContext.GetProjects(userModel.UserId);
+            List<ProjectModel> userProjectModels = await dbContext.GetProjects(userModel.UserId);
+            var searchProjectModels = new List<ProjectModel>();
+            string? searchQueryString = null;
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                searchQueryString = searchQuery;
+                searchProjectModels = await dbContext.SearchProjects(searchQuery);
+            }
 
-            var viewModels = new Tuple<UserModel, List<ProjectModel>>(userModel, projectModels);
-            return View(viewModels);
+            return View(new UserDashboardModels()
+            {
+                User = userModel,
+                UserProjects = userProjectModels,
+                SearchQuery = searchQueryString,
+                ProjectSearchResults = searchProjectModels
+            });
         }
 
         /// <summary>
@@ -222,7 +236,7 @@ namespace BugTracker.Controllers
         /// Method <c>UpdateProfile</c> handles user profile updates.
         /// </summary>
         /// <returns>The updated user profile action result.</returns>
-        [HttpPost]
+        [Authorize, HttpPost]
         public async Task<IActionResult> UpdateProfile()
         {
             // get input from form
