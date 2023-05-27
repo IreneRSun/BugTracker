@@ -1,12 +1,13 @@
-﻿using MySql.Data.MySqlClient;
+﻿using BugTracker.Models.EntityModels;
+using MySql.Data.MySqlClient;
 using System.Data;
 
-namespace BugTracker.Models
+namespace BugTracker.Models.DatabaseContexts
 {
     /// <summary>
     /// Class <c>DatabaseContext</c> models a database context that manages connections to the database.
     /// </summary>
-    public class DatabaseContext
+    public class MySQLDatabaseContext
     {
         /// <value>
         /// Property <c>ConnectionString</c> is the connection string used for connecting to the database.
@@ -17,7 +18,7 @@ namespace BugTracker.Models
         /// Constructor <c>DatabaseContext</c> creates a DatabaseContext initialized with the given connection string.
         /// </summary>
         /// <param name="connectionString">The connection string.</param>
-        public DatabaseContext(string connectionString)
+        public MySQLDatabaseContext(string connectionString)
         {
             ConnectionString = connectionString;
         }
@@ -53,9 +54,11 @@ namespace BugTracker.Models
                 cmd.Parameters.AddWithValue("@hash", hash);
                 using var reader = (MySqlDataReader)await cmd.ExecuteReaderAsync();
 
-                if (reader.HasRows) {
+                if (reader.HasRows)
+                {
                     hash = Utils.GenerateHash();
-                } else
+                }
+                else
                 {
                     uniqueHashFound = true;
                 }
@@ -175,8 +178,8 @@ namespace BugTracker.Models
                 }
                 return null;
             };
-            
-            return await QueryDatabase<string?>(query, parameters, queryParser);
+
+            return await QueryDatabase(query, parameters, queryParser);
         }
 
         /// <summary>
@@ -197,7 +200,7 @@ namespace BugTracker.Models
                 return reader.HasRows;
             };
 
-            bool userExists = await QueryDatabase<bool>(query, parameters, queryParser);
+            bool userExists = await QueryDatabase(query, parameters, queryParser);
 
             // build database update command
             var sqlCmd = userExists ? "UPDATE users SET avatar = @imageData WHERE uid = @uid" : "INSERT INTO users (uid, avatar) VALUES (@uid, @imageData)";
@@ -230,16 +233,16 @@ namespace BugTracker.Models
                 var projects = new List<ProjectModel>();
                 while (await reader.ReadAsync())
                 {
-                    projects.Add(new ProjectModel()
+                    var projectId = reader.GetString("pid");
+                    projects.Add(new ProjectModel(projectId)
                     {
-                        ProjectId = reader.GetString("pid"),
-                        ProjectName = reader.GetString("name")
+                        Name = reader.GetString("name")
                     });
                 };
                 return projects;
             };
 
-            return await QueryDatabase<List<ProjectModel>>(query, parameters, queryParser);
+            return await QueryDatabase(query, parameters, queryParser);
         }
 
         /// <summary>
@@ -256,21 +259,21 @@ namespace BugTracker.Models
             };
 
             // build query result parser
-            Func < MySqlDataReader, Task < List<ProjectModel>>> queryParser = async (reader) =>
+            Func<MySqlDataReader, Task<List<ProjectModel>>> queryParser = async (reader) =>
             {
                 var projects = new List<ProjectModel>();
                 while (await reader.ReadAsync())
                 {
-                    projects.Add(new ProjectModel()
+                    var projectId = reader.GetString("pid");
+                    projects.Add(new ProjectModel(projectId)
                     {
-                        ProjectId = reader.GetString("pid"),
-                        ProjectName = reader.GetString("name")
+                        Name = reader.GetString("name")
                     });
                 };
                 return projects;
             };
 
-            return await QueryDatabase<List<ProjectModel>>(query, parameters, queryParser);
+            return await QueryDatabase(query, parameters, queryParser);
         }
 
         /// <summary>
@@ -290,15 +293,15 @@ namespace BugTracker.Models
             Func<MySqlDataReader, Task<ProjectModel>> queryParser = async (reader) =>
             {
                 await reader.ReadAsync();
-                var project = new ProjectModel()
+                var projectId = reader.GetString("pid");
+                var project = new ProjectModel(projectId)
                 {
-                    ProjectId = reader.GetString("pid"),
-                    ProjectName = reader.GetString("name")
+                    Name = reader.GetString("name")
                 };
                 return project;
             };
 
-            return await QueryDatabase<ProjectModel>(query, parameters, queryParser);
+            return await QueryDatabase(query, parameters, queryParser);
         }
 
         /// <summary>
@@ -345,7 +348,7 @@ namespace BugTracker.Models
                 return reader.GetInt32("count");
             };
 
-            int numDevelopers = await QueryDatabase<int>(query, queryParameters, queryParser);
+            int numDevelopers = await QueryDatabase(query, queryParameters, queryParser);
 
             // delete project if user is the only developer, otherwise remove developer from the project
             var sqlCmd = numDevelopers > 1 ? "DELETE FROM developments WHERE developer = @uid" : "DELETE FROM projects WHERE pid = @pid";
@@ -377,18 +380,39 @@ namespace BugTracker.Models
                 var developers = new List<UserModel>();
                 while (await reader.ReadAsync())
                 {
-                    var avatarData = reader.GetFieldValue<byte[]>("avatar");
-                    var avatar = "data:image/png;base64," + Convert.ToBase64String(avatarData);
-                    developers.Add(new UserModel()
+                    var userId = reader.GetString("uid");
+                    developers.Add(new UserModel(userId)
                     {
-                        UserId = reader.GetString("uid"),
                         Avatar = GetAvatarFromReader(reader)
                     });
                 };
                 return developers;
             };
 
-            return await QueryDatabase<List<UserModel>>(query, parameters, queryParser);
+            return await QueryDatabase(query, parameters, queryParser);
+        }
+
+        /// <summary>
+        /// Method <c>IsDeveloper</c> checks if a user is a developer of a project.
+        /// </summary>
+        /// <param name="userId">The ID of the user to check.</param>
+        /// <param name="projectId">The ID of the project to check.</param>
+        /// <returns>Whether the user is a developer of the project.</returns>
+        public async Task<bool> IsDeveloper(string userId, string projectId)
+        {
+            // query database for the user
+            var query = "SELECT * FROM developments WHERE project = @pid AND developer = @uid";
+            var parameters = new Dictionary<string, string> {
+                { "@pid", projectId },
+                { "@uid", userId }
+            };
+
+            Func<MySqlDataReader, Task<bool>> queryParser = async (reader) =>
+            {
+                return reader.HasRows;
+            };
+
+            return await QueryDatabase(query, parameters, queryParser);
         }
 
         /// <summary>
@@ -494,11 +518,11 @@ namespace BugTracker.Models
                 var bugs = new List<BugReportModel>();
                 while (await reader.ReadAsync())
                 {
-                    bugs.Add(new BugReportModel()
+                    var reportId = reader.GetString("bid");
+                    bugs.Add(new BugReportModel(reportId)
                     {
-                        ReportId = reader.GetString("bid"),
-                        ReporterId = reader.GetString("reportee"),
-                        ProjectId = reader.GetString("project"),
+                        ReporterID = reader.GetString("reportee"),
+                        ProjectID = reader.GetString("project"),
                         Summary = reader.GetString("summary"),
                         SoftwareVersion = reader.GetDecimal("software_version"),
                         Device = reader.GetString("device"),
@@ -516,7 +540,7 @@ namespace BugTracker.Models
                 return bugs;
             };
 
-            return await QueryDatabase<List<BugReportModel>>(query, parameters, queryParser);
+            return await QueryDatabase(query, parameters, queryParser);
         }
 
         /// <summary>

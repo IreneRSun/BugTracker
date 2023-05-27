@@ -1,4 +1,6 @@
-﻿namespace BugTracker.Models
+﻿using BugTracker.Models.EntityModels;
+
+namespace BugTracker.Models.ViewDataModels
 {
     public class UserDashboardModels
     {

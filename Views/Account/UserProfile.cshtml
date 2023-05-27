@@ -1,4 +1,4 @@
-﻿@model BugTracker.Models.UserModel
+﻿@model BugTracker.Models.EntityModels.UserModel
 @{
     ViewData["Title"] = "Profile";
 }
@@ -15,12 +15,12 @@
     <!-- email -->
     <div class="mt-sm-4">
         <h5>Email</h5>
-        <label name="email">@Model.EmailAddress</label>
+        <label name="email">@Model.Email</label>
     </div>
     <!-- username edit -->
     <div class="mt-sm-2">
         <h5>Username</h5>
-        <input type="text" name="username" value="@Model.UserName"/>
+        <input type="text" name="username" value="@Model.Name"/>
     </div>
     <!-- update profile button -->
     <div class="mt-sm-4">

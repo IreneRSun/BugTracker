@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Auth0.AspNetCore.Authentication;
-using BugTracker.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using System.Collections.Generic;
+using BugTracker.Models.DatabaseContexts;
+using BugTracker.Models.EntityModels;
+using BugTracker.Models.ViewDataModels;
 
 namespace BugTracker.Controllers
 {
@@ -47,18 +48,27 @@ namespace BugTracker.Controllers
         /// Method <c>GetDBContext</c> gets the current MySQL database context.
         /// </summary>
         /// <returns>The database context.</returns>
-        private DatabaseContext GetDBContext()
+        private MySQLDatabaseContext GetDBContext()
         {
-            return HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+            return HttpContext.RequestServices.GetService(typeof(MySQLDatabaseContext)) as MySQLDatabaseContext;
         }
 
         /// <summary>
         /// Method <c>GetAuthContext</c> gets the current Auth0 database context.
         /// </summary>
         /// <returns>The database context.</returns>
-        private AuthManagementContext GetAuthContext()
+        private Auth0ManagementContext GetAuthContext()
         {
-            return new AuthManagementContext(_configuration);
+            return new Auth0ManagementContext(_configuration);
+        }
+
+        /// <summary>
+        /// Method <c>GetUserID</c> gets the ID of the currently logged in user.
+        /// </summary>
+        /// <returns>The logged in user's ID.</returns>
+        private string GetUserID()
+        {
+            return User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         }
 
         /// <summary>
@@ -69,21 +79,20 @@ namespace BugTracker.Controllers
         private async Task<UserModel> GetUser()
         {
             // get user data from Auth0
-            string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            string userId = GetUserID();
             string emailAddress = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             string userName = User.Claims.FirstOrDefault(c => c.Type == "nickname")?.Value;
 
             // get corresponding avatar from database, if any
-            DatabaseContext dbContext = GetDBContext();
+            MySQLDatabaseContext dbContext = GetDBContext();
             string? avatar = await dbContext.GetAvatar(userId);
             avatar ??= User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value;
 
             // return the model of the user
-            return new UserModel()
+            return new UserModel(userId)
             {
-                UserId = userId,
-                EmailAddress = emailAddress,
-                UserName = userName,
+                Email = emailAddress,
+                Name = userName,
                 Avatar = avatar
             };
         }
@@ -96,10 +105,10 @@ namespace BugTracker.Controllers
         [Authorize, HttpGet]
         public async Task<IActionResult> UserDashboard(string? searchQuery)
         {
-            DatabaseContext dbContext = GetDBContext();
+            MySQLDatabaseContext dbContext = GetDBContext();
             
             UserModel userModel = await GetUser();
-            List<ProjectModel> userProjectModels = await dbContext.GetProjects(userModel.UserId);
+            List<ProjectModel> userProjectModels = await dbContext.GetProjects(userModel.ID);
             var searchProjectModels = new List<ProjectModel>();
             string? searchQueryString = null;
             if (!string.IsNullOrEmpty(searchQuery))
@@ -125,15 +134,22 @@ namespace BugTracker.Controllers
         [Authorize]
         public async Task<IActionResult> ProjectDashboard(string projectId)
         {
-            DatabaseContext dbContext = GetDBContext();
-            AuthManagementContext authContext = GetAuthContext();
+            MySQLDatabaseContext dbContext = GetDBContext();
+            Auth0ManagementContext authContext = GetAuthContext();
 
             ProjectModel project = await dbContext.GetProject(projectId);
             List<UserModel> developers = await dbContext.GetDevelopers(projectId);
             await authContext.FillUserData(developers);
 
-            var viewModels = new Tuple<ProjectModel, List<UserModel>>(project, developers);
-            return View(viewModels);
+            string userId = GetUserID();
+            bool userIsDeveloper = await dbContext.IsDeveloper(userId, projectId);
+
+            return View(new ProjectDashboardModels()
+            {
+                Project = project,
+                Developers = developers,
+                IsDeveloper = userIsDeveloper
+            });
         }
 
         /// <summary>
@@ -153,7 +169,7 @@ namespace BugTracker.Controllers
         [Authorize]
         public async Task<IActionResult> UserTasks()
         {
-            return View(GetUser());
+            return View();
         }
 
         /// <summary>
@@ -187,8 +203,8 @@ namespace BugTracker.Controllers
         {
             string projectName = Request.Form["project-name"];
             var user = await GetUser();
-            DatabaseContext dbContext = GetDBContext();
-            await dbContext.AddProject(projectName, user.UserId);
+            MySQLDatabaseContext dbContext = GetDBContext();
+            await dbContext.AddProject(projectName, user.ID);
             return RedirectToAction("UserDashboard", "Account");
         }
 
@@ -200,8 +216,8 @@ namespace BugTracker.Controllers
         [Authorize, HttpPost]
         public async Task<IActionResult> DeleteProject(string projectId)
         {
-            string userId = GetUser().Result.UserId;
-            DatabaseContext dbContext = GetDBContext();
+            string userId = GetUser().Result.ID;
+            MySQLDatabaseContext dbContext = GetDBContext();
             await dbContext.DeleteProject(projectId, userId);
             return RedirectToAction("UserDashboard", "Account");
         }
@@ -226,7 +242,7 @@ namespace BugTracker.Controllers
                     byte[] fileData = memoryStream.ToArray();
 
                     // add data to database
-                    DatabaseContext dbContext = GetDBContext();
+                    MySQLDatabaseContext dbContext = GetDBContext();
                     dbContext.SetAvatar(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value, fileData);
                 }
             }
@@ -245,7 +261,7 @@ namespace BugTracker.Controllers
 
             // request username update
             string? userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            AuthManagementContext authContext = GetAuthContext();
+            Auth0ManagementContext authContext = GetAuthContext();
             await authContext.UpdateUsername(userId, username);
 
             // request avatar update
@@ -265,7 +281,7 @@ namespace BugTracker.Controllers
         {
             // request account deletion
             string? userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            AuthManagementContext authContext = GetAuthContext();
+            Auth0ManagementContext authContext = GetAuthContext();
             await authContext.DeleteUser(userId);
 
             // log the user out

@@ -1,27 +1,31 @@
-﻿@model Tuple<BugTracker.Models.ProjectModel, List<BugTracker.Models.UserModel>>
+﻿@model BugTracker.Models.ViewDataModels.ProjectDashboardModels
 @{
 }
 
-<h2>@Model.Item1.ProjectName</h2>
+<img src=@Model.Project.Avatar alt="project avatar" width="100px" height="100px" />
+<h2>@Model.Project.Name</h2>
 
 <!-- header of page -->
 <div class="btn-toolbar">
-    <button type="button" class="btn btn-primary offset-1" id="create-report-btn" data-bs-toggle="modal" data-bs-target="#create-report-dialog">Report a Bug</button>
+    <button type="button" class="btn btn-primary" id="create-report-btn" data-bs-toggle="modal" data-bs-target="#create-report-dialog">Report a Bug</button>
 </div>
 
 <!-- collaborators list -->
 <h5>Developers</h5>
 <ul>
-    @foreach (var item in Model.Item2)
+    @foreach (var developer in Model.Developers)
     {
         <li>
-            <img src="@Html.DisplayFor(modelItem => item.Avatar)" alt="" class="rounded-circle" width="100px" height="100px" />
-            <label>@Html.DisplayFor(modelItem => item.UserName)</label>
+            <img src=@developer.Avatar alt="" class="rounded-circle" width="50px" height="50px" />
+            <label>@Html.DisplayFor(modelItem => developer.Name)</label>
         </li>
     }
 </ul>
 
 <!-- form for project deletion -->
-<form method="post" onSubmit="return confirm('This action is not cannot be undone. Are you sure you wish to proceed?');" class="mt-sm-5" asp-controller="Account" asp-action="DeleteProject" asp-route-projectId=@Model.Item1.ProjectId>
-    <button type="submit" class="btn-danger">Delete Project</button>
-</form>
+@if (Model.IsDeveloper)
+{
+    <form method="post" onSubmit="return confirm('This action is not cannot be undone. Are you sure you wish to proceed?');" class="mt-sm-5" asp-controller="Account" asp-action="DeleteProject" asp-route-projectId=@Model.Project.ID>
+        <button type="submit" class="btn-danger">Delete Project</button>
+    </form>
+}

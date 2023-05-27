@@ -1,15 +1,16 @@
 ﻿using Auth0.ManagementApi;
 using Auth0.ManagementApi.Models;
+using BugTracker.Models.EntityModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 
-namespace BugTracker.Models
+namespace BugTracker.Models.DatabaseContexts
 {
     /// <summary>
     /// Class <c>AuthManagementContext</c> models an API context that manages connections to the Auth0 Management API.
     /// </summary>
-    public class AuthManagementContext
+    public class Auth0ManagementContext
     {
         /// <value>
         /// Property <c>domain</c> is the domain associated with the Auth0 account.
@@ -35,7 +36,8 @@ namespace BugTracker.Models
         /// Method <c>AuthManagementContext</c> initializes the class with the relevant appsettings.json configurations.
         /// </summary>
         /// <param name="configuration">The appsettings.json configuration.</param>
-        public AuthManagementContext(IConfiguration configuration) {
+        public Auth0ManagementContext(IConfiguration configuration)
+        {
             domain = configuration["Auth0:Domain"];
             clientId = configuration["Auth0:ClientId"];
             clientSecret = configuration["Auth0:ClientSecret"];
@@ -52,8 +54,8 @@ namespace BugTracker.Models
             var client = new RestClient($"https://{domain}");
             var request = new RestRequest("/oauth/token", Method.Post);
             request.AddHeader("content-type", "application/json");
-            request.AddParameter("application/json", 
-                $"{{\"client_id\":\"{clientId}\",\"client_secret\":\"{clientSecret}\",\"audience\":\"{audience}\",\"grant_type\":\"client_credentials\"}}", 
+            request.AddParameter("application/json",
+                $"{{\"client_id\":\"{clientId}\",\"client_secret\":\"{clientSecret}\",\"audience\":\"{audience}\",\"grant_type\":\"client_credentials\"}}",
                 ParameterType.RequestBody);
             RestResponse response = client.Execute(request);
 
@@ -87,7 +89,7 @@ namespace BugTracker.Models
                     NickName = newName
                 };
                 await client.Users.UpdateAsync(userId, request);
-            }  
+            }
         }
 
         /// <summary>
@@ -114,9 +116,9 @@ namespace BugTracker.Models
             var client = new ManagementApiClient(token, domain);
             foreach (var user in users)
             {
-                var userData = await client.Users.GetAsync(user.UserId);
-                user.UserName = userData.NickName;
-                user.EmailAddress = userData.Email;
+                var userData = await client.Users.GetAsync(user.ID);
+                user.Name = userData.NickName;
+                user.Email = userData.Email;
                 user.Avatar ??= userData.Picture;
             }
         }
@@ -127,7 +129,7 @@ namespace BugTracker.Models
         /// <param name="searchQuery">The search query.</param>
         /// <param name="maxResults">The maximum number of users to return.</param>
         /// <returns>The list of users satisfying the criteria.</returns>
-        public async Task<List<UserModel>> SearchUsers(string searchQuery, int maxResults = 5)
+        public List<UserModel> SearchUsers(string searchQuery, int maxResults = 5)
         {
             // search for users
             string query = searchQuery.Length > 2 ? $"*{searchQuery}*" : $"{searchQuery}*";
@@ -148,11 +150,11 @@ namespace BugTracker.Models
                     var usersJObject = (JArray)json["users"];
                     foreach (JObject userJObject in usersJObject)
                     {
-                        var user = new UserModel()
+                        var userId = userJObject["user_id"].ToString();
+                        var user = new UserModel(userId)
                         {
-                            UserId = userJObject["user_id"].ToString(),
-                            EmailAddress = userJObject["email"].ToString(),
-                            UserName = userJObject["nickname"].ToString(),
+                            Email = userJObject["email"].ToString(),
+                            Name = userJObject["nickname"].ToString(),
                             Avatar = userJObject["picture"].ToString()
                         };
                         users.Add(user);

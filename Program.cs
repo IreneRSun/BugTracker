@@ -1,12 +1,12 @@
 using Auth0.AspNetCore.Authentication;
-using BugTracker.Models;
+using BugTracker.Models.DatabaseContexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 // Database services
-builder.Services.Add(new ServiceDescriptor(typeof(DatabaseContext), new DatabaseContext(builder.Configuration.GetConnectionString("DefaultConnection"))));
+builder.Services.Add(new ServiceDescriptor(typeof(MySQLDatabaseContext), new MySQLDatabaseContext(builder.Configuration.GetConnectionString("DefaultConnection"))));
 // Auth0 services
 builder.Services
     .AddAuth0WebAppAuthentication(options =>

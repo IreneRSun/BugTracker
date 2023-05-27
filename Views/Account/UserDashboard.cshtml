@@ -1,4 +1,4 @@
-﻿@model UserDashboardModels
+﻿@model BugTracker.Models.ViewDataModels.UserDashboardModels
 @{
     ViewData["Title"] = "Dashboard";
 }
@@ -17,8 +17,8 @@
 
 <!-- welcome message -->
 <div>
-    <img src="@Model.User.Avatar" alt="" class="rounded-circle" width="100px" height="100px" />
-    <h3>Welcome @Model.User.UserName</h3>
+    <img src="@Model.User.Avatar" alt="user avatar" class="rounded-circle" width="100px" height="100px" />
+    <h3>Welcome @Model.User.Name</h3>
 </div>
 
 <!-- project creation modal dialog -->
@@ -51,13 +51,18 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Search Results for "@Model.SearchQuery"</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    @foreach (var item in Model.ProjectSearchResults)
-                    {
-                        <label>@Html.DisplayFor(modelItem => item.ProjectName)</label>
-                    }
+                    <ul>
+                        @foreach (var project in Model.ProjectSearchResults)
+                        {
+                            <li>
+                                <img src=@project.Avatar alt="project avatar" width="30px" height="30px">
+                                <label>@Html.DisplayFor(modelItem => project.Name)</label>
+                            </li>
+                        }
+                    </ul>
                 </div>
             </div>
         </div>
@@ -66,20 +71,13 @@
 
 <!-- user's projects -->
 <h2>Projects</h2>
-<table class="table">
-  <tr>
-    <th>Project ID</th>
-    <th>Project Name</th>
-  </tr>
-  @foreach (var item in Model.UserProjects)
-  {
-    <tr>
-      <td>
-          <a href="@Url.Action("ProjectDashboard", "Account", new { projectId = item.ProjectId, userId = Model.User.UserId })">@Html.DisplayFor(modelItem => item.ProjectId)</a>
-      </td>
-      <td>
-        @Html.DisplayFor(modelItem => item.ProjectName)
-      </td>
-    </tr>
-  }
-</table>
+<ul>
+    @foreach (var project in Model.UserProjects)
+    {
+        <li>
+            <img src=@project.Avatar alt="project avatar" width="30px" height="30px">
+            <a href="@Url.Action("ProjectDashboard", "Account", new { projectId = project.ID, userId = Model.User.ID })">@Html.DisplayFor(modelItem => project.Name)</a>
+        </li>
+    }
+</ul>
+
