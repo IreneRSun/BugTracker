@@ -59,7 +59,7 @@
                         {
                             <li>
                                 <img src=@project.Avatar alt="project avatar" width="30px" height="30px">
-                                <label>@Html.DisplayFor(modelItem => project.Name)</label>
+                                <a href="@Url.Action("ProjectDashboard", "Account", new { projectId = project.ID, userId = Model.User.ID })">@Html.DisplayFor(modelItem => project.Name)</a>
                             </li>
                         }
                     </ul>
