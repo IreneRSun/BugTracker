@@ -46,8 +46,11 @@
                             @foreach (var user in Model.UserSearchResults)
                             {
                                 <li>
-                                    <img src=@user.Avatar alt="project avatar" width="30px" height="30px">
-                                    <label>@user.Name</label>
+                                    <form method="post" asp-controller="Account" asp-action="AddDeveloper" asp-route-projectId=@Model.Project.ID asp-route-userId=@user.ID>
+                                        <img src=@user.Avatar alt="project avatar" class="rounded-circle" width="30px" height="30px">
+                                        <label>@user.Name</label>
+                                        <button type="submit" class="rounded-circle bg-white">+</button>
+                                    </form>
                                 </li>
                             }
                         </ul>

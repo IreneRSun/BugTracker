@@ -32,7 +32,7 @@ namespace BugTracker.Controllers
         /// Method <c>Login</c> handles the login of the user.
         /// </summary>
         /// <param name="returnUrl">The location to send the user after authentication.</param>
-        public async Task Login(string returnUrl = "/")
+        public async Task Login(string returnUrl = "/Account/LoginCallback")
         {
             var authenticationProperties = new LoginAuthenticationPropertiesBuilder()
               .WithRedirectUri(returnUrl)
@@ -42,6 +42,21 @@ namespace BugTracker.Controllers
               Auth0Constants.AuthenticationScheme,
               authenticationProperties
             );
+        }
+
+        /// <summary>
+        /// Method <c>LoginCallback</c> handles pipeline actions after user login.
+        /// </summary>
+        /// <returns>The action result of homepage the user sees after login.</returns>
+        [Authorize]
+        public async Task<IActionResult> LoginCallback()
+        {
+            // make sure the user is registered in the MySQL database as well
+            string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var dbContext = GetDBContext();
+            await dbContext.AddUserIfNone(userId);
+
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>
@@ -152,7 +167,11 @@ namespace BugTracker.Controllers
                 userSearchResults = authContext.SearchUsers(searchQuery);
                 foreach (var user in userSearchResults)
                 {
-                    user.Avatar = await dbContext.GetAvatar(user.ID);
+                    string? databaseAvatar = await dbContext.GetAvatar(user.ID);
+                    if (databaseAvatar != null)
+                    {
+                        user.Avatar = databaseAvatar;
+                    }
                 }
             }
 
@@ -234,6 +253,20 @@ namespace BugTracker.Controllers
             MySQLDatabaseContext dbContext = GetDBContext();
             await dbContext.DeleteProject(projectId, userId);
             return RedirectToAction("UserDashboard", "Account");
+        }
+
+        /// <summary>
+        /// Method <c>AddDeveloper</c> adds a user as a developer to a project.
+        /// </summary>
+        /// <returns>The updated project dashboard action result.</returns>
+        [Authorize, HttpPost]
+        public async Task<IActionResult> AddDeveloper(string projectId, string userId)
+        {
+            MySQLDatabaseContext dbContext = GetDBContext();
+            await dbContext.AddDeveloper(projectId, userId);
+
+            var parameters = new { projectId };
+            return RedirectToAction("ProjectDashboard", "Account", parameters);
         }
 
         /// <summary>

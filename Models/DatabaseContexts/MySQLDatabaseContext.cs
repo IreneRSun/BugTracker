@@ -1,6 +1,8 @@
-﻿using BugTracker.Models.EntityModels;
+﻿using Auth0.ManagementApi.Models;
+using BugTracker.Models.EntityModels;
 using MySql.Data.MySqlClient;
 using System.Data;
+using System.Web.Razor.Generator;
 
 namespace BugTracker.Models.DatabaseContexts
 {
@@ -144,14 +146,36 @@ namespace BugTracker.Models.DatabaseContexts
         }
 
         /// <summary>
+        /// Method <c>AddUserIfNone</c> adds a user if one does not exist in the database (avoids constraint errors).
+        /// </summary>
+        /// <param name="userId">The ID of the user to add.</param>
+        public async Task AddUserIfNone(string userId)
+        {
+            // build database update command
+            var sqlCmd = "INSERT IGNORE INTO users (uid, avatar) VALUES (@uid, NULL)";
+            var parameters = new Dictionary<string, string>
+            {
+                { "@uid", userId }
+            };
+
+            // add new user
+            await UpdateDatabase(sqlCmd, parameters);
+        }
+
+        /// <summary>
         /// Method <c>GetAvatarFromReader</c> converts avatar BLOB data from a MySqlDataReader to a string.
         /// </summary>
         /// <param name="reader">The MySqlDataReader that contains the avatar data.</param>
-        /// <returns></returns>
-        private static string GetAvatarFromReader(MySqlDataReader reader)
+        /// <returns>The converted string avatar from the reader.</returns>
+        private static string? GetAvatarFromReader(MySqlDataReader reader)
         {
-            var avatarData = reader.GetFieldValue<byte[]>("avatar");
-            return "data:image/png;base64," + Convert.ToBase64String(avatarData);
+            if (!reader.IsDBNull("avatar"))
+            {
+                var avatarData = reader.GetFieldValue<byte[]>("avatar");
+                return "data:image/png;base64," + Convert.ToBase64String(avatarData);
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -170,15 +194,11 @@ namespace BugTracker.Models.DatabaseContexts
             // build query result parser
             Func<MySqlDataReader, Task<string?>> queryParser = async (reader) =>
             {
-                if (reader.HasRows)
-                {
-                    // convert avatar byte array to string
-                    await reader.ReadAsync();
-                    return GetAvatarFromReader(reader);
-                }
-                return null;
+                // convert avatar byte array to string
+                await reader.ReadAsync();
+                return GetAvatarFromReader(reader);
             };
-
+            
             return await QueryDatabase(query, parameters, queryParser);
         }
 
@@ -189,21 +209,8 @@ namespace BugTracker.Models.DatabaseContexts
         /// <param name="imageData">The byte array containing the data of the image to set the avatar to.</param>
         public async Task SetAvatar(string userId, byte[] imageData)
         {
-            // query database for the user
-            var query = "SELECT * FROM users WHERE uid = @uid";
-            var parameters = new Dictionary<string, string> {
-                { "@uid", userId }
-            };
-
-            Func<MySqlDataReader, Task<bool>> queryParser = async (reader) =>
-            {
-                return reader.HasRows;
-            };
-
-            bool userExists = await QueryDatabase(query, parameters, queryParser);
-
             // build database update command
-            var sqlCmd = userExists ? "UPDATE users SET avatar = @imageData WHERE uid = @uid" : "INSERT INTO users (uid, avatar) VALUES (@uid, @imageData)";
+            var sqlCmd = "UPDATE users SET avatar = @imageData WHERE uid = @uid";
             Action<MySqlCommand> addParameters = (cmd) =>
             {
                 cmd.Parameters.AddWithValue("@imageData", imageData).DbType = DbType.Binary;  // tells database to treat the byte array as a blob
