@@ -17,10 +17,46 @@
     {
         <li>
             <img src=@developer.Avatar alt="" class="rounded-circle" width="50px" height="50px" />
-            <label>@Html.DisplayFor(modelItem => developer.Name)</label>
+            <label>@developer.Name</label>
         </li>
     }
 </ul>
+
+<!-- collaborator addition -->
+@if (Model.IsDeveloper)
+{
+    <h5>Add Collaborators</h5>
+    <form method="get" class="mt-1" asp-controller="Account" asp-action="ProjectDashboard">
+        <input type="hidden" name="projectId" value=@Model.Project.ID />
+        <input type="text" name="searchQuery" placeholder="Search for users ... " />
+        <button type="submit">Search</button>
+    </form>
+
+    @if (Model.SearchQuery != null)
+    {
+        <div class="modal fade mt-2 search-results" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Search Results for "@Model.SearchQuery"</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul>
+                            @foreach (var user in Model.UserSearchResults)
+                            {
+                                <li>
+                                    <img src=@user.Avatar alt="project avatar" width="30px" height="30px">
+                                    <label>@user.Name</label>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
 
 <!-- form for project deletion -->
 @if (Model.IsDeveloper)

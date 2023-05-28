@@ -5,7 +5,7 @@
 
 // Document logic for showing search results
 $(document).ready(() => {
-    $('#project-search-results').modal('show');
+    $(".search-results").modal("show");
 });
 
 // Function updates the profile image on the profile page to the uploaded image for previewing when called

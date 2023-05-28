@@ -292,8 +292,8 @@ namespace BugTracker.Models.DatabaseContexts
             // build query result parser
             Func<MySqlDataReader, Task<ProjectModel>> queryParser = async (reader) =>
             {
-                await reader.ReadAsync();
-                var projectId = reader.GetString("pid");
+                var a = await reader.ReadAsync();
+                
                 var project = new ProjectModel(projectId)
                 {
                     Name = reader.GetString("name")

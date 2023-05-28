@@ -131,8 +131,8 @@ namespace BugTracker.Controllers
         /// </summary>
         /// <param name="projectId">The ID of the project to get the dashboard for.</param>
         /// <returns>The project dashboard action result.</returns>
-        [Authorize]
-        public async Task<IActionResult> ProjectDashboard(string projectId)
+        [Authorize, HttpGet]
+        public async Task<IActionResult> ProjectDashboard(string projectId, string searchQuery)
         {
             MySQLDatabaseContext dbContext = GetDBContext();
             Auth0ManagementContext authContext = GetAuthContext();
@@ -144,11 +144,25 @@ namespace BugTracker.Controllers
             string userId = GetUserID();
             bool userIsDeveloper = await dbContext.IsDeveloper(userId, projectId);
 
+            string? searchQueryString = null;
+            var userSearchResults = new List<UserModel>();
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                searchQueryString = searchQuery;
+                userSearchResults = authContext.SearchUsers(searchQuery);
+                foreach (var user in userSearchResults)
+                {
+                    user.Avatar = await dbContext.GetAvatar(user.ID);
+                }
+            }
+
             return View(new ProjectDashboardModels()
             {
                 Project = project,
                 Developers = developers,
-                IsDeveloper = userIsDeveloper
+                IsDeveloper = userIsDeveloper,
+                SearchQuery = searchQueryString,
+                UserSearchResults = userSearchResults
             });
         }
 

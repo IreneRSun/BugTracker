@@ -144,11 +144,10 @@ namespace BugTracker.Models.DatabaseContexts
             var users = new List<UserModel>();
             if (response.Content != null)
             {
-                var json = JsonConvert.DeserializeObject<JObject>(response.Content);
+                var json = JsonConvert.DeserializeObject<JArray>(response.Content);
                 if (json != null)
                 {
-                    var usersJObject = (JArray)json["users"];
-                    foreach (JObject userJObject in usersJObject)
+                    foreach (JObject userJObject in json)
                     {
                         var userId = userJObject["user_id"].ToString();
                         var user = new UserModel(userId)

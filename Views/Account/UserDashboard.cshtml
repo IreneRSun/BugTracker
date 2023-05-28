@@ -25,7 +25,7 @@
 <div class="modal fade" id="create-project-dialog" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="post" asp-controller="Account" asp-action="CreateProject" asp>
+            <form method="post" asp-controller="Account" asp-action="CreateProject">
                 <div class="modal-header">
                     <h5 class="modal-title">Create Project</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -46,7 +46,7 @@
 <!-- project search results modal dialog -->
 @if (Model.SearchQuery != null)
 {
-    <div class="modal fade mt-2" id="project-search-results" tabindex="-1">
+    <div class="modal fade mt-2 search-results" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -59,7 +59,7 @@
                         {
                             <li>
                                 <img src=@project.Avatar alt="project avatar" width="30px" height="30px">
-                                <a href="@Url.Action("ProjectDashboard", "Account", new { projectId = project.ID, userId = Model.User.ID })">@Html.DisplayFor(modelItem => project.Name)</a>
+                                <a asp-controller="Account" asp-action="ProjectDashboard" asp-route-projectId=@project.ID>@project.Name</a>
                             </li>
                         }
                     </ul>
@@ -76,7 +76,7 @@
     {
         <li>
             <img src=@project.Avatar alt="project avatar" width="30px" height="30px">
-            <a href="@Url.Action("ProjectDashboard", "Account", new { projectId = project.ID, userId = Model.User.ID })">@Html.DisplayFor(modelItem => project.Name)</a>
+            <a asp-controller="Account" asp-action="ProjectDashboard" asp-route-projectId=@project.ID>@project.Name</a>
         </li>
     }
 </ul>
