@@ -7,6 +7,7 @@ using System.Security.Claims;
 using BugTracker.Models.DatabaseContexts;
 using BugTracker.Models.EntityModels;
 using BugTracker.Models.ViewDataModels;
+using Auth0.ManagementApi.Models;
 
 namespace BugTracker.Controllers
 {
@@ -264,6 +265,31 @@ namespace BugTracker.Controllers
         {
             MySQLDatabaseContext dbContext = GetDBContext();
             await dbContext.AddDeveloper(projectId, userId);
+
+            var parameters = new { projectId };
+            return RedirectToAction("ProjectDashboard", "Account", parameters);
+        }
+
+        [Authorize, HttpPost]
+        public async Task<IActionResult> ReportBug(string projectId)
+        {
+            // get bug report data
+            var report_fields = new Dictionary<string, string> 
+            {
+                { "summary", Request.Form["report-summary"] },
+                { "software_version", Request.Form["software-version"] },
+                { "device", Request.Form["device"] },
+                { "os", Request.Form["os"] },
+                { "expected_result", Request.Form["expected-result"] },
+                { "actual_result", Request.Form["actual-result"] },
+                { "steps", Request.Form["steps"] },
+                { "details", Request.Form["details"] }
+            };
+
+            string userId = GetUser().Result.ID;
+
+            MySQLDatabaseContext dbContext = GetDBContext();
+            await dbContext.AddReport(projectId, userId, report_fields);
 
             var parameters = new { projectId };
             return RedirectToAction("ProjectDashboard", "Account", parameters);

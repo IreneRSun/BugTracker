@@ -5,9 +5,50 @@
 <img src=@Model.Project.Avatar alt="project avatar" width="100px" height="100px" />
 <h2>@Model.Project.Name</h2>
 
-<!-- header of page -->
-<div class="btn-toolbar">
-    <button type="button" class="btn btn-primary" id="create-report-btn" data-bs-toggle="modal" data-bs-target="#create-report-dialog">Report a Bug</button>
+<!-- bug reporting modal dialog -->
+<button type="button" class="btn btn-primary" id="create-report-btn" data-bs-toggle="modal" data-bs-target="#create-report-dialog">Report a Bug</button>
+
+<div class="modal fade" id="create-report-dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-controller="Account" asp-action="ReportBug" asp-route-projectId=@Model.Project.ID>
+                <div class="modal-header">
+                    <h5 class="modal-title">Report Bug</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <label>Summary</label>
+                    <input type="text" name="report-summary" placeholder="Enter a summary of the bug here" maxlength="150" required />
+                    <br />
+                    <label>Software Version</label>
+                    <input type="number" name="software-version" min="1" step="0.001" required />
+                    <br />
+                    <label>Device</label>
+                    <input type="text" name="device" placeholder="Enter your device type" maxlength="50" />
+                    <br />
+                    <label>Operating System</label>
+                    <input type="text" name="os" placeholder="Enter you operating system" maxlength="50" required />
+                    <br />
+                    <label>Expected Result</label>
+                    <input type="text" name="expected-result" placeholder="What you expected to happen" maxlength="200" required />
+                    <br />
+                    <label>Actual Result</label>
+                    <input type="text" name="actual-result" placeholder="What actually happened" maxlength="200" required />
+                    <br />
+                    <label>Steps to Reproduce the Bug</label>
+                    <input type="text" name="steps" placeholder="List your steps here" required />
+                    <br />
+                    <label>Other Details</label>
+                    <input type="text" name="details" placeholder="Add any other details here" />
+                    <br />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 <!-- collaborators list -->
