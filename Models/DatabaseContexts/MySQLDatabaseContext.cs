@@ -1,8 +1,6 @@
-﻿using Auth0.ManagementApi.Models;
-using BugTracker.Models.EntityModels;
+﻿using BugTracker.Models.EntityModels;
 using MySql.Data.MySqlClient;
 using System.Data;
-using System.Web.Razor.Generator;
 
 namespace BugTracker.Models.DatabaseContexts
 {
@@ -14,7 +12,7 @@ namespace BugTracker.Models.DatabaseContexts
         /// <value>
         /// Property <c>ConnectionString</c> is the connection string used for connecting to the database.
         /// </value>
-        public string ConnectionString { get; set; }
+        private readonly string _connectionString;
 
         /// <summary>
         /// Constructor <c>DatabaseContext</c> creates a DatabaseContext initialized with the given connection string.
@@ -22,7 +20,7 @@ namespace BugTracker.Models.DatabaseContexts
         /// <param name="connectionString">The connection string.</param>
         public MySQLDatabaseContext(string connectionString)
         {
-            ConnectionString = connectionString;
+            _connectionString = connectionString;
         }
 
         /// <summary>
@@ -31,7 +29,7 @@ namespace BugTracker.Models.DatabaseContexts
         /// <returns>The MySqlConnection that represents the connection to the database.</returns>
         private MySqlConnection GetConnection()
         {
-            return new MySqlConnection(ConnectionString);
+            return new MySqlConnection(_connectionString);
         }
 
         /// <summary>
@@ -430,6 +428,12 @@ namespace BugTracker.Models.DatabaseContexts
         /// <returns></returns>
         public async Task AddDeveloper(string projectId, string developerId)
         {
+            // check if user is already a developer of this project
+            if (await IsDeveloper(developerId, projectId))
+            {
+                return;
+            }
+
             // find a unique hash for the new development relationship
             string developmentId = await FindUniqueHash("developments", "did");
 
@@ -444,6 +448,50 @@ namespace BugTracker.Models.DatabaseContexts
 
             // add new developer
             await UpdateDatabase(sqlCmd, parameters);
+        }
+
+        /// <summary>
+        /// Method <c>GetReports</c> gets the bug reports of a project.
+        /// </summary>
+        /// <param name="projectId">The ID of the project to get the reports for.</param>
+        /// <returns>The list of bug reports for the project.</returns>
+        public async Task<List<BugReportModel>> GetReports(string projectId)
+        {
+            // build query
+            var query = "SELECT * FROM bug_reports WHERE project = @pid";
+            var parameters = new Dictionary<string, string> {
+                { "@pid", projectId }
+            };
+
+            // build query result parser
+            Func<MySqlDataReader, Task<List<BugReportModel>>> queryParser = async (reader) =>
+            {
+                var bugs = new List<BugReportModel>();
+                while (await reader.ReadAsync())
+                {
+                    var reportId = reader.GetString("bid");
+                    bugs.Add(new BugReportModel(reportId)
+                    {
+                        ReporterID = reader.GetString("reportee"),
+                        ProjectID = reader.GetString("project"),
+                        Summary = reader.GetString("summary"),
+                        SoftwareVersion = reader.GetDecimal("software_version"),
+                        Device = reader.GetString("device"),
+                        OS = reader.GetString("os"),
+                        ExpectedResult = reader.GetString("expected_result"),
+                        ActualResult = reader.GetString("actual_result"),
+                        Steps = reader.GetString("steps"),
+                        Details = reader.GetString("details"),
+                        Priority = reader.GetString("priority"),
+                        Severity = reader.GetInt16("severity"),
+                        Status = reader.GetString("status"),
+                        Date = reader.GetDateTime("date")
+                    });
+                }
+                return bugs;
+            };
+
+            return await QueryDatabase(query, parameters, queryParser);
         }
 
         /// <summary>

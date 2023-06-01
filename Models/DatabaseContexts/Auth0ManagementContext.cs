@@ -15,33 +15,33 @@ namespace BugTracker.Models.DatabaseContexts
         /// <value>
         /// Property <c>domain</c> is the domain associated with the Auth0 account.
         /// </value>
-        private readonly string domain;
+        private readonly string _domain;
 
         /// <value>
         /// Property <c>clientId</c> is the application ID.
         /// </value>
-        private readonly string clientId;
+        private readonly string _clientId;
 
         /// <value>
         /// Property <c>clientSecret</c> is the password associated with the application ID.
         /// </value>
-        private readonly string clientSecret;
+        private readonly string _clientSecret;
 
         /// <value>
         /// Property <c>audience</c> is the unique identifier of the API.
         /// </value>
-        private readonly string audience;
+        private readonly string _audience;
 
         /// <summary>
-        /// Method <c>AuthManagementContext</c> initializes the class with the relevant appsettings.json configurations.
+        /// Method <c>AuthManagementContext</c> initializes the class with the relevant configurations.
         /// </summary>
         /// <param name="configuration">The appsettings.json configuration.</param>
-        public Auth0ManagementContext(IConfiguration configuration)
+        public Auth0ManagementContext(string domain, string clientId, string clientSecret, string audience)
         {
-            domain = configuration["Auth0:Domain"];
-            clientId = configuration["Auth0:ClientId"];
-            clientSecret = configuration["Auth0:ClientSecret"];
-            audience = configuration["Auth0:Audience"];
+            _domain = domain;
+            _clientId = clientId;
+            _clientSecret = clientSecret;
+            _audience = audience;
         }
 
         /// <summary>
@@ -51,11 +51,11 @@ namespace BugTracker.Models.DatabaseContexts
         private string? GetToken()
         {
             // request token
-            var client = new RestClient($"https://{domain}");
+            var client = new RestClient($"https://{_domain}");
             var request = new RestRequest("/oauth/token", Method.Post);
             request.AddHeader("content-type", "application/json");
             request.AddParameter("application/json",
-                $"{{\"client_id\":\"{clientId}\",\"client_secret\":\"{clientSecret}\",\"audience\":\"{audience}\",\"grant_type\":\"client_credentials\"}}",
+                $"{{\"client_id\":\"{_clientId}\",\"client_secret\":\"{_clientSecret}\",\"audience\":\"{_audience}\",\"grant_type\":\"client_credentials\"}}",
                 ParameterType.RequestBody);
             RestResponse response = client.Execute(request);
 
@@ -66,11 +66,31 @@ namespace BugTracker.Models.DatabaseContexts
                 var jsonResponse = JsonConvert.DeserializeObject<JObject>(response.Content);
                 if (jsonResponse != null)
                 {
-                    token = jsonResponse["access_token"].ToString();
+                    JToken? jsonToken = jsonResponse["access_token"];
+                    if (jsonToken != null)
+                    {
+                        token = jsonToken.ToString();
+                    }
                 }
             }
 
             return token;
+        }
+
+        public async Task<UserModel> getUser(string userId)
+        {
+            // request user data
+            string? token = GetToken();
+            var client = new ManagementApiClient(token, _domain);
+            var userData = await client.Users.GetAsync(userId);
+
+            // create user model with data
+            return new UserModel(userId)
+            {
+                Name = userData.NickName,
+                Email = userData.Email,
+                Avatar = userData.Picture
+            };
         }
 
         /// <summary>
@@ -78,49 +98,41 @@ namespace BugTracker.Models.DatabaseContexts
         /// </summary>
         /// <param name="userId">The ID of the user to update the name of.</param>
         /// <param name="newName">The new name to update to.</param>
-        public async Task UpdateUsername(string? userId, string newName)
+        public async Task UpdateUsername(string userId, string newName)
         {
-            if (userId != null)
+            string? token = GetToken();
+            var client = new ManagementApiClient(token, _domain);
+
+            var request = new UserUpdateRequest
             {
-                string? token = GetToken();
-                var client = new ManagementApiClient(token, domain);
-                var request = new UserUpdateRequest
-                {
-                    NickName = newName
-                };
-                await client.Users.UpdateAsync(userId, request);
-            }
+                NickName = newName
+            };
+            await client.Users.UpdateAsync(userId, request);
         }
 
         /// <summary>
         /// Method <c>DeleteUser</c> deletes a user from the Auth0 database.
         /// </summary>
         /// <param name="userId">The ID of the user to delete.</param>
-        public async Task DeleteUser(string? userId)
+        public async Task DeleteUser(string userId)
         {
-            if (userId != null)
-            {
-                string? token = GetToken();
-                var client = new ManagementApiClient(token, domain);
-                await client.Users.DeleteAsync(userId);
-            }
+            string? token = GetToken();
+            var client = new ManagementApiClient(token, _domain);
+            await client.Users.DeleteAsync(userId);
         }
 
         /// <summary>
-        /// Method <c>FillUserData</c> fills a list of UserModel objects with their corresponding data from the Auth0 database.
+        /// Method <c>FillUserData</c> fills a UserModel object with their corresponding data from the Auth0 database.
         /// </summary>
-        /// <param name="users">The list of users.</param>
-        public async Task FillUserData(List<UserModel> users)
+        /// <param name="users">The UserModel representing the user.</param>
+        public async Task FillUserData(UserModel user)
         {
             string? token = GetToken();
-            var client = new ManagementApiClient(token, domain);
-            foreach (var user in users)
-            {
-                var userData = await client.Users.GetAsync(user.ID);
-                user.Name = userData.NickName;
-                user.Email = userData.Email;
-                user.Avatar ??= userData.Picture;
-            }
+            var client = new ManagementApiClient(token, _domain);
+            var userData = await client.Users.GetAsync(user.ID);
+            user.Name = userData.NickName;
+            user.Email = userData.Email;
+            user.Avatar ??= userData.Picture;
         }
 
         /// <summary>
@@ -129,14 +141,14 @@ namespace BugTracker.Models.DatabaseContexts
         /// <param name="searchQuery">The search query.</param>
         /// <param name="maxResults">The maximum number of users to return.</param>
         /// <returns>The list of users satisfying the criteria.</returns>
-        public List<UserModel> SearchUsers(string searchQuery, int maxResults = 5)
+        public List<UserModel> SearchUsers(string searchQuery)
         {
             // search for users
             string query = searchQuery.Length > 2 ? $"*{searchQuery}*" : $"{searchQuery}*";
 
             string? token = GetToken();
-            var client = new RestClient($"https://{domain}");
-            var request = new RestRequest($"/api/v2/users?q=nickname%3A{query}&page=0&per_page={maxResults}&search_engine=v3", Method.Get);
+            var client = new RestClient($"https://{_domain}");
+            var request = new RestRequest($"/api/v2/users?q=nickname%3A{query}&search_engine=v3", Method.Get);
             request.AddHeader("authorization", $"Bearer {token}");
             RestResponse response = client.Execute(request);
 
@@ -147,7 +159,7 @@ namespace BugTracker.Models.DatabaseContexts
                 var json = JsonConvert.DeserializeObject<JArray>(response.Content);
                 if (json != null)
                 {
-                    foreach (JObject userJObject in json)
+                    foreach (JToken userJObject in json)
                     {
                         var userId = userJObject["user_id"].ToString();
                         var user = new UserModel(userId)

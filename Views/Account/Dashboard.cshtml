@@ -1,0 +1,77 @@
+﻿@model BugTracker.Models.ViewDataModels.DashboardViewModel
+
+<!-- project creation button -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-project-dialog">New Project</button>
+
+<!-- project search bar -->
+<form method="get" class="mt-1" asp-controller="Account" asp-action="Dashboard">
+    <input type="text" name="searchQuery" placeholder="Search for projects ... " />
+    <button type="submit">Search</button>
+</form>
+
+<!-- welcome message -->
+<div>
+    <img src="@Model.User.Avatar" alt="user avatar" class="rounded-circle" width="100px" height="100px" />
+    <h3>Welcome @Model.User.Name</h3>
+</div>
+
+<!-- project creation modal dialog -->
+<div class="modal fade" id="create-project-dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-controller="AccountActions" asp-action="CreateProject">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Project</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <label>Enter a name for the project: </label>
+                    <input type="text" name="project-name" placeholder="Project Name" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Create Project</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- project search results modal dialog -->
+@if (Model.SearchQuery != null)
+{
+    <div class="modal fade mt-2 search-results" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Search Results for "@Model.SearchQuery"</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        @foreach (var project in Model.ProjectSearchResults)
+                        {
+                            <li>
+                                <img src=@project.Avatar alt="project avatar" width="30px" height="30px">
+                                <a asp-controller="Account" asp-action="Project" asp-route-projectId=@project.ID>@project.Name</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- user's projects -->
+<h2>Projects</h2>
+<ul>
+    @foreach (var project in Model.UserProjects)
+    {
+        <li>
+            <img src=@project.Avatar alt="project avatar" width="30px" height="30px">
+            <a asp-controller="Account" asp-action="Project" asp-route-projectId=@project.ID>@project.Name</a>
+        </li>
+    }
+</ul>
+
