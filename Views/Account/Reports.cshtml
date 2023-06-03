@@ -1,0 +1,30 @@
+﻿@model BugTracker.Models.ViewDataModels.ReportsViewModel
+
+<!-- sort options -->
+<label>Filter Type</label>
+<select>
+	<options>All</options>
+</select>
+<label>Sort Type</label>
+<select>
+	<option>Date</option>
+	<option>Severity</option>
+	<option>Priority</option>
+</select>
+
+<label>Sort Order</label>
+<select>
+	<option>Descending</option>
+	<option>Ascending</option>
+</select>
+
+<h2>@Model.FilterType Bug Reports</h2>
+
+<li>
+	@foreach (var report in Model.BugReports)
+	{
+		<ul>
+			<a asp-controller="Account" asp-action="BugReport" asp-route-bugReport="">@report.Summary</a>
+		</ul>
+	}
+</li>

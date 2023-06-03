@@ -1,0 +1,10 @@
+﻿@model BugTracker.Models.ViewDataModels.TasksViewModel
+
+<li>
+	@foreach (var report in Model.BugReports)
+	{
+		<ul>
+			@report.Summary
+		</ul>
+	}
+</li>

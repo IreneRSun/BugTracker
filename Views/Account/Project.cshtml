@@ -6,7 +6,7 @@
 <!-- bug reporting modal dialog -->
 <div class="btn-toolbar">
     <button type="button" class="btn btn-primary" id="create-report-btn" data-bs-toggle="modal" data-bs-target="#create-report-dialog">Report a Bug</button>
-    <a asp-controller="Account" asp-action="Reports" asp-route-projectId=@Model.Project.ID></a>
+    <a asp-controller="Account" asp-action="Reports" asp-route-projectId=@Model.Project.ID>See Bug Reports</a>
 </div>
 
 <div class="modal fade" id="create-report-dialog" tabindex="-1">

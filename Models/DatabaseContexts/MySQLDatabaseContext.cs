@@ -470,21 +470,21 @@ namespace BugTracker.Models.DatabaseContexts
                 while (await reader.ReadAsync())
                 {
                     var reportId = reader.GetString("bid");
-                    bugs.Add(new BugReportModel(reportId)
+					bugs.Add(new BugReportModel(reportId)
                     {
                         ReporterID = reader.GetString("reportee"),
                         ProjectID = reader.GetString("project"),
                         Summary = reader.GetString("summary"),
                         SoftwareVersion = reader.GetDecimal("software_version"),
-                        Device = reader.GetString("device"),
+                        Device = reader.IsDBNull("device") ? null : reader.GetString("device"),
                         OS = reader.GetString("os"),
                         ExpectedResult = reader.GetString("expected_result"),
                         ActualResult = reader.GetString("actual_result"),
                         Steps = reader.GetString("steps"),
-                        Details = reader.GetString("details"),
-                        Priority = reader.GetString("priority"),
-                        Severity = reader.GetInt16("severity"),
-                        Status = reader.GetString("status"),
+                        Details = reader.IsDBNull("details") ? null : reader.GetString("details"),
+                        Priority = reader.IsDBNull("priority") ? null : reader.GetString("priority"),
+                        Severity = reader.IsDBNull("severity") ? null : reader.GetInt16("severity"),
+                        Status = reader.IsDBNull("status") ? null : reader.GetString("status"),
                         Date = reader.GetDateTime("date")
                     });
                 }

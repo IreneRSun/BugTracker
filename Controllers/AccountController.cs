@@ -202,36 +202,41 @@ namespace BugTracker.Controllers
             return View(viewModel);
         }
 
-        /// <summary>
-        /// Method <c>Issues</c> gets the ViewResult for the issues page (page showing sorted bug reports).
-        /// </summary>
-        /// <param name="viewModel">The model containing the page data.</param>
-        /// <returns>The ViewResult of the issues page.</returns>
-        public IActionResult Issues(IssuesViewModel viewModel)
+		/// <summary>
+		/// Method <c>Tasks</c> gets the ViewResult for the tasks page.
+		/// </summary>
+		/// <param name="viewModel">The model containing the page data.</param>
+		/// <returns>The ViewResult of the issues page.</returns>
+		public async Task<IActionResult> Tasks()
         {
-            return View(viewModel);
-        }
-
-        public async Task<IActionResult> Tasks(string userId)
-        {
+            string? userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             var dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
             List<BugReportModel> tasks = await dbContext.SqlDb.GetAssignments(userId);
-            var viewModel = new IssuesViewModel()
+            var viewModel = new TasksViewModel()
             {
                 BugReports = tasks
             };
-            return RedirectToAction("Issues", "Account", viewModel);
+            return View(viewModel);
         }
 
         public async Task<IActionResult> Reports(string projectId)
         {
             var dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
             List<BugReportModel> tasks = await dbContext.SqlDb.GetReports(projectId);
-            var viewModel = new IssuesViewModel()
+            var viewModel = new ReportsViewModel()
             {
                 BugReports = tasks
             };
-            return RedirectToAction("Issues", "Account", viewModel);
+            return View(viewModel);
+        }
+
+        public IActionResult BugReport(BugReportModel bugReport)
+        {
+            var viewModel = new BugReportViewModel()
+            {
+                BugReport = bugReport
+            };
+            return View(viewModel);
         }
     }
 }
