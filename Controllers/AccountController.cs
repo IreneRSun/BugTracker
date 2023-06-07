@@ -7,7 +7,7 @@ using System.Security.Claims;
 using BugTracker.Models.DatabaseContexts;
 using BugTracker.Models.EntityModels;
 using BugTracker.Models.ViewDataModels;
-using Auth0.ManagementApi.Models;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BugTracker.Controllers
 {
@@ -15,7 +15,7 @@ namespace BugTracker.Controllers
     /// Class <c>AccountController</c> is a controller handling user authentication
     /// and the pages that are available when the user is authenticated.
     /// </summary>
-    public class AccountController : Controller
+    public class AccountController : DatabaseAccessingController
     {
         /// <summary>
         /// Method <c>Login</c> handles the login of the user.
@@ -41,8 +41,8 @@ namespace BugTracker.Controllers
         public async Task<IActionResult> LoginCallback()
         {
             // make sure the user is registered in the MySQL database
-            string? userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            var dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+            string userId = GetUserId();
+            var dbContext = GetDbCxt();
             if (userId != null && dbContext != null)
             {
                 await dbContext.SqlDb.AddUserIfNone(userId);
@@ -98,8 +98,8 @@ namespace BugTracker.Controllers
         public async Task<IActionResult> Dashboard(string? searchQuery)
         {
             // get the current user's ID and the database context
-            string? userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            var dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+            string? userId = GetUserId();
+            var dbContext = GetDbCxt();
 
             // get representative models for the user and theeir projects
             UserModel userModel = await dbContext.GetUser(userId);
@@ -129,18 +129,14 @@ namespace BugTracker.Controllers
         /// <summary>
         /// Method <c>Profile</c> gets the ViewResult for the current user's profile.
         /// </summary>
-        /// <param name="userId">The ID of the user to get the profile of.</param>
         /// <returns>The ViewResult for the user's profile page.</returns>
         [Authorize]
         public async Task<IActionResult> Profile()
         {
             // get current user
-            string? userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            var dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+            string userId = GetUserId();
+            var dbContext = GetDbCxt();
             UserModel user = await dbContext.GetUser(userId);
-
-            // check if the user is the current user
-            bool isCurr = userId == User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
             // return ViewResult
             var viewModel = new ProfileViewModel()
@@ -160,7 +156,7 @@ namespace BugTracker.Controllers
         public async Task<IActionResult> Project(string projectId, string searchQuery)
         {
             // get representative models for the project and its developers
-            var dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+            var dbContext = GetDbCxt();
             ProjectModel project = await dbContext.SqlDb.GetProject(projectId);
             List<UserModel> developers = await dbContext.SqlDb.GetDevelopers(projectId);
             foreach (var developer in developers)
@@ -169,7 +165,7 @@ namespace BugTracker.Controllers
             }
 
             // check if the current user is a developer of this project
-            string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            string userId = GetUserId();
             bool userIsDeveloper = await dbContext.SqlDb.IsDeveloper(userId, projectId);
 
             // search for users, if user entered a search query
@@ -202,14 +198,15 @@ namespace BugTracker.Controllers
             return View(viewModel);
         }
 
-		/// <summary>
-		/// Method <c>Tasks</c> gets the ViewResult for the tasks page.
-		/// </summary>
-		/// <returns>The ViewResult of the issues page.</returns>
+        /// <summary>
+        /// Method <c>Tasks</c> gets the ViewResult for the tasks page.
+        /// </summary>
+        /// <returns>The ViewResult of the issues page.</returns>
+        [Authorize]
 		public async Task<IActionResult> Tasks()
         {
-            string? userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            var dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+            string? userId = GetUserId();
+            var dbContext = GetDbCxt();
             List<BugReportModel> tasks = await dbContext.SqlDb.GetAssignments(userId);
             var viewModel = new TasksViewModel()
             {
@@ -218,14 +215,15 @@ namespace BugTracker.Controllers
             return View(viewModel);
         }
 
-		/// <summary>
-		/// Method <c>Reports</c> gets the ViewResult for the page displaying a project's reports.
-		/// </summary>
-		/// <param name="projectId">The ID of the project to display the reports of.</param>
-		/// <returns>The ViewResult of the reports page.</returns>
+        /// <summary>
+        /// Method <c>Reports</c> gets the ViewResult for the page displaying a project's reports.
+        /// </summary>
+        /// <param name="projectId">The ID of the project to display the reports of.</param>
+        /// <returns>The ViewResult of the reports page.</returns>
+        [Authorize]
 		public async Task<IActionResult> Reports(string projectId)
         {
-            var dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+            var dbContext = GetDbCxt();
             List<BugReportModel> tasks = await dbContext.SqlDb.GetReports(projectId);
             var viewModel = new ReportsViewModel()
             {
@@ -234,14 +232,15 @@ namespace BugTracker.Controllers
             return View(viewModel);
         }
 
-		/// <summary>
-		/// Method <c>BugReport<c> gets the ViewResult for the bug report page.
-		/// </summary>
-		/// <param name="reportId">The ID of the bug report to display.</param>
-		/// <returns>The ViewResult of the issues page.</returns>
+        /// <summary>
+        /// Method <c>BugReport<c> gets the ViewResult for the bug report page.
+        /// </summary>
+        /// <param name="reportId">The ID of the bug report to display.</param>
+        /// <returns>The ViewResult of the issues page.</returns>
+        [Authorize]
 		public async Task<IActionResult> BugReport(string reportId)
         {
-			var dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+			var dbContext = GetDbCxt();
 			BugReportModel report = await dbContext.SqlDb.GetReport(reportId);
 			var viewModel = new BugReportViewModel()
             {

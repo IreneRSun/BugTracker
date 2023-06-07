@@ -1,7 +1,6 @@
 ﻿using BugTracker.Models.DatabaseContexts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace BugTracker.Controllers
 {
@@ -10,7 +9,7 @@ namespace BugTracker.Controllers
     /// require database updates while the user is authenticated.
     /// </summary>
     [Authorize]
-    public class AccountActionsController : Controller
+    public class AccountActionsController : DatabaseAccessingController
     {
         /// <summary>
         /// Method <c>CreateProject</c> handles project creation.
@@ -23,8 +22,8 @@ namespace BugTracker.Controllers
             string projectName = Request.Form["project-name"];
 
             // add project to database
-            DatabaseContext dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
-            string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            DatabaseContext dbContext = GetDbCxt();
+            string userId = GetUserId();
             await dbContext.SqlDb.AddProject(projectName, userId);
 
             // direct to the user dashboard page
@@ -40,8 +39,8 @@ namespace BugTracker.Controllers
         public async Task<IActionResult> DeleteProject(string projectId)
         {
             // delete project
-            string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            DatabaseContext dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+            string userId = GetUserId();
+            DatabaseContext dbContext = GetDbCxt();
             await dbContext.SqlDb.DeleteProject(projectId, userId);
 
             // direct to the user dashboard page
@@ -56,7 +55,7 @@ namespace BugTracker.Controllers
         public async Task<IActionResult> AddDeveloper(string projectId, string userId)
         {
             // add developer
-            DatabaseContext dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+            DatabaseContext dbContext = GetDbCxt();
             await dbContext.SqlDb.AddDeveloper(projectId, userId);
 
             // direct to project dashboard page
@@ -85,8 +84,8 @@ namespace BugTracker.Controllers
             };
 
             // add bug report to database
-            string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            DatabaseContext dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+            string userId = GetUserId();
+            DatabaseContext dbContext = GetDbCxt();
             await dbContext.SqlDb.AddReport(projectId, userId, report_fields);
 
             // redirect to the updated project dashboard
@@ -111,8 +110,8 @@ namespace BugTracker.Controllers
                 byte[] fileData = memoryStream.ToArray();
 
                 // add data to database
-                DatabaseContext dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
-                string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                DatabaseContext dbContext = GetDbCxt();
+                string userId = GetUserId();
                 await dbContext.SqlDb.SetAvatar(userId, fileData);
             }
         }
@@ -129,8 +128,8 @@ namespace BugTracker.Controllers
             IFormFile? fileInput = HttpContext.Request.Form.Files["image-file"];
 
             // update username in database
-            string? userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            DatabaseContext dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+            string userId = GetUserId();
+            DatabaseContext dbContext = GetDbCxt();
             await dbContext.AuthDb.UpdateUsername(userId, username);
 
             // request avatar update
@@ -149,8 +148,8 @@ namespace BugTracker.Controllers
         public async Task<IActionResult> DeleteAccount()
         {
             // delete account from database
-            string? userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            DatabaseContext dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+            string? userId = GetUserId();
+            DatabaseContext dbContext = GetDbCxt();
             await dbContext.AuthDb.DeleteUser(userId);
 
             // log the user out
