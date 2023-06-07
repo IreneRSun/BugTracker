@@ -205,7 +205,6 @@ namespace BugTracker.Controllers
 		/// <summary>
 		/// Method <c>Tasks</c> gets the ViewResult for the tasks page.
 		/// </summary>
-		/// <param name="viewModel">The model containing the page data.</param>
 		/// <returns>The ViewResult of the issues page.</returns>
 		public async Task<IActionResult> Tasks()
         {
@@ -219,7 +218,12 @@ namespace BugTracker.Controllers
             return View(viewModel);
         }
 
-        public async Task<IActionResult> Reports(string projectId)
+		/// <summary>
+		/// Method <c>Reports</c> gets the ViewResult for the page displaying a project's reports.
+		/// </summary>
+		/// <param name="projectId">The ID of the project to display the reports of.</param>
+		/// <returns>The ViewResult of the reports page.</returns>
+		public async Task<IActionResult> Reports(string projectId)
         {
             var dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
             List<BugReportModel> tasks = await dbContext.SqlDb.GetReports(projectId);
@@ -230,11 +234,18 @@ namespace BugTracker.Controllers
             return View(viewModel);
         }
 
-        public IActionResult BugReport(BugReportModel bugReport)
+		/// <summary>
+		/// Method <c>BugReport<c> gets the ViewResult for the bug report page.
+		/// </summary>
+		/// <param name="reportId">The ID of the bug report to display.</param>
+		/// <returns>The ViewResult of the issues page.</returns>
+		public async Task<IActionResult> BugReport(string reportId)
         {
-            var viewModel = new BugReportViewModel()
+			var dbContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+			BugReportModel report = await dbContext.SqlDb.GetReport(reportId);
+			var viewModel = new BugReportViewModel()
             {
-                BugReport = bugReport
+                BugReport = report
             };
             return View(viewModel);
         }

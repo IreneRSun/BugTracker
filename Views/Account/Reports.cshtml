@@ -24,7 +24,7 @@
 	@foreach (var report in Model.BugReports)
 	{
 		<ul>
-			<a asp-controller="Account" asp-action="BugReport" asp-route-bugReport="">@report.Summary</a>
+			<a asp-controller="Account" asp-action="BugReport" asp-route-reportId=@report.ID>@report.Summary</a>
 		</ul>
 	}
 </li>

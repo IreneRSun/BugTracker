@@ -494,13 +494,54 @@ namespace BugTracker.Models.DatabaseContexts
             return await QueryDatabase(query, parameters, queryParser);
         }
 
-        /// <summary>
-        /// Method <c>AddReport</c> creates a bug report.
-        /// </summary>
-        /// <param name="projectId">The ID of the project that the bug report is for.</param>
-        /// <param name="userId">The ID of the user that is reporting the bug.</param>
-        /// <param name="reportFields">The bug report fields.</param>
-        public async Task AddReport(string projectId, string userId, Dictionary<string, string> reportFields)
+		/// <summary>
+		/// Method <c>GetReport</c> gets a bug report.
+		/// </summary>
+		/// <param name="reportId">The ID of the report to get.</param>
+		/// <returns>The bug report.</returns>
+		public async Task<BugReportModel> GetReport(string reportId)
+		{
+			// build query
+			var query = "SELECT * FROM bug_reports WHERE bid = @bid";
+			var parameters = new Dictionary<string, string> {
+				{ "@bid", reportId }
+			};
+
+			// build query result parser
+			Func<MySqlDataReader, Task<BugReportModel>> queryParser = async (reader) =>
+			{
+                await reader.ReadAsync();
+
+				var reportId = reader.GetString("bid");
+				return new BugReportModel(reportId)
+				{
+					ReporterID = reader.GetString("reportee"),
+					ProjectID = reader.GetString("project"),
+					Summary = reader.GetString("summary"),
+					SoftwareVersion = reader.GetDecimal("software_version"),
+					Device = reader.IsDBNull("device") ? null : reader.GetString("device"),
+					OS = reader.GetString("os"),
+					ExpectedResult = reader.GetString("expected_result"),
+					ActualResult = reader.GetString("actual_result"),
+					Steps = reader.GetString("steps"),
+					Details = reader.IsDBNull("details") ? null : reader.GetString("details"),
+					Priority = reader.IsDBNull("priority") ? null : reader.GetString("priority"),
+					Severity = reader.IsDBNull("severity") ? null : reader.GetInt16("severity"),
+					Status = reader.IsDBNull("status") ? null : reader.GetString("status"),
+					Date = reader.GetDateTime("date")
+				};
+			};
+
+			return await QueryDatabase(query, parameters, queryParser);
+		}
+
+		/// <summary>
+		/// Method <c>AddReport</c> creates a bug report.
+		/// </summary>
+		/// <param name="projectId">The ID of the project that the bug report is for.</param>
+		/// <param name="userId">The ID of the user that is reporting the bug.</param>
+		/// <param name="reportFields">The bug report fields.</param>
+		public async Task AddReport(string projectId, string userId, Dictionary<string, string> reportFields)
         {
             // find a unique hash for the new development relationship
             string reportId = await FindUniqueHash("bug_reports", "bid");
