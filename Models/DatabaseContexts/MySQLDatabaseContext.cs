@@ -434,14 +434,10 @@ namespace BugTracker.Models.DatabaseContexts
                 return;
             }
 
-            // find a unique hash for the new development relationship
-            string developmentId = await FindUniqueHash("developments", "did");
-
             // build database update command
-            var sqlCmd = "INSERT INTO developments (did, project, developer) VALUES (@did, @pid, @uid)";
+            var sqlCmd = "INSERT INTO developments (project, developer) VALUES (@pid, @uid)";
             var parameters = new Dictionary<string, string>
             {
-                { "@did", developmentId },
                 { "@pid", projectId },
                 { "@uid", developerId }
             };
@@ -478,9 +474,6 @@ namespace BugTracker.Models.DatabaseContexts
                         SoftwareVersion = reader.GetDecimal("software_version"),
                         Device = reader.IsDBNull("device") ? null : reader.GetString("device"),
                         OS = reader.GetString("os"),
-                        ExpectedResult = reader.GetString("expected_result"),
-                        ActualResult = reader.GetString("actual_result"),
-                        Steps = reader.GetString("steps"),
                         Details = reader.IsDBNull("details") ? null : reader.GetString("details"),
                         Priority = reader.IsDBNull("priority") ? null : reader.GetString("priority"),
                         Severity = reader.IsDBNull("severity") ? null : reader.GetInt16("severity"),
@@ -521,9 +514,6 @@ namespace BugTracker.Models.DatabaseContexts
 					SoftwareVersion = reader.GetDecimal("software_version"),
 					Device = reader.IsDBNull("device") ? null : reader.GetString("device"),
 					OS = reader.GetString("os"),
-					ExpectedResult = reader.GetString("expected_result"),
-					ActualResult = reader.GetString("actual_result"),
-					Steps = reader.GetString("steps"),
 					Details = reader.IsDBNull("details") ? null : reader.GetString("details"),
 					Priority = reader.IsDBNull("priority") ? null : reader.GetString("priority"),
 					Severity = reader.IsDBNull("severity") ? null : reader.GetInt16("severity"),
@@ -548,8 +538,8 @@ namespace BugTracker.Models.DatabaseContexts
 
             // build database update command
             var sqlCmd = "INSERT INTO bug_reports " +
-                "(bid, reportee, project, summary, software_version, device, os, expected_result, actual_result, steps, details) " +
-                "VALUES (@bid, @uid, @pid, @summary, @version, @device, @os, @expected, @actual, @steps, @details)";
+                "(bid, reportee, project, summary, software_version, device, os, details) " +
+                "VALUES (@bid, @uid, @pid, @summary, @version, @device, @os, @details)";
             var parameters = new Dictionary<string, string>
             {
                 { "@bid", reportId },
@@ -559,9 +549,6 @@ namespace BugTracker.Models.DatabaseContexts
                 { "@version", reportFields["software_version"] },
                 { "@device", reportFields["device"] },
                 { "@os", reportFields["os"] },
-                { "@expected", reportFields["expected_result"] },
-                { "@actual", reportFields["actual_result"] },
-                { "@steps", reportFields["steps"] },
                 { "@details", reportFields["details"] }
             };
 
@@ -621,15 +608,12 @@ namespace BugTracker.Models.DatabaseContexts
                         ProjectID = reader.GetString("project"),
                         Summary = reader.GetString("summary"),
                         SoftwareVersion = reader.GetDecimal("software_version"),
-                        Device = reader.GetString("device"),
+                        Device = reader.IsDBNull("device") ? null : reader.GetString("device"),
                         OS = reader.GetString("os"),
-                        ExpectedResult = reader.GetString("expected_result"),
-                        ActualResult = reader.GetString("actual_result"),
-                        Steps = reader.GetString("steps"),
                         Details = reader.GetString("details"),
-                        Priority = reader.GetString("priority"),
-                        Severity = reader.GetInt16("severity"),
-                        Status = reader.GetString("status"),
+                        Priority = reader.IsDBNull("priority") ? null : reader.GetString("priority"),
+                        Severity = reader.IsDBNull("severity") ? null : reader.GetInt16("severity"),
+                        Status = reader.IsDBNull("status") ? null : reader.GetString("status"),
                         Date = reader.GetDateTime("date")
                     });
                 }
@@ -646,14 +630,10 @@ namespace BugTracker.Models.DatabaseContexts
         /// <param name="developerId">The ID of the developer to assign the bug to.</param>
         public async Task AddAssignment(string reportId, string developerId)
         {
-            // find a unique hash for the assignment
-            string assignmentId = await FindUniqueHash("assignments", "aid");
-
             // build database update command
-            var sqlCmd = "INSERT INTO assignments (aid, assignee, bug_report) VALUES (@aid, @uid, @bid)";
+            var sqlCmd = "INSERT INTO assignments (assignee, bug_report) VALUES (@uid, @bid)";
             var parameters = new Dictionary<string, string>
             {
-                { "@aid", assignmentId },
                 { "@uid", developerId },
                 { "@bid", reportId }
             };
@@ -687,10 +667,9 @@ namespace BugTracker.Models.DatabaseContexts
         /// <param name="tagValue">The new value of the tag.</param>
         public async Task UpdateBugTag(string reportId, string tagName, string tagValue)
         {
-            var sqlCmd = "UPDATE bug_reports SET @tag_name = @tag_value WHERE bug_report = @bid";
+            var sqlCmd = $"UPDATE bug_reports SET {tagName} = @tag_value WHERE bid = @bid";
             var parameters = new Dictionary<string, string>
             {
-                { "@tag_name", tagName },
                 { "@tag_value", tagValue },
                 { "@bid", reportId }
             };

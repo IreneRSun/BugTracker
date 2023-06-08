@@ -5,8 +5,19 @@
 <label>Date</label>
 <p>@Model.BugReport.Date</p>
 
-<label>Status</label>
-<p>@Model.BugReport.Status</p>
+<form method="post" asp-controller="AccountActions" asp-action="UpdateBugStatus" asp-route-reportId=@Model.BugReport.ID>
+	<label>Status</label>
+	<select name="status-select">
+		<option selected disabled hidden>@Model.BugReport.Status</option>
+		<option>Deferred</option>
+		<option>Rejected</option>
+		<option>Duplicate</option>
+		<option>Not a Bug</option>
+		<option>Open</option>
+		<option>Closed</option>
+	</select>
+	<button type="submit">Update Status</button>
+</form>
 
 <label>Priority</label>
 <p>@Model.BugReport.Priority</p>

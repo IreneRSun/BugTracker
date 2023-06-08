@@ -34,18 +34,6 @@
         /// </value>
         public string? OS { get; set; }
         /// <value>
-        /// Property <c>ExpectedResult</c> represents the result the user expected when using the project.
-        /// </value>
-        public string? ExpectedResult { get; set; }
-        /// <value>
-        /// Property <c>ActualResult</c> represents the result that actually occurred when the user was using the project.
-        /// </value>
-        public string? ActualResult { get; set; }
-        /// <value>
-        /// Property <c>Steps</c> represents the steps to recreate the bug.
-        /// </value>
-        public string? Steps { get; set; }
-        /// <value>
         /// Property <c>Details</c> represents further details regarding the bug.
         /// </value>
         public string? Details { get; set; }

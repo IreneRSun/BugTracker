@@ -77,9 +77,6 @@ namespace BugTracker.Controllers
                 { "software_version", Request.Form["software-version"] },
                 { "device", Request.Form["device"] },
                 { "os", Request.Form["os"] },
-                { "expected_result", Request.Form["expected-result"] },
-                { "actual_result", Request.Form["actual-result"] },
-                { "steps", Request.Form["steps"] },
                 { "details", Request.Form["details"] }
             };
 
@@ -92,11 +89,30 @@ namespace BugTracker.Controllers
             return RedirectToAction("Project", "Account", new { projectId });
         }
 
-        /// <summary>
-        /// Method <c>UpdateAvatar</c> updates the avatar of the user in the MySQL database with the uploaded image.
-        /// </summary>
-        /// <param name="fileInput">The uploaded image.</param>
-        private async Task UpdateAvatar(IFormFile? fileInput)
+		/// <summary>
+		/// Method<c>UpdateBugStatus</c> handles bug report status updating.
+		/// </summary>
+		/// <param name="reportId">The ID of the bug report to update the status of.</param>
+		/// <returns>The action result of the updated bug report.</returns>
+		[HttpPost]
+		public async Task<IActionResult> UpdateBugStatus(string reportId)
+        {
+            // get selected status
+            string selectedStatus = Request.Form["status-select"];
+
+            // update report status
+            var dbContext = GetDbCxt();
+            await dbContext.SqlDb.UpdateBugTag(reportId, "status", selectedStatus);
+
+            // redirect to the updated bug report
+            return RedirectToAction("BugReport", "Account", new { reportId });
+        }
+
+		/// <summary>
+		/// Method <c>UpdateAvatar</c> updates the avatar of the user in the MySQL database with the uploaded image.
+		/// </summary>
+		/// <param name="fileInput">The uploaded image.</param>
+		private async Task UpdateAvatar(IFormFile? fileInput)
         {
             // check file size
             long fileSize = fileInput.Length;

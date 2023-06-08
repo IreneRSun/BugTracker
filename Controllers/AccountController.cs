@@ -3,11 +3,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Auth0.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using BugTracker.Models.DatabaseContexts;
 using BugTracker.Models.EntityModels;
 using BugTracker.Models.ViewDataModels;
-using Microsoft.IdentityModel.Tokens;
 
 namespace BugTracker.Controllers
 {
