@@ -476,7 +476,7 @@ namespace BugTracker.Models.DatabaseContexts
                         OS = reader.GetString("os"),
                         Details = reader.IsDBNull("details") ? null : reader.GetString("details"),
                         Priority = reader.IsDBNull("priority") ? null : reader.GetString("priority"),
-                        Severity = reader.IsDBNull("severity") ? null : reader.GetInt16("severity"),
+                        Severity = reader.IsDBNull("severity") ? null : reader.GetString("severity"),
                         Status = reader.IsDBNull("status") ? null : reader.GetString("status"),
                         Date = reader.GetDateTime("date")
                     });
@@ -516,7 +516,7 @@ namespace BugTracker.Models.DatabaseContexts
 					OS = reader.GetString("os"),
 					Details = reader.IsDBNull("details") ? null : reader.GetString("details"),
 					Priority = reader.IsDBNull("priority") ? null : reader.GetString("priority"),
-					Severity = reader.IsDBNull("severity") ? null : reader.GetInt16("severity"),
+					Severity = reader.IsDBNull("severity") ? null : reader.GetString("severity"),
 					Status = reader.IsDBNull("status") ? null : reader.GetString("status"),
 					Date = reader.GetDateTime("date")
 				};
@@ -612,7 +612,7 @@ namespace BugTracker.Models.DatabaseContexts
                         OS = reader.GetString("os"),
                         Details = reader.GetString("details"),
                         Priority = reader.IsDBNull("priority") ? null : reader.GetString("priority"),
-                        Severity = reader.IsDBNull("severity") ? null : reader.GetInt16("severity"),
+                        Severity = reader.IsDBNull("severity") ? null : reader.GetString("severity"),
                         Status = reader.IsDBNull("status") ? null : reader.GetString("status"),
                         Date = reader.GetDateTime("date")
                     });
@@ -676,5 +676,39 @@ namespace BugTracker.Models.DatabaseContexts
 
             await UpdateDatabase(sqlCmd, parameters);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="projectId">The ID of the </param>
+        /// <param name=""
+        /// <returns></returns>
+        public async Task<int> GetProjectStatistic(string projectId, string statisticType)
+        {
+			var query = "SELECT COUNT(*) AS count FROM bug_reports WHERE status = @status";
+            var parameters = new Dictionary<string, string>
+            {
+                { "@status", "" }
+            };
+			var type = statisticType.ToLower();
+            if (type == "fixed")
+            {
+                parameters["@status"] = "Closed";
+            } else if (type == "pending")
+            {
+				parameters["@status"] = "Open";
+			} else if (type == "new")
+            {
+				parameters["@status"] = "NEW";
+			}
+
+			Func<MySqlDataReader, Task<int>> queryParser = async (reader) =>
+			{
+                await reader.ReadAsync();
+                return reader.GetInt32("count");
+			};
+
+			return await QueryDatabase(query, parameters, queryParser);
+		}
     }
 }

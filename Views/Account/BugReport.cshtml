@@ -5,7 +5,7 @@
 <label>Date</label>
 <p>@Model.BugReport.Date</p>
 
-<form method="post" asp-controller="AccountActions" asp-action="UpdateBugStatus" asp-route-reportId=@Model.BugReport.ID>
+<form method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="status">
 	<label>Status</label>
 	<select name="status-select">
 		<option selected disabled hidden>@Model.BugReport.Status</option>
@@ -19,14 +19,27 @@
 	<button type="submit">Update Status</button>
 </form>
 
-<label>Priority</label>
-<p>@Model.BugReport.Priority</p>
+<form method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="priority">
+	<label>Priority</label>
+	<select name="priority-select">
+		<option selected disabled hidden>@Model.BugReport.Priority</option>
+		<option>Low</option>
+		<option>Medium</option>
+		<option>High</option>
+	</select>
+	<button type="submit">Update Priority</button>
+</form>
 
-<label>Severity</label>
-<p>@Model.BugReport.Severity</p>
-
-<label>Summary</label>
-<p>@Model.BugReport.Summary</p>
+<form method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="severity">
+	<label>Severity</label>
+	<select name="severity-select">
+		<option selected disabled hidden>@Model.BugReport.Severity</option>
+		<option>Low</option>
+		<option>Medium</option>
+		<option>High</option>
+	</select>
+	<button type="submit">Update Severity</button>
+</form>
 
 <label>Operating System</label>
 <p>@Model.BugReport.OS</p>

@@ -44,7 +44,7 @@
         /// <value>
         /// Property <c>Severity</c> represents the severity level of the bug.
         /// </value>
-        public int? Severity { get; set; }
+        public string? Severity { get; set; }
         /// <value>
         /// Property <c>Status</c> represents the status of the bug.
         /// </value>

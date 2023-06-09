@@ -93,16 +93,17 @@ namespace BugTracker.Controllers
 		/// Method<c>UpdateBugStatus</c> handles bug report status updating.
 		/// </summary>
 		/// <param name="reportId">The ID of the bug report to update the status of.</param>
+        /// <param name="tagType">The column of the bug report to update (status, priority, or severity)</param>
 		/// <returns>The action result of the updated bug report.</returns>
 		[HttpPost]
-		public async Task<IActionResult> UpdateBugStatus(string reportId)
+		public async Task<IActionResult> UpdateBugTag(string reportId, string tagType)
         {
             // get selected status
-            string selectedStatus = Request.Form["status-select"];
+            string selectedStatus = Request.Form[$"{tagType}-select"];
 
             // update report status
             var dbContext = GetDbCxt();
-            await dbContext.SqlDb.UpdateBugTag(reportId, "status", selectedStatus);
+            await dbContext.SqlDb.UpdateBugTag(reportId, tagType, selectedStatus);
 
             // redirect to the updated bug report
             return RedirectToAction("BugReport", "Account", new { reportId });
