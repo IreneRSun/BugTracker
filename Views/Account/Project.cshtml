@@ -3,6 +3,11 @@
 <img src=@Model.Project.Avatar alt="project avatar" width="100px" height="100px" />
 <h2>@Model.Project.Name</h2>
 
+<!-- project statistics -->
+<label>New <b>@Model.NewBugs</b></label>
+<label>Pending <b>@Model.PendingBugs</b></label>
+<label>Fixed <b>@Model.FixedBugs</b></label>
+
 <!-- bug reporting modal dialog -->
 <div class="btn-toolbar">
     <button type="button" class="btn btn-primary" id="create-report-btn" data-bs-toggle="modal" data-bs-target="#create-report-dialog">Report a Bug</button>

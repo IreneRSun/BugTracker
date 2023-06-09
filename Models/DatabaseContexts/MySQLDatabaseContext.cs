@@ -678,18 +678,21 @@ namespace BugTracker.Models.DatabaseContexts
         }
 
         /// <summary>
-        /// 
+        /// Method <c>GetProjectStatisitic</c> gets a statistic for a project as a number of bug reports that are part of the statistic.
         /// </summary>
-        /// <param name="projectId">The ID of the </param>
-        /// <param name=""
+        /// <param name="projectId">The ID of the project to get the statistic of.</param>
+        /// <param name="statisticType">The type of statistic to retrieve (i.e. fixed, pending, or new).</param>
         /// <returns></returns>
         public async Task<int> GetProjectStatistic(string projectId, string statisticType)
         {
-			var query = "SELECT COUNT(*) AS count FROM bug_reports WHERE status = @status";
+            // build query
+			var query = "SELECT COUNT(*) AS count FROM bug_reports WHERE project = @pid AND status = @status";
             var parameters = new Dictionary<string, string>
             {
+                { "@pid", projectId },
                 { "@status", "" }
             };
+            // set query parameter based on desired statistic type
 			var type = statisticType.ToLower();
             if (type == "fixed")
             {
@@ -702,6 +705,7 @@ namespace BugTracker.Models.DatabaseContexts
 				parameters["@status"] = "NEW";
 			}
 
+            // build query result parser
 			Func<MySqlDataReader, Task<int>> queryParser = async (reader) =>
 			{
                 await reader.ReadAsync();

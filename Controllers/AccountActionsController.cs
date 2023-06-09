@@ -90,10 +90,10 @@ namespace BugTracker.Controllers
         }
 
 		/// <summary>
-		/// Method<c>UpdateBugStatus</c> handles bug report status updating.
+		/// Method<c>UpdateBugStatus</c> handles bug report tag updating.
 		/// </summary>
-		/// <param name="reportId">The ID of the bug report to update the status of.</param>
-        /// <param name="tagType">The column of the bug report to update (status, priority, or severity)</param>
+		/// <param name="reportId">The ID of the bug report to update the tag of.</param>
+        /// <param name="tagType">The tag(column) of the bug report to update (status, priority, or severity)</param>
 		/// <returns>The action result of the updated bug report.</returns>
 		[HttpPost]
 		public async Task<IActionResult> UpdateBugTag(string reportId, string tagType)

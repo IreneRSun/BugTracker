@@ -161,6 +161,11 @@ namespace BugTracker.Controllers
                 dbContext.AuthDb.FillUserData(developer);
             }
 
+            // get project statisics
+            int newBugs = await dbContext.SqlDb.GetProjectStatistic(projectId, "new");
+            int pendingBugs = await dbContext.SqlDb.GetProjectStatistic(projectId, "pending");
+            int fixedBugs = await dbContext.SqlDb.GetProjectStatistic(projectId, "fixed");
+
             // check if the current user is a developer of this project
             string userId = GetUserId();
             bool userIsDeveloper = await dbContext.SqlDb.IsDeveloper(userId, projectId);
@@ -187,6 +192,9 @@ namespace BugTracker.Controllers
             {
                 Project = project,
                 Developers = developers,
+                NewBugs = newBugs,
+                PendingBugs = pendingBugs,
+                FixedBugs = fixedBugs,
                 IsDeveloper = userIsDeveloper,
                 SearchQuery = searchQueryString,
                 UserSearchResults = userSearchResults
