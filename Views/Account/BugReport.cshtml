@@ -5,10 +5,10 @@
 <label>Date</label>
 <p>@Model.BugReport.Date</p>
 
-<form method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="status">
+<form id="status-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="status">
 	<label>Status</label>
-	<select name="status-select">
-		<option selected disabled hidden>@Model.BugReport.Status</option>
+	<select name="status-select" onchange="submitForm('status-change-form')">
+		<option selected hidden>@Model.BugReport.Status</option>
 		<option>Deferred</option>
 		<option>Rejected</option>
 		<option>Duplicate</option>
@@ -16,29 +16,26 @@
 		<option>Open</option>
 		<option>Closed</option>
 	</select>
-	<button type="submit">Update Status</button>
 </form>
 
-<form method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="priority">
+<form id="priority-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="priority">
 	<label>Priority</label>
-	<select name="priority-select">
-		<option selected disabled hidden>@Model.BugReport.Priority</option>
+	<select name="priority-select" onchange="submitForm('priority-change-form')">
+		<option selected hidden>@Model.BugReport.Priority</option>
 		<option>Low</option>
 		<option>Medium</option>
 		<option>High</option>
 	</select>
-	<button type="submit">Update Priority</button>
 </form>
 
-<form method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="severity">
+<form id="severity-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="severity">
 	<label>Severity</label>
-	<select name="severity-select">
-		<option selected disabled hidden>@Model.BugReport.Severity</option>
+	<select name="severity-select" onchange="submitForm('severity-change-form')">
+		<option selected hidden>@Model.BugReport.Severity</option>
 		<option>Low</option>
 		<option>Medium</option>
 		<option>High</option>
 	</select>
-	<button type="submit">Update Severity</button>
 </form>
 
 <label>Operating System</label>

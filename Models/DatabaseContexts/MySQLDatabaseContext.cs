@@ -451,13 +451,26 @@ namespace BugTracker.Models.DatabaseContexts
         /// </summary>
         /// <param name="projectId">The ID of the project to get the reports for.</param>
         /// <returns>The list of bug reports for the project.</returns>
-        public async Task<List<BugReportModel>> GetReports(string projectId)
+        public async Task<List<BugReportModel>> GetReports(string projectId, string filter, string sortType, string sortOrder)
         {
             // build query
             var query = "SELECT * FROM bug_reports WHERE project = @pid";
             var parameters = new Dictionary<string, string> {
                 { "@pid", projectId }
             };
+
+            if (!(filter.ToLower() == "all"))
+            {
+                query += " AND status = @status";
+                parameters.Add("@status", filter);
+            }
+
+            query += $" ORDER BY {sortType.ToLower()}";
+
+            if (sortOrder.ToLower() == "descending")
+            {
+                query += $" DESC";
+			}
 
             // build query result parser
             Func<MySqlDataReader, Task<List<BugReportModel>>> queryParser = async (reader) =>

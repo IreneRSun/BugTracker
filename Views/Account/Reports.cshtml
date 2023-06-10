@@ -1,22 +1,37 @@
 ﻿@model BugTracker.Models.ViewDataModels.ReportsViewModel
 
 <!-- sort options -->
-<label>Filter Type</label>
-<select>
-	<options>All</options>
-</select>
-<label>Sort Type</label>
-<select>
-	<option>Date</option>
-	<option>Severity</option>
-	<option>Priority</option>
-</select>
+<form id="sort-form" method="get" asp-controller="Account" asp-action="Reports">
+	<input type="hidden" name="projectId" value=@Model.ProjectId />
 
-<label>Sort Order</label>
-<select>
-	<option>Descending</option>
-	<option>Ascending</option>
-</select>
+	<label>Filter Type</label>
+	<select name="filter" onchange="submitForm('sort-form')">
+		<option selected hidden>@Model.FilterType</option>
+		<option>All</option>
+		<option>NEW</option>
+		<option>Deferred</option>
+		<option>Rejected</option>
+		<option>Duplicate</option>
+		<option>Not a Bug</option>
+		<option>Open</option>
+		<option>Closed</option>
+	</select>
+
+	<label>Sort Type</label>
+	<select name="sortType" onchange="submitForm('sort-form')">
+		<option selected hidden>@Model.SortType</option>
+		<option>Date</option>
+		<option>Severity</option>
+		<option>Priority</option>
+	</select>
+
+	<label>Sort Order</label>
+	<select name="sortOrder" onchange="submitForm('sort-form')">
+		<option selected hidden>@Model.SortOrder</option>
+		<option>Descending</option>
+		<option>Ascending</option>
+	</select>
+</form>
 
 <h2>@Model.FilterType Bug Reports</h2>
 

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using BugTracker.Models.EntityModels;
 using BugTracker.Models.ViewDataModels;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BugTracker.Controllers
 {
@@ -224,16 +225,23 @@ namespace BugTracker.Controllers
         /// Method <c>Reports</c> gets the ViewResult for the page displaying a project's reports.
         /// </summary>
         /// <param name="projectId">The ID of the project to display the reports of.</param>
+        /// <param name="filter">What status to filter the reports by.</param>
+        /// <param name="sortType">What to sort the reports by.</param>
+        /// <param name="sortOrder">What order to sort the reports in.</param>
         /// <returns>The ViewResult of the reports page.</returns>
-        [Authorize]
-		public async Task<IActionResult> Reports(string projectId)
+        [Authorize, HttpGet]
+		public async Task<IActionResult> Reports(string projectId, string filter = "All", string sortType = "Date", string sortOrder = "Descending")
         {
             var dbContext = GetDbCxt();
-            List<BugReportModel> tasks = await dbContext.SqlDb.GetReports(projectId);
+            List<BugReportModel> tasks = await dbContext.SqlDb.GetReports(projectId, filter, sortType, sortOrder);
             var viewModel = new ReportsViewModel()
             {
-                BugReports = tasks
-            };
+                ProjectId = projectId,
+                BugReports = tasks,
+                FilterType = filter,
+                SortType = sortType,
+				SortOrder = sortOrder
+			};
             return View(viewModel);
         }
 

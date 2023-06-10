@@ -8,6 +8,12 @@ $(document).ready(() => {
     $(".search-results").modal("show");
 });
 
+// Function that submits a given form
+function submitForm(formId) {
+    const form = document.getElementById(formId);
+    form.submit();
+}
+
 // Function updates the profile image on the profile page to the uploaded image for previewing when called
 function previewImage() {
     const input = document.getElementById("image-file");

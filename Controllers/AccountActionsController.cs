@@ -50,6 +50,8 @@ namespace BugTracker.Controllers
         /// <summary>
         /// Method <c>AddDeveloper</c> adds a user as a developer to a project.
         /// </summary>
+        /// <param name="projectId">The ID of the project to add the user to.</param>
+        /// <param name="userId">The ID of the user to add.</param>
         /// <returns>The action result of the updated project dashboard.</returns>
         [HttpPost]
         public async Task<IActionResult> AddDeveloper(string projectId, string userId)
