@@ -11,7 +11,7 @@
 
 <!-- welcome message -->
 <div>
-    <img src="@Model.User.Avatar" alt="user avatar" class="rounded-circle" width="100px" height="100px" />
+    <img src="@Model.User.Avatar" alt="user avatar" class="custom-avatar-size-3 rounded-circle" />
     <h3>Welcome @Model.User.Name</h3>
 </div>
 
@@ -52,7 +52,7 @@
                         @foreach (var project in Model.ProjectSearchResults)
                         {
                             <li>
-                                <img src=@project.Avatar alt="project avatar" width="30px" height="30px">
+                                <img src=@project.Avatar alt="project avatar" class="custom-avatar-size-1">
                                 <a asp-controller="Account" asp-action="Project" asp-route-projectId=@project.ID>@project.Name</a>
                             </li>
                         }
@@ -65,13 +65,25 @@
 
 <!-- user's projects -->
 <h2>Projects</h2>
-<ul>
-    @foreach (var project in Model.UserProjects)
-    {
-        <li>
-            <img src=@project.Avatar alt="project avatar" width="30px" height="30px">
-            <a asp-controller="Account" asp-action="Project" asp-route-projectId=@project.ID>@project.Name</a>
-        </li>
-    }
-</ul>
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            <ul class="list-unstyled">
+                @foreach (var project in Model.UserProjects)
+                {
+                    <li class="hover-lift">
+                        <a asp-controller="Account" asp-action="Project" asp-route-projectId=@project.ID>
+                            <div class="card brd-top-grad-1">
+                                <img src=@project.Avatar alt="project avatar" class="card-img" />
+                                <div class="card-img-overlay bg-grad-fog">
+                                    <h5 class="card-title txt-black">@project.Name</h5>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
 

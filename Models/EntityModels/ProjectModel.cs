@@ -25,7 +25,7 @@
         public ProjectModel(string projectID)
         {
             ID = projectID;
-            Avatar = Utils.GetSeededAvatar(ID);
+            Avatar = Utils.GetSeededAvatar(ID, radius: 0);
         }
     }
 }

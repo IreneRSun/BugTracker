@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using BugTracker.Models.EntityModels;
 using BugTracker.Models.ViewDataModels;
-using Microsoft.IdentityModel.Tokens;
 
 namespace BugTracker.Controllers
 {
