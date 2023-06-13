@@ -21,19 +21,17 @@ body {
     background: linear-gradient(180deg, rgba(255,255,255), rgba(255,255,255,0.7), rgba(255,255,255,0));
 }
 
-.txt-black {
-    color: black;
+.txt-white {
+    color: white;
 }
 
-.brd-top-grad-1 {
-    border-color: white;
-    border-image: linear-gradient(90deg, white, gray) 8.33333333%;
-    border-width: 5px 0px 0px 0px;
-    border-style: solid;
+.txt-outline-black {
+    text-shadow: 1px 1px 2px black;
 }
 
-.hover-lift:hover {
+.hover-push:hover {
     transform: translateY(5px);
+    transition: 0.8s;
 }
 
 .custom-avatar-size-1 {
@@ -49,4 +47,8 @@ body {
 .custom-avatar-size-3 {
     width: 100px;
     height: 100px;
+}
+
+.custom-rounded {
+    border-radius: 40%;
 }

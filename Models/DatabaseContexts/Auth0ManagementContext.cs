@@ -122,17 +122,15 @@ namespace BugTracker.Models.DatabaseContexts
         }
 
         /// <summary>
-        /// Method <c>FillUserData</c> fills a UserModel object with their corresponding data from the Auth0 database.
+        /// Method <c>GetDefaultAvatar</c> gets the default avatar associated with a user from the Auth0 database.
         /// </summary>
-        /// <param name="users">The UserModel representing the user.</param>
-        public async Task FillUserData(UserModel user)
+        /// <param name="userId">The ID of the user.</param>
+        public async Task<string> GetDefaultAvatar(string userId)
         {
             string? token = GetToken();
             var client = new ManagementApiClient(token, _domain);
-            var userData = await client.Users.GetAsync(user.ID);
-            user.Name = userData.NickName;
-            user.Email = userData.Email;
-            user.Avatar ??= userData.Picture;
+            var userData = await client.Users.GetAsync(userId);
+            return userData.Picture;
         }
 
         /// <summary>

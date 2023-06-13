@@ -158,7 +158,7 @@ namespace BugTracker.Controllers
             List<UserModel> developers = await dbContext.SqlDb.GetDevelopers(projectId);
             foreach (var developer in developers)
             {
-                dbContext.AuthDb.FillUserData(developer);
+                developer.Avatar ??= await dbContext.AuthDb.GetDefaultAvatar(developer.ID);
             }
 
             // get project statisics
