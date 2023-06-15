@@ -92,18 +92,54 @@ namespace BugTracker.Controllers
         }
 
 		/// <summary>
+		/// Method<c>AddAssignment</c> handles the assignment of the selected developer to a bug report.
+		/// </summary>
+		/// <param name="reportId">The ID of the bug report to assign.</param>
+		/// <returns>The action result of the updated bug report.</returns>
+		[HttpPost]
+		public async Task<IActionResult> AddAssignment(string reportId)
+		{
+			// get selected developer
+			string userId = Request.Form["developer-select"];
+
+			// update report status
+			var dbContext = GetDbCxt();
+			await dbContext.SqlDb.AddAssignment(reportId, userId);
+
+			// redirect to the updated bug report
+			return RedirectToAction("BugReport", "Account", new { reportId });
+		}
+
+		/// <summary>
+		/// Method<c>DeleteAssignment</c> handles the deletion of an assignment of the selected developer to a bug report.
+		/// </summary>
+		/// <param name="reportId">The ID of the bug report to delete the assignment of.</param>
+        /// <param name="devId">The ID of the developer to delete the assignment of.</param>
+		/// <returns>The action result of the updated bug report.</returns>
+		[HttpPost]
+		public async Task<IActionResult> DeleteAssignment(string reportId, string devId)
+		{
+			// update report status
+			var dbContext = GetDbCxt();
+            await dbContext.SqlDb.RemoveAssignment(reportId, devId);
+
+			// redirect to the updated bug report
+			return RedirectToAction("BugReport", "Account", new { reportId });
+		}
+
+		/// <summary>
 		/// Method<c>UpdateBugStatus</c> handles bug report tag updating.
 		/// </summary>
 		/// <param name="reportId">The ID of the bug report to update the tag of.</param>
-        /// <param name="tagType">The tag(column) of the bug report to update (status, priority, or severity)</param>
+		/// <param name="tagType">The tag(column) of the bug report to update (status, priority, or severity)</param>
 		/// <returns>The action result of the updated bug report.</returns>
 		[HttpPost]
 		public async Task<IActionResult> UpdateBugTag(string reportId, string tagType)
         {
-            // get selected status
+            // get selected tag
             string selectedStatus = Request.Form[$"{tagType}-select"];
 
-            // update report status
+            // update report tag
             var dbContext = GetDbCxt();
             await dbContext.SqlDb.UpdateBugTag(reportId, tagType, selectedStatus);
 

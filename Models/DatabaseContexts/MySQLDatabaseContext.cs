@@ -241,7 +241,8 @@ namespace BugTracker.Models.DatabaseContexts
                     var projectId = reader.GetString("pid");
                     projects.Add(new ProjectModel(projectId)
                     {
-                        Name = reader.GetString("name")
+                        Name = reader.GetString("name"),
+                        CreationDate = reader.GetString("date")
                     });
                 };
                 return projects;
@@ -272,8 +273,9 @@ namespace BugTracker.Models.DatabaseContexts
                     var projectId = reader.GetString("pid");
                     projects.Add(new ProjectModel(projectId)
                     {
-                        Name = reader.GetString("name")
-                    });
+                        Name = reader.GetString("name"),
+						CreationDate = reader.GetString("date")
+					});
                 };
                 return projects;
             };
@@ -301,8 +303,9 @@ namespace BugTracker.Models.DatabaseContexts
                 
                 var project = new ProjectModel(projectId)
                 {
-                    Name = reader.GetString("name")
-                };
+                    Name = reader.GetString("name"),
+					CreationDate = reader.GetString("date")
+				};
                 return project;
             };
 
@@ -636,12 +639,43 @@ namespace BugTracker.Models.DatabaseContexts
             return await QueryDatabase(query, parameters, queryParser);
         }
 
-        /// <summary>
-        /// Method <c>AddAssignment</c> assigns a developer to a bug report.
-        /// </summary>
-        /// <param name="reportId">The ID of the bug report to assign.</param>
-        /// <param name="developerId">The ID of the developer to assign the bug to.</param>
-        public async Task AddAssignment(string reportId, string developerId)
+		/// <summary>
+		/// Method <c>GetAssignees</c> gets the users assigned to a bug.
+		/// </summary>
+		/// <param name="reportId">The ID of the bug report to get the assigees for.</param>
+		/// <returns>The list of assignees for a bug report.</returns>
+		public async Task<List<UserModel>> GetAssignees(string reportId)
+		{
+			// build query
+			var query = "SELECT * FROM users WHERE uid IN (SELECT assignee FROM assignments WHERE bug_report = @bid)";
+			var parameters = new Dictionary<string, string> {
+				{ "@bid", reportId }
+			};
+
+			// build query result parser
+			Func<MySqlDataReader, Task<List<UserModel>>> queryParser = async (reader) =>
+			{
+				var assignees = new List<UserModel>();
+				while (await reader.ReadAsync())
+				{
+					var userId = reader.GetString("uid");
+					assignees.Add(new UserModel(userId)
+					{
+						Avatar = GetAvatarFromReader(reader)
+					});
+				};
+				return assignees;
+			};
+
+			return await QueryDatabase(query, parameters, queryParser);
+		}
+
+		/// <summary>
+		/// Method <c>AddAssignment</c> assigns a developer to a bug report.
+		/// </summary>
+		/// <param name="reportId">The ID of the bug report to assign.</param>
+		/// <param name="developerId">The ID of the developer to assign the bug to.</param>
+		public async Task AddAssignment(string reportId, string developerId)
         {
             // build database update command
             var sqlCmd = "INSERT INTO assignments (assignee, bug_report) VALUES (@uid, @bid)";

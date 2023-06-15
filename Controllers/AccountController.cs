@@ -158,7 +158,8 @@ namespace BugTracker.Controllers
             List<UserModel> developers = await dbContext.SqlDb.GetDevelopers(projectId);
             foreach (var developer in developers)
             {
-                developer.Avatar ??= await dbContext.AuthDb.GetDefaultAvatar(developer.ID);
+                developer.Name = await dbContext.AuthDb.GetName(developer.ID);
+				developer.Avatar ??= await dbContext.AuthDb.GetDefaultAvatar(developer.ID);
             }
 
             // get project statisics
@@ -254,9 +255,23 @@ namespace BugTracker.Controllers
         {
 			var dbContext = GetDbCxt();
 			BugReportModel report = await dbContext.SqlDb.GetReport(reportId);
+            List<UserModel> assignees = await dbContext.SqlDb.GetAssignees(reportId);
+			foreach (var assignee in assignees)
+			{
+				assignee.Name = await dbContext.AuthDb.GetName(assignee.ID);
+				assignee.Avatar ??= await dbContext.AuthDb.GetDefaultAvatar(assignee.ID);
+			}
+			List<UserModel> developers = await dbContext.SqlDb.GetDevelopers(report.ProjectID);
+			foreach (var developer in developers)
+			{
+				developer.Name = await dbContext.AuthDb.GetName(developer.ID);
+				developer.Avatar ??= await dbContext.AuthDb.GetDefaultAvatar(developer.ID);
+			}
 			var viewModel = new BugReportViewModel()
             {
-                BugReport = report
+                BugReport = report,
+                Assignees = assignees,
+                AvailableDevelopers = developers
             };
             return View(viewModel);
         }

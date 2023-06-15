@@ -13,6 +13,10 @@
         /// Property <c>Name</c> represents the project's name.
         /// </value>
         public string? Name { get; set; }
+		/// <value>
+		/// Property <c>Creation</c> represents the project's date of creation.
+		/// </value>
+		public string? CreationDate { get; set; }
         /// <value>
         /// Property <c>Avatar</c> represents the project's avatar image.
         /// </value>

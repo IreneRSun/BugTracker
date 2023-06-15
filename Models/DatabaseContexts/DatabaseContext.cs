@@ -21,7 +21,7 @@ namespace BugTracker.Models.DatabaseContexts
         /// <returns>The UserModel of the user.</returns>
         public async Task<UserModel> GetUser(string userId)
         {
-            UserModel user = await AuthDb.getUser(userId);
+            UserModel user = await AuthDb.GetUser(userId);
             string? avatar = await SqlDb.GetAvatar(userId);
             if (avatar != null)
             {

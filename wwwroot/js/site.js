@@ -3,9 +3,11 @@
 
 // Write your JavaScript code.
 
-// Document logic for showing search results
 $(document).ready(() => {
+    // show search results, if any
     $(".search-results").modal("show");
+    // handle dropdown search
+    $(".search2-multiple").select2();
 });
 
 // Function that submits a given form

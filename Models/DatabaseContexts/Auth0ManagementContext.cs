@@ -77,7 +77,12 @@ namespace BugTracker.Models.DatabaseContexts
             return token;
         }
 
-        public async Task<UserModel> getUser(string userId)
+        /// <summary>
+        /// Method <c>GetUser</c> gets a UserModel with user data from the Auth0 database.
+        /// </summary>
+        /// <param name="userId">The ID of the user to get the UserModel of.</param>
+        /// <returns>The UserModel with the user data.</returns>
+        public async Task<UserModel> GetUser(string userId)
         {
             // request user data
             string? token = GetToken();
@@ -93,12 +98,36 @@ namespace BugTracker.Models.DatabaseContexts
             };
         }
 
-        /// <summary>
-        /// Method <c>UpdateUsername</c> updates the username of the user.
-        /// </summary>
-        /// <param name="userId">The ID of the user to update the name of.</param>
-        /// <param name="newName">The new name to update to.</param>
-        public async Task UpdateUsername(string userId, string newName)
+		/// <summary>
+		/// Method <c>GetDefaultAvatar</c> gets the default avatar associated with a user from the Auth0 database.
+		/// </summary>
+		/// <param name="userId">The ID of the user.</param>
+		public async Task<string> GetDefaultAvatar(string userId)
+		{
+			string? token = GetToken();
+			var client = new ManagementApiClient(token, _domain);
+			var userData = await client.Users.GetAsync(userId);
+			return userData.Picture;
+		}
+
+		/// <summary>
+		/// Method <c>GetDefaultAvatar</c> gets the name associated with a user from the Auth0 database.
+		/// </summary>
+		/// <param name="userId">The ID of the user to get the name of.</param>
+		public async Task<string> GetName(string userId)
+        {
+			string? token = GetToken();
+			var client = new ManagementApiClient(token, _domain);
+			var userData = await client.Users.GetAsync(userId);
+			return userData.NickName;
+		}
+
+		/// <summary>
+		/// Method <c>UpdateUsername</c> updates the username of the user.
+		/// </summary>
+		/// <param name="userId">The ID of the user to update the name of.</param>
+		/// <param name="newName">The new name to update to.</param>
+		public async Task UpdateUsername(string userId, string newName)
         {
             string? token = GetToken();
             var client = new ManagementApiClient(token, _domain);
@@ -119,18 +148,6 @@ namespace BugTracker.Models.DatabaseContexts
             string? token = GetToken();
             var client = new ManagementApiClient(token, _domain);
             await client.Users.DeleteAsync(userId);
-        }
-
-        /// <summary>
-        /// Method <c>GetDefaultAvatar</c> gets the default avatar associated with a user from the Auth0 database.
-        /// </summary>
-        /// <param name="userId">The ID of the user.</param>
-        public async Task<string> GetDefaultAvatar(string userId)
-        {
-            string? token = GetToken();
-            var client = new ManagementApiClient(token, _domain);
-            var userData = await client.Users.GetAsync(userId);
-            return userData.Picture;
         }
 
         /// <summary>
