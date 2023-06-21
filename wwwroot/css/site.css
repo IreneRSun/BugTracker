@@ -52,3 +52,11 @@ body {
 .custom-rounded {
     border-radius: 40%;
 }
+
+.screen-width {
+    width: 100%;
+}
+
+.select2-container--default .select2-selection--single {
+    min-height: 35px;
+}

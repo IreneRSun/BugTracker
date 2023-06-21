@@ -24,8 +24,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxEYXNoYm9hcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/irene/VS/repos/BugTracker/Views/Account/DatabaseError.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxEYXRhYmFzZUVycm9yLmNzaHRtbA==
+[C:/Users/irene/VS/repos/BugTracker/Views/Account/LoggedOut.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dnZWRPdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/irene/VS/repos/BugTracker/Views/Account/Profile.cshtml]
@@ -54,10 +54,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/irene/VS/repos/BugTracker/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/irene/VS/repos/BugTracker/Views/Home/Logout.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxMb2dvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/irene/VS/repos/BugTracker/Views/Home/Privacy.cshtml]

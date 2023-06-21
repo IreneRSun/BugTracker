@@ -11,7 +11,7 @@
 	{
 		<li>
 			<form method="post" asp-controller="AccountActions" asp-action="DeleteAssignment" asp-route-reportId=@Model.BugReport.ID asp-route-devId=@dev.ID>
-				<img src=@dev.Avatar alt="project avatar" class="rounded-circle" width="30px" height="30px">
+				<img src=@dev.Avatar alt="project avatar" class="custom-avatar-size-1 rounded-circle">
 				<label>@dev.Name</label>
 				<button type="submit" class="rounded-circle bg-white">-</button>
 			</form>
@@ -21,7 +21,7 @@
 
 <form id="assign-developer-form" method="post" asp-controller="AccountActions" asp-action="AddAssignment" asp-route-reportId=@Model.BugReport.ID>
 	<label>Assign Developers</label>
-	<select name="developer-select" class="search2-multiple" multiple="multiple" onchange="submitForm('assign-developer-form')">
+	<select name="developer-select" class="developer-select screen-width" onchange="submitForm('assign-developer-form')">
 		@foreach (var developer in Model.AvailableDevelopers)
 		{
 			<option value=@developer.ID>@developer.Name</option>

@@ -10,7 +10,5 @@ namespace BugTracker.Models.ViewDataModels
         public int FixedBugs { get; set; }
         public List<UserModel> Developers { get; set; }
         public bool IsDeveloper { get; set; }
-        public string? SearchQuery { get; set; }
-        public List<UserModel> UserSearchResults { get; set; }
     }
 }

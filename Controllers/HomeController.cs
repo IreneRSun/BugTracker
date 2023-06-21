@@ -4,7 +4,10 @@ using System.Diagnostics;
 
 namespace BugTracker.Controllers
 {
-    public class HomeController : Controller
+	/// <summary>
+	/// Class <c>HomeController</c> is a controller handling the website home pages.
+	/// </summary>
+	public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
 
@@ -28,11 +31,6 @@ namespace BugTracker.Controllers
         }
 
         public IActionResult Contact()
-        {
-            return View();
-        }
-
-        public IActionResult Logout()
         {
             return View();
         }

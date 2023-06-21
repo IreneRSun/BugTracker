@@ -25,7 +25,7 @@
                 </div>
                 <div class="modal-body">
                     <label>Summary</label>
-                    <input type="text" name="report-summary" placeholder="Enter a summary of the bug here" maxlength="150" required />
+                    <textarea name="report-summary" rows="2" cols="50" placeholder="Enter a summary of the bug here" maxlength="150" required></textarea>
                     <br />
                     <label>Software Version</label>
                     <input type="number" name="software-version" min="1" step="0.001" required />
@@ -37,7 +37,7 @@
                     <input type="text" name="os" placeholder="Enter you operating system" maxlength="50" required />
                     <br />
                     <label>Details</label>
-                    <input type="text" name="details" placeholder="Add details here" required />
+                    <textarea name="details" rows="5" cols="50" placeholder="Add details here" required></textarea>
                     <br />
                 </div>
                 <div class="modal-footer">
@@ -55,55 +55,27 @@
     @foreach (var developer in Model.Developers)
     {
         <li>
-            <img src=@developer.Avatar alt="" class="rounded-circle" width="50px" height="50px" />
+            <img src=@developer.Avatar alt="" class="custom-avatar-size-2 rounded-circle" />
             <label>@developer.Name</label>
         </li>
     }
 </ul>
 
 <!-- collaborator addition -->
-@if (Model.IsDeveloper)
+@if (Model.IsDeveloper) 
 {
-    <h5>Add Collaborators</h5>
-    <form method="get" class="mt-1" asp-controller="Account" asp-action="Project">
-        <input type="hidden" name="projectId" value=@Model.Project.ID />
-        <input type="text" name="searchQuery" placeholder="Search for users ... " />
-        <button type="submit">Search</button>
+    <form id="add-developer-form" method="post" class="mt-1" asp-controller="Account" asp-action="AddDeveloper">
+        <input type="hidden" name="project-id" value=@Model.Project.ID />
+        <label>Add Collaborators</label>
+        <select name="user-search" class="user-search screen-width" onchange="submitForm('add-developer-form')"></select>
     </form>
-
-    @if (Model.SearchQuery != null)
-    {
-        <div class="modal fade mt-2 search-results" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Search Results for "@Model.SearchQuery"</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <ul>
-                            @foreach (var user in Model.UserSearchResults)
-                            {
-                                <li>
-                                    <form method="post" asp-controller="AccountActions" asp-action="AddDeveloper" asp-route-projectId=@Model.Project.ID asp-route-userId=@user.ID>
-                                        <img src=@user.Avatar alt="project avatar" class="rounded-circle" width="30px" height="30px">
-                                        <label>@user.Name</label>
-                                        <button type="submit" class="rounded-circle bg-white">+</button>
-                                    </form>
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
 }
 
 <!-- form for project deletion -->
 @if (Model.IsDeveloper)
 {
-    <form method="post" onSubmit="return confirm('This action is not cannot be undone. Are you sure you wish to proceed?');" class="mt-sm-5" asp-controller="AccountActions" asp-action="DeleteProject" asp-route-projectId=@Model.Project.ID>
+    <form method="post" onSubmit="return confirm('This action is not cannot be undone. Are you sure you wish to proceed?');" class="mt-sm-5" asp-controller="AccountActions" asp-action="DeleteProject">
+        <input type="hidden" name="project-id" value=@Model.Project.ID />
         <button type="submit" class="btn-danger">Delete Project</button>
     </form>
 }

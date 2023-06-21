@@ -13,7 +13,7 @@ USE bug_tracker;
 
 CREATE TABLE users (
 uid VARCHAR(64) PRIMARY KEY,
-avatar MEDIUMBLOB,
+avatar BLOB,
 status VARCHAR(30)
 );
 

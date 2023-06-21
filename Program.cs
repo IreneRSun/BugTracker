@@ -1,5 +1,4 @@
 using Auth0.AspNetCore.Authentication;
-using BugTracker.Controllers;
 using BugTracker.Models.DatabaseContexts;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,15 +17,17 @@ builder.Services
         options.Scope = "openid profile email";
     });
 
-// Database services
-var sqlDbCx = new MySQLDatabaseContext(builder.Configuration.GetConnectionString("DefaultConnection"));
-var authDbCx = new Auth0ManagementContext(
-    builder.Configuration["Auth0:Domain"],
-    builder.Configuration["Auth0:ClientId"],
-    builder.Configuration["Auth0:ClientSecret"],
-    builder.Configuration["Auth0:Audience"]);
+// Auth0 Management API services
+var authCx = new UserManagementContext(
+	builder.Configuration["Auth0:Domain"],
+	builder.Configuration["Auth0:ClientId"],
+	builder.Configuration["Auth0:ClientSecret"],
+	builder.Configuration["Auth0:Audience"]);
+builder.Services.Add(new ServiceDescriptor(typeof(UserManagementContext), authCx));
 
-builder.Services.Add(new ServiceDescriptor(typeof(DatabaseContext), new DatabaseContext(sqlDbCx, authDbCx)));
+// Database services
+var sqlCx = new DatabaseContext(builder.Configuration.GetConnectionString("DefaultConnection"));
+builder.Services.Add(new ServiceDescriptor(typeof(DatabaseContext), sqlCx));
 
 var app = builder.Build();
 
