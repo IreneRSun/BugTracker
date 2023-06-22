@@ -1,4 +1,5 @@
-﻿using BugTracker.Models.EntityModels;
+﻿using Auth0.ManagementApi.Models;
+using BugTracker.Models.EntityModels;
 using MySql.Data.MySqlClient;
 using System.Data;
 
@@ -592,26 +593,58 @@ namespace BugTracker.Models.DatabaseContexts
         /// <param name="reportId">The ID of the bug report the comment was made on.</param>
         /// <param name="userId">The ID of the user that made the comment.</param>
         /// <param name="comment">The comment the user made.</param>
-        /// <param name="replyToID">The ID of the comment this comment is replying to, if any.</param>
-        public async Task AddComment(string reportId, string userId, string comment, string? replyToID = null)
+        public async Task AddComment(string reportId, string userId, string comment)
         {
             // find a unique hash for the comment
             string commentId = await FindUniqueHash("comments", "cid");
 
             // add comment data to database
             // build database update command
-            var sqlCmd = "INSERT INTO comments (cid, commenter, bug_report, reply_to, comment) VALUES (@cid, @uid, @bid, @rt, @comment)";
+            var sqlCmd = "INSERT INTO comments (cid, commenter, bug_report, comment) VALUES (@cid, @uid, @bid, @comment)";
             var parameters = new Dictionary<string, string>
             {
                 { "@cid", commentId },
                 { "@uid", userId },
                 { "@bid", reportId },
-                { "@rt", replyToID },
                 { "@comment", comment }
             };
 
             await UpdateDatabase(sqlCmd, parameters);
         }
+
+		/// <summary>
+		/// Method <c>GetComments</c> gets the comments for a bug report.
+		/// </summary>
+		/// <param name="reportId">The ID of the report to get the comments of.</param>
+		/// <returns>The list of comments for a bug report (ordered by date, descending).</returns>
+		public async Task<List<CommentModel>> GetComments(string reportId)
+        {
+			// build query
+			var query = "SELECT * FROM comments WHERE bug_report = @bid ORDER BY date DESC";
+			var parameters = new Dictionary<string, string> {
+				{ "@bid", reportId }
+			};
+
+			// build query result parser
+			Func<MySqlDataReader, Task<List<CommentModel>>> queryParser = async (reader) =>
+			{
+				var comments = new List<CommentModel>();
+				while (await reader.ReadAsync())
+				{
+					var commentId = reader.GetString("cid");
+                    var commenter = reader.GetString("commenter");
+                    comments.Add(new CommentModel(commentId, commenter)
+                    {
+                        BugReport = reader.GetString("bug_report"),
+                        Comment = reader.GetString("comment"),
+                        Date = reader.GetString("date")
+                    });
+				}
+				return comments;
+			};
+
+			return await QueryDatabase(query, parameters, queryParser);
+		}
 
         /// <summary>
         /// Method <c>GetAssignments</c> gets the bugs assigned to the user.

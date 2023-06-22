@@ -230,11 +230,18 @@ namespace BugTracker.Controllers
 					developer.Name = await usrCx.GetName(developer.ID);
 					developer.Avatar ??= await usrCx.GetDefaultAvatar(developer.ID);
 				}
+				List<CommentModel> comments = await dbCx.GetComments(report.ProjectID);
+				foreach (var comment in comments)
+				{
+					comment.Commenter.Name = await usrCx.GetName(comment.Commenter.ID);
+				}
 				var viewModel = new BugReportViewModel()
 				{
 					BugReport = report,
 					Assignees = assignees,
-					AvailableDevelopers = developers
+					AvailableDevelopers = developers,
+					CurrentUser = GetUserId(),
+					Comments = comments
 				};
 				return View(viewModel);
 			}
