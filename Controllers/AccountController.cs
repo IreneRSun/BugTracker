@@ -212,10 +212,11 @@ namespace BugTracker.Controllers
         [Authorize]
         public async Task<IActionResult> BugReport(string reportId)
 		{
+			string? userId = GetUserId();
             UserManagementContext? usrCx = GetUserManagementCx();
             DatabaseContext? dbCx = GetDbCx();
 
-            if (usrCx != null && dbCx != null)
+            if (userId != null && usrCx != null && dbCx != null)
 			{
 				BugReportModel report = await dbCx.GetReport(reportId);
 				List<UserModel> assignees = await dbCx.GetAssignees(reportId);
@@ -230,7 +231,13 @@ namespace BugTracker.Controllers
 					developer.Name = await usrCx.GetName(developer.ID);
 					developer.Avatar ??= await usrCx.GetDefaultAvatar(developer.ID);
 				}
-				List<CommentModel> comments = await dbCx.GetComments(report.ProjectID);
+				var user = await usrCx.GetUser(userId);
+				var userAvatar = await dbCx.GetAvatar(userId);
+				if (userAvatar != null)
+				{
+					user.Avatar = userAvatar;
+				}
+				List<CommentModel> comments = await dbCx.GetComments(report.ID);
 				foreach (var comment in comments)
 				{
 					comment.Commenter.Name = await usrCx.GetName(comment.Commenter.ID);
@@ -240,7 +247,7 @@ namespace BugTracker.Controllers
 					BugReport = report,
 					Assignees = assignees,
 					AvailableDevelopers = developers,
-					CurrentUser = GetUserId(),
+					CurrentUser = user,
 					Comments = comments
 				};
 				return View(viewModel);

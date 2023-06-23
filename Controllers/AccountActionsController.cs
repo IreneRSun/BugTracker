@@ -299,6 +299,33 @@ namespace BugTracker.Controllers
 			}
 		}
 
+		[HttpPost]
+		public async Task<IActionResult> Comment(string reportId)
+		{
+			// get user comment
+			string comment = Request.Form["user-comment"];
+
+			string? userId = GetUserId();
+			DatabaseContext? dbCx = GetDbCx();
+
+			if (dbCx != null && reportId != null && userId != null && comment != null)
+			{
+				// update report tag
+				await dbCx.AddComment(reportId, userId, comment);
+				// redirect to the updated bug report
+				return RedirectToAction("BugReport", "Account", new { reportId });
+
+			}
+			else if (dbCx == null)
+			{
+				throw new Exception("Could not access database services.");
+			}
+			else
+			{
+				throw new Exception("Invalid database action with null values.");
+			}
+		}
+
 		/// <summary>
 		/// Method <c>UpdateAvatar</c> updates the avatar of the user in the database context with the uploaded image.
 		/// </summary>

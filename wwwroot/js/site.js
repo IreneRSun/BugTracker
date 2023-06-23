@@ -71,7 +71,7 @@ function formatUser(result) {
     if (result.avatar) {
         return $(`<div><img src="${result.avatar}" class="custom-avatar-size-1 rounded-circle" /> ${result.name}</div>`);
     } else if (result.name) {
-        return $(`<div><span class="custom-avatar-size-1 rounded-circle"><i class="fa fa-user"></i></span> ${result.name}</div>`);
+        return $(`<div><span class="custom-avatar-size-1 rounded-circle"><i class="fa fa-user-circle-o"></i></span> ${result.name}</div>`);
     } else {
         return null;
     }
@@ -81,7 +81,7 @@ function formatUserSelection(result) {
     if (result.avatar) {
         return $(`<div><img src="${result.avatar}" class="custom-avatar-size-1 rounded-circle" /> ${result.name}</div>`) || result.text;
     } else if (result.name) {
-        return $(`<div><span class="custom-avatar-size-1 rounded-circle"><i class="fa fa-user"></i></span> ${result.name}</div>`) || result.text;
+        return $(`<div><span class="custom-avatar-size-1 rounded-circle"><i class="fa fa-user-circle-o"></i></span> ${result.name}</div>`) || result.text;
     } else {
         return null;
     }
