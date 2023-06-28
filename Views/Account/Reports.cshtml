@@ -35,11 +35,15 @@
 
 <h2>@Model.FilterType Bug Reports</h2>
 
-<li>
+<ul>
 	@foreach (var report in Model.BugReports)
 	{
-		<ul>
+		<li>
 			<a asp-controller="Account" asp-action="BugReport" asp-route-reportId=@report.ID>@report.Summary</a>
-		</ul>
+			@if (report.HelpWanted)
+			{
+				<label>Help Wanted</label>
+			}
+		</li>
 	}
-</li>
+</ul>

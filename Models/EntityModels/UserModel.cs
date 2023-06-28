@@ -21,9 +21,13 @@
         /// Property <c>Avatar</c> represents the user's profile picture.
         /// </value>
         public string? Avatar { get; set; }
+		/// <value>
+		/// Property <c>Avatar</c> represents the user's status.
+		/// </value>
+		public string? Status { get; set; }
 
         /// <summary>
-        /// Method <c>UserModel</c> initalizes the class with an ID.
+        /// Method <c>UserModel</c> initalizes the class with a user's ID.
         /// </summary>
         /// <param name="userID">The ID of the user.</param>
         public UserModel(string userID)

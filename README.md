@@ -23,19 +23,19 @@ name VARCHAR(50) NOT NULL,
 date DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
-CREATE TABLE bug_reports (
+CREATE TABLE reports (
 bid CHAR(64) PRIMARY KEY,
 reportee VARCHAR(64),
-project CHAR(64),
+project CHAR(64) NOT NULL,
 summary VARCHAR(150) NOT NULL,
 software_version DECIMAL NOT NULL,
 device VARCHAR(50),
-os VARCHAR(50),
+os VARCHAR(50) NOT NULL,
 details TEXT NOT NULL,
 priority VARCHAR(10),
 severity VARCHAR(10),
 status VARCHAR(30) DEFAULT "NEW" NOT NULL,
-help_wanted TINYINT DEFAULT 0,
+help_wanted TINYINT DEFAULT 0 NOT NULL,
 date DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
 FOREIGN KEY (reportee) REFERENCES users(uid) ON DELETE SET NULL,
 FOREIGN KEY (project) REFERENCES projects(pid) ON DELETE CASCADE
@@ -44,11 +44,11 @@ FOREIGN KEY (project) REFERENCES projects(pid) ON DELETE CASCADE
 CREATE TABLE comments (
 cid CHAR(64) PRIMARY KEY,
 commenter VARCHAR(64),
-bug_report CHAR(64) NOT NULL,
+report CHAR(64) NOT NULL,
 comment TEXT NOT NULL,
 date DATETIME DEFAULT CURRENT_TIMESTAMP,
 FOREIGN KEY (commenter) REFERENCES users(uid) ON DELETE SET NULL,
-FOREIGN KEY (bug_report) REFERENCES bug_reports(bid) ON DELETE CASCADE
+FOREIGN KEY (report) REFERENCES reports(bid) ON DELETE CASCADE
 );
 
 CREATE TABLE developments (
@@ -60,9 +60,16 @@ FOREIGN KEY (developer) REFERENCES users(uid) ON DELETE SET NULL
 
 CREATE TABLE assignments (
 assignee VARCHAR(64),
-bug_report CHAR(64),
+report CHAR(64),
 FOREIGN KEY (assignee) REFERENCES users(uid) ON DELETE SET NULL,
-FOREIGN KEY (bug_report) REFERENCES bug_reports(bid) ON DELETE SET NULL
+FOREIGN KEY (report) REFERENCES reports(bid) ON DELETE CASCADE
+);
+
+CREATE TABLE upvotes (
+user VARCHAR(64),
+report CHAR(64),
+FOREIGN KEY (user) REFERENCES users(uid) ON DELETE SET NULL,
+FOREIGN KEY (report) REFERENCES reports(bid) ON DELETE CASCADE
 );
 
 ## Tutorials/Guides
