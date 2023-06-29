@@ -267,6 +267,28 @@ namespace BugTracker.Models.DatabaseContexts
 		}
 
         /// <summary>
+        /// Method <c>ParseCount</c> parses the count data from a MySqlDataReader into an integer.
+        /// Requires the name or alias of the column with the count data to be "count".
+        /// </summary>
+        /// <param name="reader">The MySqlDataReader that contains the count data.</param>
+        /// <returns>The count.</returns>
+        private async Task<int> ParseCount(MySqlDataReader reader)
+        {
+            await reader.ReadAsync();
+            return reader.GetInt32("count");
+        }
+
+        /// <summary>
+        /// Method <c>ParseHasRows</c> returns whether a MySqlDataReader has one or more rows as a boolean.
+        /// </summary>
+        /// <param name="reader">The MySqlDataReader that contains the row data.</param>
+        /// <returns>Whether the reader contains one or more rows.</returns>
+        private async Task<bool> ParseHasRows(MySqlDataReader reader)
+        {
+            return reader.HasRows;
+        }
+
+        /// <summary>
         /// Method <c>RegisterUser</c> adds a user if they do not exist in the database.
         /// </summary>
         /// <param name="userId">The ID of the user to add.</param>
@@ -440,14 +462,7 @@ namespace BugTracker.Models.DatabaseContexts
             var queryParameters = new Dictionary<string, object?> {
                 { "@pid", projectId }
             };
-
-            Func<MySqlDataReader, Task<int>> queryParser = async (reader) =>
-            {
-                await reader.ReadAsync();
-                return reader.GetInt32("count");
-            };
-
-            int numDevelopers = await QueryDatabase(query, queryParameters, queryParser);
+            int numDevelopers = await QueryDatabase(query, queryParameters, ParseCount);
 
             // delete project if user is the only developer, otherwise remove developer from the project
             var cmd = numDevelopers > 1 ? "DELETE FROM developments WHERE developer = @uid" : "DELETE FROM projects WHERE pid = @pid";
@@ -487,13 +502,7 @@ namespace BugTracker.Models.DatabaseContexts
                 { "@pid", projectId },
                 { "@uid", userId }
             };
-
-            Func<MySqlDataReader, Task<bool>> queryParser = async (reader) =>
-            {
-                return reader.HasRows;
-            };
-
-            return await QueryDatabase(query, parameters, queryParser);
+            return await QueryDatabase(query, parameters, ParseHasRows);
         }
 
         /// <summary>
@@ -772,14 +781,7 @@ namespace BugTracker.Models.DatabaseContexts
             {
 				parameters["@status"] = "NEW";
 			}
-
-            // get statistic
-			Func<MySqlDataReader, Task<int>> queryParser = async (reader) =>
-			{
-                await reader.ReadAsync();
-                return reader.GetInt32("count");
-			};
-			return await QueryDatabase(query, parameters, queryParser);
+			return await QueryDatabase(query, parameters, ParseCount);
 		}
 
         /// <summary>
@@ -794,14 +796,7 @@ namespace BugTracker.Models.DatabaseContexts
 			{
 				{ "@bid", reportId }
 			};
-
-			Func<MySqlDataReader, Task<int>> queryParser = async (reader) =>
-			{
-				await reader.ReadAsync();
-				return reader.GetInt32("count");
-			};
-
-			return await QueryDatabase(query, parameters, queryParser);
+			return await QueryDatabase(query, parameters, ParseCount);
 		}
 
         /// <summary>
@@ -817,13 +812,7 @@ namespace BugTracker.Models.DatabaseContexts
 				{ "@bid", reportId },
 				{ "@uid", userId }
 			};
-
-			Func<MySqlDataReader, Task<bool>> queryParser = async (reader) =>
-			{
-				return reader.HasRows;
-			};
-
-			return await QueryDatabase(query, parameters, queryParser);
+			return await QueryDatabase(query, parameters, ParseHasRows);
 		}
 
         /// <summary>
