@@ -320,6 +320,57 @@ namespace BugTracker.Controllers
 			}
 		}
 
+		[HttpPost]
+		public async Task<IActionResult> Upvote()
+		{
+			// get form input
+			string reportId = Request.Form["report-id"];
+
+			string? userId = GetUserId();
+			DatabaseContext? dbCx = GetDbCx();
+
+			if ( dbCx != null && reportId != null && userId != null)
+			{
+				// upvote bug report and redirect to updated bug report page
+				await dbCx.AddUpvote(reportId, userId);
+				return RedirectToAction("BugReport", "Account", new { reportId });
+			}
+			else if (dbCx == null)
+			{
+				throw new Exception("Could not access database services.");
+			}
+			else
+			{
+				throw new Exception("Invalid database action with null values.");
+			}
+		}
+
+		[HttpPost]
+
+		public async Task<IActionResult> RemoveUpvote()
+		{
+			// get form input
+			string reportId = Request.Form["report-id"];
+
+			string? userId = GetUserId();
+			DatabaseContext? dbCx = GetDbCx();
+
+			if (dbCx != null && reportId != null && userId != null)
+			{
+				// un-upvote bug report and redirect to updated bug report page
+				await dbCx.DeleteUpvote(reportId, userId);
+				return RedirectToAction("BugReport", "Account", new { reportId });
+			}
+			else if (dbCx == null)
+			{
+				throw new Exception("Could not access database services.");
+			}
+			else
+			{
+				throw new Exception("Invalid database action with null values.");
+			}
+		}
+
 		/// <summary>
 		/// Method <c>UpdateAvatar</c> updates the avatar of the user in the database context with the uploaded image.
 		/// </summary>

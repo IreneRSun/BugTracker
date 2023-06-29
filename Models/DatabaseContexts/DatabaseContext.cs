@@ -1,8 +1,5 @@
-﻿using Auth0.ManagementApi.Models;
-using BugTracker.Models.EntityModels;
-using crypto;
+﻿using BugTracker.Models.EntityModels;
 using MySql.Data.MySqlClient;
-using System;
 using System.Data;
 
 namespace BugTracker.Models.DatabaseContexts

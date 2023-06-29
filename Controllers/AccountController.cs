@@ -228,6 +228,9 @@ namespace BugTracker.Controllers
 					}
 				}
 
+				// get whether the user has upvoted the bug report
+				bool userUpvoted = await dbCx.IsUserUpvoted(reportId, userId);
+
 				// return the ViewResult with the page data
 				var viewModel = new BugReportViewModel()
 				{
@@ -235,6 +238,7 @@ namespace BugTracker.Controllers
 					Assignees = assignees,
 					AvailableDevelopers = developers,
 					CurrentUserId = userId,
+					UserUpvoted = userUpvoted,
 					Comments = comments
 				};
 				return View(viewModel);

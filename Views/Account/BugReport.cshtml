@@ -5,6 +5,22 @@
 <label>Date</label>
 <p>@Model.BugReport.Date</p>
 
+@if (Model.UserUpvoted == true)
+{
+	<form method="post" asp-controller="AccountActions" asp-action="RemoveUpvote">
+		<input type="hidden" name="report-id" value=@Model.BugReport.ID />
+		<button type="submit"><i class="fa fa-caret-up" style="color: black"></i></button>
+	</form>
+} 
+else if (Model.UserUpvoted == false)
+{
+	<form method="post" asp-controller="AccountActions" asp-action="Upvote">
+		<input type="hidden" name="report-id" value=@Model.BugReport.ID />
+		<button type="submit"><i class="fa fa-caret-up" style="color: grey"></i></button>
+	</form>
+}
+<div>@Model.BugReport.Upvotes</div>
+
 <label>Assignees</label>
 <ul>
 	@foreach (var developer in Model.Assignees)
@@ -15,7 +31,7 @@
 				<input type="hidden" name="developer-id" value=@developer.ID />
 				<img src=@developer.Avatar alt="project avatar" class="custom-avatar-size-1 rounded-circle">
 				<label>@developer.Name</label>
-				<button type="submit" class="rounded-circle bg-white">-</button>
+				<button type="submit" class="rounded-circle bg-white"><i class="fa fa-user-times"></i></button>
 			</form>
 		</li>
 	}
