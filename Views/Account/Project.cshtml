@@ -2,7 +2,7 @@
 
 <img src=@Model.Project.Avatar alt="project avatar" class="custom-avatar-size-3 rounded-circle" />
 <h2>@Model.Project.Name</h2>
-<label>Created at <i>@Model.Project.CreationDate</i></label>
+<label>Created at <i>@Model.Project.Date</i></label>
 
 <!-- project statistics -->
 <label>New <b>@Model.NewBugs</b></label>
@@ -18,12 +18,13 @@
 <div class="modal fade" id="create-report-dialog" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="post" asp-controller="AccountActions" asp-action="ReportBug" asp-route-projectId=@Model.Project.ID>
+            <form method="post" asp-controller="AccountActions" asp-action="ReportBug">
                 <div class="modal-header">
                     <h5 class="modal-title">Report Bug</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
+                    <input type="hidden" name="project-id" value=@Model.Project.ID />
                     <label>Summary</label>
                     <textarea name="report-summary" rows="2" cols="50" placeholder="Enter a summary of the bug here" maxlength="150" required></textarea>
                     <br />
@@ -62,7 +63,7 @@
 </ul>
 
 <!-- collaborator addition -->
-@if (Model.IsDeveloper) 
+@if (Model.IsDeveloper == true) 
 {
     <form id="add-developer-form" method="post" class="mt-1" asp-controller="Account" asp-action="AddDeveloper">
         <input type="hidden" name="project-id" value=@Model.Project.ID />
@@ -72,7 +73,7 @@
 }
 
 <!-- form for project deletion -->
-@if (Model.IsDeveloper)
+@if (Model.IsDeveloper == true)
 {
     <form method="post" onSubmit="return confirm('This action is not cannot be undone. Are you sure you wish to proceed?');" class="mt-sm-5" asp-controller="AccountActions" asp-action="DeleteProject">
         <input type="hidden" name="project-id" value=@Model.Project.ID />

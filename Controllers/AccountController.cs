@@ -3,6 +3,7 @@ using BugTracker.Models.EntityModels;
 using BugTracker.Models.ViewDataModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BugTracker.Controllers
 {
@@ -12,24 +13,22 @@ namespace BugTracker.Controllers
 	public class AccountController : DatabaseAccessingController
 	{
         /// <summary>
-        /// Method <c>Dashboard</c> gets the ViewResult for the current user's dashboard.
+        /// Method <c>Dashboard</c> gets the ViewResult for a user's dashboard.
         /// </summary>
+		/// <param name="id">The ID of the user to get the dashboard of.
+		/// Defaults to the current user's ID if empty.</param>
         /// <returns>The ViewResult for the user dashboard page.</returns>
         [Authorize]
-        public async Task<IActionResult> Dashboard()
+        public async Task<IActionResult> Dashboard(string id)
 		{
-			string? userId = GetUserId();
+			string? userId = id.IsNullOrEmpty() ? GetUserId() : id;
 			UserManagementContext? usrCx = GetUserManagementCx();
 			DatabaseContext? dbCx = GetDbCx();
 
 			if (usrCx != null && dbCx != null && userId != null) {
 				// get representative models for the user and their projects
 				UserModel userModel = await usrCx.GetUser(userId);
-				string? avatar = await dbCx.GetAvatar(userId);
-				if (avatar != null)
-				{
-					userModel.Avatar = avatar;
-				}
+				await dbCx.GetUserData(userModel);
 
 				List<ProjectModel> userProjectModels = await dbCx.GetProjects(userId);
 
@@ -42,35 +41,30 @@ namespace BugTracker.Controllers
 
 				return View(viewModel);
 			}
-			else if (userId == null)
-			{
-				throw new Exception("Could not find current user ID.");
-			}
 			else
 			{
 				throw new Exception("Could not access database services.");
 			}
 		}
 
-        /// <summary>
-        /// Method <c>Profile</c> gets the ViewResult for the current user's profile.
-        /// </summary>
-        /// <returns>The ViewResult for the user's profile page.</returns>
-        [Authorize]
-        public async Task<IActionResult> Profile()
+		/// <summary>
+		/// Method <c>Profile</c> gets the ViewResult for the current user's profile.
+		/// </summary>
+		/// <param name="id">The ID of the user to get the dashboard of.
+		/// Defaults to the current user's ID if empty.</param>
+		/// <returns>The ViewResult for the user's profile page.</returns>
+		[Authorize]
+        public async Task<IActionResult> Profile(string id)
 		{
-			string? userId = GetUserId();
-            UserManagementContext? usrCx = GetUserManagementCx();
+			string? userId = id.IsNullOrEmpty() ? GetUserId() : id;
+			UserManagementContext? usrCx = GetUserManagementCx();
             DatabaseContext? dbCx = GetDbCx();
 
             if (usrCx != null && dbCx != null && userId != null) {
                 // get representative model of current user
                 UserModel userModel = await usrCx.GetUser(userId);
-				string? avatar = await dbCx.GetAvatar(userId);
-				if (avatar != null)
-				{
-					userModel.Avatar = avatar;
-				}
+				await dbCx.GetUserData(userModel);
+
 				// return ViewResult
 				var viewModel = new ProfileViewModel()
 				{
@@ -78,10 +72,6 @@ namespace BugTracker.Controllers
 				};
 
 				return View(viewModel);
-			} 
-			else if (userId == null)
-			{
-				throw new Exception("Could not find current user ID.");
 			}
 			else
 			{
@@ -104,12 +94,11 @@ namespace BugTracker.Controllers
             if (usrCx != null && dbCx != null && userId != null)
 			{
 				// get representative models for the project and its developers
-				ProjectModel project = await dbCx.GetProject(projectId);
+				ProjectModel project = await dbCx.GetProject(projectId) ?? throw new Exception($"No projects with the ID {projectId} found.");
 				List<UserModel> developers = await dbCx.GetDevelopers(projectId);
-				foreach (var developer in developers)
+				foreach (UserModel developer in developers)
 				{
-					developer.Name = await usrCx.GetName(developer.ID);
-					developer.Avatar ??= await usrCx.GetDefaultAvatar(developer.ID);
+					await usrCx.GetUserData(developer);
 				}
 
 				// get project statisics
@@ -133,10 +122,6 @@ namespace BugTracker.Controllers
 
 				return View(viewModel);
 			}
-			else if (userId == null)
-			{
-				throw new Exception("Could not find current user ID.");
-			}
 			else
 			{
 				throw new Exception("Could not access database services.");
@@ -144,9 +129,9 @@ namespace BugTracker.Controllers
 		}
 
         /// <summary>
-        /// Method <c>Tasks</c> gets the ViewResult for the tasks page.
+        /// Method <c>Tasks</c> gets the ViewResult for the current user's tasks(assigned bugs) page.
         /// </summary>
-        /// <returns>The ViewResult of the issues page.</returns>
+        /// <returns>The ViewResult of the current user's tasks page.</returns>
         [Authorize]
         public async Task<IActionResult> Tasks()
 		{
@@ -155,16 +140,13 @@ namespace BugTracker.Controllers
 
             if (dbCx != null && userId != null)
 			{
+				// return ViewResult with data on user assignments
 				List<BugReportModel> tasks = await dbCx.GetAssignments(userId);
 				var viewModel = new TasksViewModel()
 				{
 					BugReports = tasks
 				};
 				return View(viewModel);
-			}
-			else if (userId == null)
-			{
-				throw new Exception("Could not find current user ID.");
 			}
 			else
 			{
@@ -187,6 +169,7 @@ namespace BugTracker.Controllers
 
             if (dbCx != null)
 			{
+				// return ViewResult with the project's sorted and filtered bug reports and page information
 				List<BugReportModel> tasks = await dbCx.GetReports(projectId, filter, sortType, sortOrder);
 				var viewModel = new ReportsViewModel()
 				{
@@ -218,36 +201,40 @@ namespace BugTracker.Controllers
 
             if (userId != null && usrCx != null && dbCx != null)
 			{
-				BugReportModel report = await dbCx.GetReport(reportId);
+				// get bug report data
+				BugReportModel report = await dbCx.GetReport(reportId) ?? throw new Exception($"No reports with the ID {reportId} found.");
+
+				// get developers assigned to the bug report
 				List<UserModel> assignees = await dbCx.GetAssignees(reportId);
 				foreach (var assignee in assignees)
 				{
-					assignee.Name = await usrCx.GetName(assignee.ID);
-					assignee.Avatar ??= await usrCx.GetDefaultAvatar(assignee.ID);
+					await dbCx.GetUserData(assignee);
 				}
+
+				// get of developers of the project
 				List<UserModel> developers = await dbCx.GetDevelopers(report.ProjectID);
 				foreach (var developer in developers)
 				{
-					developer.Name = await usrCx.GetName(developer.ID);
-					developer.Avatar ??= await usrCx.GetDefaultAvatar(developer.ID);
+					await dbCx.GetUserData(developer);
 				}
-				var user = await usrCx.GetUser(userId);
-				var userAvatar = await dbCx.GetAvatar(userId);
-				if (userAvatar != null)
-				{
-					user.Avatar = userAvatar;
-				}
+
+				// get the comments of the bug report
 				List<CommentModel> comments = await dbCx.GetComments(report.ID);
 				foreach (var comment in comments)
 				{
-					comment.Commenter.Name = await usrCx.GetName(comment.Commenter.ID);
+					if (comment.Commenter != null)
+					{
+						await usrCx.GetUserData(comment.Commenter);
+					}
 				}
+
+				// return the ViewResult with the page data
 				var viewModel = new BugReportViewModel()
 				{
 					BugReport = report,
 					Assignees = assignees,
 					AvailableDevelopers = developers,
-					CurrentUser = user,
+					CurrentUserId = userId,
 					Comments = comments
 				};
 				return View(viewModel);

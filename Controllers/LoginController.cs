@@ -40,7 +40,7 @@ namespace BugTracker.Controllers
             DatabaseContext? dbCx = GetDbCx();
             if (userId != null && dbCx != null)
             {
-                await dbCx.AddUserIfNone(userId);
+                await dbCx.RegisterUser(userId);
             }
 
             // go to user dashboard page

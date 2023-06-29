@@ -244,16 +244,23 @@ namespace BugTracker.Models.DatabaseContexts
 		/// </summary>
 		/// <param name="reader">The MySqlDataReader that contains the comments' data.</param>
 		/// <returns>The list of comments and their data read from the reader.</returns>
-		private static async Task<List<CommentModel>> ParseComments(MySqlDataReader reader)
+		private async Task<List<CommentModel>> ParseComments(MySqlDataReader reader)
         {
 			var comments = new List<CommentModel>();
 			while (await reader.ReadAsync())
 			{
 				var commentId = reader.GetString("cid");
+
 				var commenter = reader.IsDBNull("commenter") ? null : new UserModel(reader.GetString("commenter"));
+                if (commenter != null)
+                {
+					await GetUserData(commenter);
+				}
+
                 var reportId = reader.GetString("report");
                 var comment = reader.GetString("comment");
                 var date = reader.GetDateTime("date");
+
 				comments.Add(new CommentModel(commentId, commenter, reportId, comment, date));
 			}
 			return comments;
@@ -287,27 +294,37 @@ namespace BugTracker.Models.DatabaseContexts
 			await UpdateDatabase(cmd, cmdParameters);
 		}
 
+		/// <summary>
+		/// Method <c>GetUserData</c> fills a UserModel with corresponding user data from the database, if any found.
+		/// </summary>
+		/// <param name="user">The UserModel to fill with the user's data.
+        /// User data retrieved corresponds to the ID attribute of the class.</param>
+		public async Task GetUserData(UserModel user)
+        {
+			var query = "SELECT * FROM users WHERE uid = @uid";
+			var parameters = new Dictionary<string, object?> {
+				{ "@uid", user.ID }
+			};
+            List<UserModel> matches = await QueryDatabase(query, parameters, ParseUsers);
+
+            if (matches.Count > 0)
+            {
+				UserModel userData = matches[0];
+
+				if (userData.Avatar != null)
+				{
+					user.Avatar = userData.Avatar;
+				}
+				user.Status = userData.Status;
+			}
+		}
+
         /// <summary>
         /// Method <c>GetAvatar</c> gets the avatar of the user in string form.
         /// Returns null if no such avatar exists.
         /// </summary>
         /// <param name="userId">The user ID of the user to get the avatar for.</param>
         /// <returns>The avatar of the user.</returns>
-        public async Task<string?> GetAvatar(string userId)
-        {
-            var query = "SELECT * FROM users WHERE uid = @uid";
-            var parameters = new Dictionary<string, object?> {
-                { "@uid", userId }
-            };
-
-            Func<MySqlDataReader, Task<string?>> queryParser = async (reader) =>
-            {
-                await reader.ReadAsync();
-                return GetAvatarFromReader(reader);
-            };
-            
-            return await QueryDatabase(query, parameters, queryParser);
-        }
 
         /// <summary>
         /// Method <c>SetAvatar</c> sets the avatar of the user.
@@ -324,29 +341,6 @@ namespace BugTracker.Models.DatabaseContexts
             };
             await UpdateDatabase(cmdString, addParameters);
         }
-
-		/// <summary>
-		/// Method <c>GetUserStatus</c> gets the status of the user.
-		/// Returns null if no such status is set.
-		/// </summary>
-		/// <param name="userId">The user ID of the user to get the status of.</param>
-		/// <returns>The status of the user.</returns>
-		public async Task<string?> GetUserStatus(string userId)
-        {
-			var query = "SELECT * FROM users WHERE uid = @uid";
-			var parameters = new Dictionary<string, object?> {
-				{ "@uid", userId }
-			};
-
-			Func<MySqlDataReader, Task<string?>> queryParser = async (reader) =>
-			{
-				await reader.ReadAsync();
-                var status = reader.IsDBNull("status") ? null : reader.GetString("status");
-				return status;
-			};
-
-			return await QueryDatabase(query, parameters, queryParser);
-		}
 
         /// <summary>
         /// Method <c>SetUserStatus</c> sets the status of a user.

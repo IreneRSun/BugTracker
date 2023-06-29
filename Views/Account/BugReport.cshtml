@@ -7,19 +7,22 @@
 
 <label>Assignees</label>
 <ul>
-	@foreach (var dev in Model.Assignees)
+	@foreach (var developer in Model.Assignees)
 	{
 		<li>
-			<form method="post" asp-controller="AccountActions" asp-action="DeleteAssignment" asp-route-reportId=@Model.BugReport.ID asp-route-devId=@dev.ID>
-				<img src=@dev.Avatar alt="project avatar" class="custom-avatar-size-1 rounded-circle">
-				<label>@dev.Name</label>
+			<form method="post" asp-controller="AccountActions" asp-action="DeleteAssignment">
+				<input type="hidden" name="report-id" value=@Model.BugReport.ID />
+				<input type="hidden" name="developer-id" value=@developer.ID />
+				<img src=@developer.Avatar alt="project avatar" class="custom-avatar-size-1 rounded-circle">
+				<label>@developer.Name</label>
 				<button type="submit" class="rounded-circle bg-white">-</button>
 			</form>
 		</li>
 	}
 </ul>
 
-<form id="assign-developer-form" method="post" asp-controller="AccountActions" asp-action="AddAssignment" asp-route-reportId=@Model.BugReport.ID>
+<form id="assign-developer-form" method="post" asp-controller="AccountActions" asp-action="AddAssignment" >
+	<input type="hidden" name="report-id" value=@Model.BugReport.ID />
 	<label>Assign Developers</label>
 	<select name="developer-select" class="developer-select screen-width" onchange="submitForm('assign-developer-form')">
 		@foreach (var developer in Model.AvailableDevelopers)
@@ -29,7 +32,8 @@
 	</select>
 </form>
 
-<form id="status-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="status">
+<form id="status-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-tagType="status">
+	<input type="hidden" name="report-id" value=@Model.BugReport.ID />
 	<label>Status</label>
 	<select name="status-select" onchange="submitForm('status-change-form')">
 		<option selected hidden>@Model.BugReport.Status</option>
@@ -43,6 +47,7 @@
 </form>
 
 <form id="priority-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="priority">
+	<input type="hidden" name="report-id" value=@Model.BugReport.ID />
 	<label>Priority</label>
 	<select name="priority-select" onchange="submitForm('priority-change-form')">
 		<option selected hidden>@Model.BugReport.Priority</option>
@@ -53,6 +58,7 @@
 </form>
 
 <form id="severity-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="severity">
+	<input type="hidden" name="report-id" value=@Model.BugReport.ID />
 	<label>Severity</label>
 	<select name="severity-select" onchange="submitForm('severity-change-form')">
 		<option selected hidden>@Model.BugReport.Severity</option>
@@ -72,7 +78,8 @@
 <p>@Model.BugReport.Details</p>
 
 <h5>Comments</h5>
-<form method="post" asp-controller="AccountActions" asp-action="Comment" asp-route-reportId=@Model.BugReport.ID>
+<form method="post" asp-controller="AccountActions" asp-action="Comment">
+	<input type="hidden" name="report-id" value=@Model.BugReport.ID />
 	<input type="text" name="user-comment" placeholder="Enter a comment here" />
 	<button type="submit">
 		<i class="fa fa-angle-double-right"></i>

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using System.Web.WebPages;
 
 namespace BugTracker.Controllers
 {
@@ -28,9 +29,8 @@ namespace BugTracker.Controllers
 
             if (dbCx != null && userId != null && projectName != null)
             {
-				// add project to database
+				// add project to database and direct to the updated dashboard
 				await dbCx.AddProject(projectName, userId);
-				// direct to the user dashboard page
 				return RedirectToAction("Dashboard", "Account");
 			}
             else if (dbCx == null)
@@ -57,9 +57,8 @@ namespace BugTracker.Controllers
 
             if (dbCx != null && userId != null && projectId != null)
             {
-				// delete project
+				// delete project and redirect to the current user's dashboard
 				await dbCx.DeleteProject(projectId, userId);
-				// direct to the user dashboard page
 				return RedirectToAction("Dashboard", "Account");
 			}
 			else if (dbCx == null)
@@ -127,11 +126,7 @@ namespace BugTracker.Controllers
 				List<UserModel> searchResults = usrCx.SearchUsers(search);
 				foreach (var user in searchResults)
 				{
-					string? databaseAvatar = await dbCx.GetAvatar(user.ID);
-					if (databaseAvatar != null)
-					{
-						user.Avatar = databaseAvatar;
-					}
+					await dbCx.GetUserData(user);
 				}
 				return Json(searchResults);
 			}
@@ -148,18 +143,16 @@ namespace BugTracker.Controllers
 		[HttpPost]
         public async Task<IActionResult> AddDeveloper()
         {
-			// get user input fields
+			// get form input
 			string? projectId = Request.Form["project-id"];
 			string? userId = Request.Form["user-search"];
 
             DatabaseContext? dbCx = GetDbCx();
 
-            // add developer
             if (dbCx != null && projectId != null && userId != null)
             {
-                // add the developer
+                // add the developer and redirect to the updated project dashboard
 				await dbCx.AddDeveloper(projectId, userId);
-				// direct to updated project dashboard page
 				return RedirectToAction("Project", "Account", new { projectId });
 			}
 			else if (dbCx == null)
@@ -178,27 +171,24 @@ namespace BugTracker.Controllers
         /// <param name="projectId">The ID of the project the bug report is for.</param>
         /// <returns>The action result of the updated project dashboard.</returns>
         [HttpPost]
-        public async Task<IActionResult> ReportBug(string projectId)
+        public async Task<IActionResult> ReportBug()
         {
-            // get user input for bug report data
-            var report_fields = new Dictionary<string, string>
-            {
-                { "summary", Request.Form["report-summary"] },
-                { "software_version", Request.Form["software-version"] },
-                { "device", Request.Form["device"] },
-                { "os", Request.Form["os"] },
-                { "details", Request.Form["details"] }
-            };
+			// get form input
+			string? projectId = Request.Form["project-id"];
+			string? summary = Request.Form["report-summary"];
+			string? softwareVersion = Request.Form["software-version"];
+			string? device = Request.Form["device"];
+			string? os = Request.Form["os"];
+			string? details = Request.Form["details"];
 
             // add bug report to database
             string? userId = GetUserId();
             DatabaseContext? dbCx = GetDbCx();
 
-            if (dbCx != null && projectId != null && userId != null)
+            if (dbCx != null && projectId != null && userId != null && summary != null && softwareVersion != null && os != null && details != null)
             {
-                // add bug report to database
-				await dbCx.AddReport(projectId, userId, report_fields);
-				// redirect to the updated project dashboard
+                // add bug report to database and redirect to the updated project dashboard
+				await dbCx.AddReport(projectId, userId, summary, softwareVersion.AsDecimal(), device, os, details);
 				return RedirectToAction("Project", "Account", new { projectId });
 			}
 			else if (dbCx == null)
@@ -214,20 +204,20 @@ namespace BugTracker.Controllers
 		/// <summary>
 		/// Method<c>AddAssignment</c> handles the assignment of the selected developer to a bug report.
 		/// </summary>
-		/// <param name="reportId">The ID of the bug report to assign.</param>
 		/// <returns>The action result of the updated bug report.</returns>
 		[HttpPost]
-		public async Task<IActionResult> AddAssignment(string reportId)
+		public async Task<IActionResult> AddAssignment()
 		{
-			// get selected developer
+			// get form input
+			string reportId = Request.Form["report-id"];
 			string? userId = Request.Form["developer-select"];
+
             DatabaseContext? dbCx = GetDbCx();
 
             if (dbCx != null && reportId != null && userId != null)
             {
-				// update report status
+				// update report status and redirect to the updated bug report
 				await dbCx.AddAssignment(reportId, userId);
-				// redirect to the updated bug report
 				return RedirectToAction("BugReport", "Account", new { reportId });
 			}
 			else if (dbCx == null)
@@ -243,19 +233,20 @@ namespace BugTracker.Controllers
 		/// <summary>
 		/// Method<c>DeleteAssignment</c> handles the deletion of an assignment of the selected developer to a bug report.
 		/// </summary>
-		/// <param name="reportId">The ID of the bug report to delete the assignment of.</param>
-        /// <param name="devId">The ID of the developer to delete the assignment of.</param>
 		/// <returns>The action result of the updated bug report.</returns>
 		[HttpPost]
-		public async Task<IActionResult> DeleteAssignment(string reportId, string devId)
+		public async Task<IActionResult> DeleteAssignment()
 		{
-            DatabaseContext? dbCx = GetDbCx();
+			// get form input
+			string reportId = Request.Form["report-id"];
+			string developerId = Request.Form["developer-id"];
 
-            if (dbCx != null && reportId != null && devId != null)
+			DatabaseContext? dbCx = GetDbCx();
+
+            if (dbCx != null && reportId != null && developerId != null)
             {
-				// update report status
-				await dbCx.RemoveAssignment(reportId, devId);
-				// redirect to the updated bug report
+				// update report status and redirect to the updated bug report
+				await dbCx.DeleteAssignment(reportId, developerId);
 				return RedirectToAction("BugReport", "Account", new { reportId });
 			}
 			else if (dbCx == null)
@@ -271,21 +262,20 @@ namespace BugTracker.Controllers
 		/// <summary>
 		/// Method<c>UpdateBugTag</c> handles bug report tag updating.
 		/// </summary>
-		/// <param name="reportId">The ID of the bug report to update the tag of.</param>
 		/// <param name="tagType">The tag(column) of the bug report to update (status, priority, or severity)</param>
 		/// <returns>The action result of the updated bug report.</returns>
 		[HttpPost]
-		public async Task<IActionResult> UpdateBugTag(string reportId, string tagType)
+		public async Task<IActionResult> UpdateBugTag(string tagType)
         {
-            // get selected tag
+			// get form input
+			string reportId = Request.Form["report-id"];
             string selectedStatus = Request.Form[$"{tagType}-select"];
 
             DatabaseContext? dbCx = GetDbCx();
 
             if (dbCx != null && reportId != null && selectedStatus != null) {
-				// update report tag
+				// update report tag and redirect to updated bug report
 				await dbCx.UpdateBugTag(reportId, tagType, selectedStatus);
-				// redirect to the updated bug report
 				return RedirectToAction("BugReport", "Account", new { reportId });
 
 			}
@@ -299,10 +289,15 @@ namespace BugTracker.Controllers
 			}
 		}
 
+		/// <summary>
+		/// Method <c>Comment</c> handles commenting on bug reports.
+		/// </summary>
+		/// <returns>The action result of the updated bug report.</returns>
 		[HttpPost]
-		public async Task<IActionResult> Comment(string reportId)
+		public async Task<IActionResult> Comment()
 		{
-			// get user comment
+			// get form input
+			string reportId = Request.Form["report-id"];
 			string comment = Request.Form["user-comment"];
 
 			string? userId = GetUserId();
@@ -310,9 +305,8 @@ namespace BugTracker.Controllers
 
 			if (dbCx != null && reportId != null && userId != null && comment != null)
 			{
-				// update report tag
+				// update report tag and redirect to the updated bug report
 				await dbCx.AddComment(reportId, userId, comment);
-				// redirect to the updated bug report
 				return RedirectToAction("BugReport", "Account", new { reportId });
 
 			}

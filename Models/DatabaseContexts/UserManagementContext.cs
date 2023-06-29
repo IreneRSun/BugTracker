@@ -49,6 +49,7 @@ namespace BugTracker.Models.DatabaseContexts
 
         /// <summary>
         /// Method <c>GetToken</c> gets the Auth0 access token.
+        /// Returns null if none found.
         /// </summary>
         /// <returns>The access token.</returns>
         private string? GetToken()
@@ -83,16 +84,14 @@ namespace BugTracker.Models.DatabaseContexts
         /// <summary>
         /// Method <c>GetUser</c> gets a UserModel with user data from the Auth0 database.
         /// </summary>
-        /// <param name="userId">The ID of the user to get the UserModel of.</param>
+        /// <param name="userId">The ID of the user to get the data of.</param>
         /// <returns>The UserModel with the user data.</returns>
         public async Task<UserModel> GetUser(string userId)
         {
-            // request user data
             string? token = GetToken();
             var client = new ManagementApiClient(token, _domain);
             var userData = await client.Users.GetAsync(userId);
 
-            // create user model with data
             return new UserModel(userId)
             {
                 Name = userData.NickName,
@@ -101,32 +100,24 @@ namespace BugTracker.Models.DatabaseContexts
             };
         }
 
-		/// <summary>
-		/// Method <c>GetDefaultAvatar</c> gets the default avatar associated with a user from the Auth0 database.
-		/// </summary>
-		/// <param name="userId">The ID of the user.</param>
-		public async Task<string> GetDefaultAvatar(string userId)
-		{
-			string? token = GetToken();
-			var client = new ManagementApiClient(token, _domain);
-			var userData = await client.Users.GetAsync(userId);
-			return userData.Picture;
-		}
-
-		/// <summary>
-		/// Method <c>GetDefaultAvatar</c> gets the name associated with a user from the Auth0 database.
-		/// </summary>
-		/// <param name="userId">The ID of the user to get the name of.</param>
-		public async Task<string> GetName(string userId)
+        /// <summary>
+        /// Method <c>GetUserData</c> fills a UserModel with corresponding user data from the Auth0 database.
+        /// </summary>
+        /// <param name="user">The UserModel to fill with the user's data.
+        /// User data retrieved corresponds to the ID attribute of the class.</param>
+        public async Task GetUserData(UserModel user)
         {
 			string? token = GetToken();
 			var client = new ManagementApiClient(token, _domain);
-			var userData = await client.Users.GetAsync(userId);
-			return userData.NickName;
+			var userData = await client.Users.GetAsync(user.ID);
+
+            user.Name = userData.NickName;
+            user.Email = userData.Email;
+            user.Avatar ??= userData.Picture;
 		}
 
 		/// <summary>
-		/// Method <c>UpdateUsername</c> updates the username of the user.
+		/// Method <c>UpdateUsername</c> updates the username of the user in the Auth0 database.
 		/// </summary>
 		/// <param name="userId">The ID of the user to update the name of.</param>
 		/// <param name="newName">The new name to update to.</param>
@@ -157,13 +148,11 @@ namespace BugTracker.Models.DatabaseContexts
         /// Method <c>SearchUsers</c> searches for users whose usernames match the query (case-insensitive).
         /// </summary>
         /// <param name="searchQuery">The search query.</param>
-        /// <param name="maxResults">The maximum number of users to return.</param>
-        /// <returns>The list of users satisfying the criteria.</returns>
+        /// <returns>The list of users satisfying the search criteria.</returns>
         public List<UserModel> SearchUsers(string searchQuery)
         {
             // search for users
             string query = searchQuery.Length > 2 ? $"*{searchQuery}*" : $"{searchQuery}*";
-
             string? token = GetToken();
             var client = new RestClient($"https://{_domain}");
             var request = new RestRequest($"/api/v2/users?q=nickname%3A{query}&search_engine=v3", Method.Get);
@@ -179,14 +168,20 @@ namespace BugTracker.Models.DatabaseContexts
                 {
                     foreach (JToken userJObject in json)
                     {
-                        var userId = userJObject["user_id"].ToString();
-                        var user = new UserModel(userId)
+                        if (userJObject != null)
                         {
-                            Email = userJObject["email"].ToString(),
-                            Name = userJObject["nickname"].ToString(),
-                            Avatar = userJObject["picture"].ToString()
-                        };
-                        users.Add(user);
+							var userId = userJObject["user_id"]?.ToString();
+                            if (userId != null)
+                            {
+								var user = new UserModel(userId)
+								{
+									Email = userJObject["email"]?.ToString(),
+									Name = userJObject["nickname"]?.ToString(),
+									Avatar = userJObject["picture"]?.ToString()
+								};
+								users.Add(user);
+							}
+						}
                     }
                 }
             }

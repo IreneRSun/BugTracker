@@ -14,7 +14,7 @@
         /// </value>
         public string Name { get; }
 		/// <value>
-		/// Property <c>CreationDate</c> represents the project's date of creation.
+		/// Property <c>Date</c> represents the project's date of creation.
 		/// </value>
 		public DateTime Date { get; }
         /// <value>
