@@ -371,6 +371,54 @@ namespace BugTracker.Controllers
 			}
 		}
 
+		[HttpPost]
+		public async Task<IActionResult> AddHelpWanted()
+		{
+			// get form input
+			string reportId = Request.Form["report-id"];
+
+			DatabaseContext? dbCx = GetDbCx();
+
+			if (dbCx != null && reportId != null)
+			{
+				// add help wanted label to bug report and redirect to updated bug report page
+				await dbCx.AddHelpWanted(reportId);
+				return RedirectToAction("BugReport", "Account", new { reportId });
+			}
+			else if (dbCx == null)
+			{
+				throw new Exception("Could not access database services.");
+			}
+			else
+			{
+				throw new Exception("Invalid database action with null values.");
+			}
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> RemoveHelpWanted()
+		{
+			// get form input
+			string reportId = Request.Form["report-id"];
+
+			DatabaseContext? dbCx = GetDbCx();
+
+			if (dbCx != null && reportId != null)
+			{
+				// remove help wanted label from bug report and redirect to updated bug report page
+				await dbCx.RemoveHelpWanted(reportId);
+				return RedirectToAction("BugReport", "Account", new { reportId });
+			}
+			else if (dbCx == null)
+			{
+				throw new Exception("Could not access database services.");
+			}
+			else
+			{
+				throw new Exception("Invalid database action with null values.");
+			}
+		}
+
 		/// <summary>
 		/// Method <c>UpdateAvatar</c> updates the avatar of the user in the database context with the uploaded image.
 		/// </summary>

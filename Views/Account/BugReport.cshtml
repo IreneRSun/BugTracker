@@ -5,6 +5,22 @@
 <label>Date</label>
 <p>@Model.BugReport.Date</p>
 
+@if (Model.BugReport.HelpWanted == true)
+{
+	<label>Help Wanted</label>
+	<form method="post" asp-controller="AccountActions" asp-action="RemoveHelpWanted">
+		<input type="hidden" name="report-id" value=@Model.BugReport.ID />
+		<button type="submit">Remove Help Wanted Label</button>
+	</form>
+}
+else if (Model.BugReport.HelpWanted == false)
+{
+	<form method="post" asp-controller="AccountActions" asp-action="AddHelpWanted">
+		<input type="hidden" name="report-id" value=@Model.BugReport.ID />
+		<button type="submit">Add Help Wanted</button>
+	</form>
+}
+
 @if (Model.UserUpvoted == true)
 {
 	<form method="post" asp-controller="AccountActions" asp-action="RemoveUpvote">
