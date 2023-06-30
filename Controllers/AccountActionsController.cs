@@ -460,15 +460,20 @@ namespace BugTracker.Controllers
         {
             // get input from form
             string username = Request.Form["username"];
+			string status = Request.Form["user-status-select"];
             IFormFile? fileInput = HttpContext.Request.Form.Files["image-file"];
 
             string? userId = GetUserId();
+            DatabaseContext? dbCx = GetDbCx();
             UserManagementContext? usrCx = GetUserManagementCx();
 
-            if (usrCx != null && userId != null && fileInput != null)
+            if (dbCx != null && usrCx != null && userId != null)
 			{
 				// update username in database
 				await usrCx.UpdateUsername(userId, username);
+
+				// update user status in database
+				await dbCx.SetUserStatus(userId, status);
 
 				// request avatar update
 				if (fileInput != null)

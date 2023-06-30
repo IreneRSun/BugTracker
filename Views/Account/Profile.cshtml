@@ -18,6 +18,12 @@
         <h5>Username</h5>
         <input type="text" name="username" value="@Model.User.Name" />
     </div>
+    <!-- status edit -->
+    <select name="user-status-select">
+        <option selected hidden>@Model.User.Status</option>
+        <option>Free</option>
+        <option>Busy</option>
+    </select>
     <!-- update profile button -->
     <div class="mt-sm-4">
         <button type="submit" class="border-light rounded-pill">
