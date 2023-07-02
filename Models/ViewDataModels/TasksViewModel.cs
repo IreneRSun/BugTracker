@@ -4,6 +4,6 @@ namespace BugTracker.Models.ViewDataModels
 {
 	public class TasksViewModel
 	{
-		public List<BugReportModel>? BugReports { get; set; }
+		public List<BugReportModel> BugReports { get; set; }
 	}
 }

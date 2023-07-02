@@ -59,7 +59,10 @@ else if (Model.UserUpvoted == false)
 	<select name="developer-select" class="developer-select screen-width" onchange="submitForm('assign-developer-form')">
 		@foreach (var developer in Model.AvailableDevelopers)
 		{
-			<option value=@developer.ID>@developer.Name</option>
+			@if (developer.Status != "Busy")
+			{
+				<option value=@developer.ID>@developer.Name</option>
+			}
 		}
 	</select>
 </form>

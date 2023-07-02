@@ -552,9 +552,8 @@ namespace BugTracker.Models.DatabaseContexts
             if (sortOrder.ToLower() == "descending")
             {
                 query += $" DESC";
-			}
+            }
 
-            // get reports
             return await QueryDatabase(query, parameters, ParseReports);
         }
 

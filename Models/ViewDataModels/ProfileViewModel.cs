@@ -4,6 +4,6 @@ namespace BugTracker.Models.ViewDataModels
 {
     public class ProfileViewModel
     {
-        public UserModel? User { get; set; }
+        public UserModel User { get; set; }
     }
 }

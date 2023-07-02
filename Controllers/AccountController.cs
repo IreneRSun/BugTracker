@@ -170,8 +170,23 @@ namespace BugTracker.Controllers
             if (dbCx != null)
 			{
 				// return ViewResult with the project's sorted and filtered bug reports and page information
-				List<BugReportModel> tasks = await dbCx.GetReports(projectId, filter, sortType, sortOrder);
-				var viewModel = new ReportsViewModel()
+				List<BugReportModel> tasks;
+                if (sortType == "Upvotes")
+				{
+					tasks = await dbCx.GetReports(projectId, filter, "Date", "Descending");
+					if (sortOrder == "Descending") {
+                        tasks.Sort((report1, report2) => report2.Upvotes.CompareTo(report1.Upvotes));
+                    } else
+					{
+                        tasks.Sort((report1, report2) => report1.Upvotes.CompareTo(report2.Upvotes));
+                    }
+                }
+				else
+				{
+                    tasks = await dbCx.GetReports(projectId, filter, sortType, sortOrder);
+                }
+
+                var viewModel = new ReportsViewModel()
 				{
 					ProjectId = projectId,
 					BugReports = tasks,
@@ -215,8 +230,9 @@ namespace BugTracker.Controllers
 				List<UserModel> developers = await dbCx.GetDevelopers(report.ProjectID);
 				foreach (var developer in developers)
 				{
-					await dbCx.GetUserData(developer);
+					await usrCx.GetUserData(developer);
 				}
+				System.Diagnostics.Debug.WriteLine(developers.Count);
 
 				// get the comments of the bug report
 				List<CommentModel> comments = await dbCx.GetComments(report.ID);
