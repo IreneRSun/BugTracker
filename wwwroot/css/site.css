@@ -21,6 +21,15 @@ body {
     background: linear-gradient(180deg, rgba(255,255,255), rgba(255,255,255,0.7), rgba(255,255,255,0));
 }
 
+.bg-grad-1 {
+    background: linear-gradient(90deg, rgba(237,207,207,1), rgba(255,255,255,1), rgba(122,130,123,1));
+}
+
+.brd-white-pop {
+    border: 2px solid white;
+    box-shadow: 2px 2px 3px gray;
+}
+
 .txt-white {
     color: white;
 }

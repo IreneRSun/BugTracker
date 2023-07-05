@@ -1,13 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "qzxStRMcvz/XUbpMB92NJSpnEwZ5IgmE26VLGi/lL4n2RV+H0ROqYo1U0GQWGKt/vbefAxXreYdvdg3HFKmcdA==",
+  "dgSpecHash": "OP5ldggPaBqDVU6XlA476Xt4BTLt3HxEf3Vthx/CtPaLr5+bsLXCkCg3aSN5h3O2jbrpaqEYl1Q1oNWEsKzIgQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\irene\\VS\\repos\\BugTracker\\BugTracker.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\irene\\.nuget\\packages\\auth0.aspnetcore.authentication\\1.2.0\\auth0.aspnetcore.authentication.1.2.0.nupkg.sha512",
-    "C:\\Users\\irene\\.nuget\\packages\\auth0.core\\7.19.1\\auth0.core.7.19.1.nupkg.sha512",
-    "C:\\Users\\irene\\.nuget\\packages\\auth0.managementapi\\7.19.1\\auth0.managementapi.7.19.1.nupkg.sha512",
+    "C:\\Users\\irene\\.nuget\\packages\\auth0.core\\7.21.0\\auth0.core.7.21.0.nupkg.sha512",
+    "C:\\Users\\irene\\.nuget\\packages\\auth0.managementapi\\7.21.0\\auth0.managementapi.7.21.0.nupkg.sha512",
     "C:\\Users\\irene\\.nuget\\packages\\google.protobuf\\3.21.9\\google.protobuf.3.21.9.nupkg.sha512",
+    "C:\\Users\\irene\\.nuget\\packages\\jquery\\1.6.3\\jquery.1.6.3.nupkg.sha512",
     "C:\\Users\\irene\\.nuget\\packages\\k4os.compression.lz4\\1.3.5\\k4os.compression.lz4.1.3.5.nupkg.sha512",
     "C:\\Users\\irene\\.nuget\\packages\\k4os.compression.lz4.streams\\1.3.5\\k4os.compression.lz4.streams.1.3.5.nupkg.sha512",
     "C:\\Users\\irene\\.nuget\\packages\\k4os.hash.xxhash\\1.0.8\\k4os.hash.xxhash.1.0.8.nupkg.sha512",
@@ -51,7 +52,8 @@
     "C:\\Users\\irene\\.nuget\\packages\\system.text.json\\7.0.2\\system.text.json.7.0.2.nupkg.sha512",
     "C:\\Users\\irene\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512",
     "C:\\Users\\irene\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
-    "C:\\Users\\irene\\.nuget\\packages\\system.windows.extensions\\4.7.0\\system.windows.extensions.4.7.0.nupkg.sha512"
+    "C:\\Users\\irene\\.nuget\\packages\\system.windows.extensions\\4.7.0\\system.windows.extensions.4.7.0.nupkg.sha512",
+    "C:\\Users\\irene\\.nuget\\packages\\toastr\\2.1.1\\toastr.2.1.1.nupkg.sha512"
   ],
   "logs": [
     {
