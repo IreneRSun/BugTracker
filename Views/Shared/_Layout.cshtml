@@ -18,7 +18,7 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="https://api.dicebear.com/6.x/icons/svg?icon=bug&backgroundType=gradientLinear&backgroundColor=b6e3f4,c0aede" class="custom-avatar-size-2 rounded-2" />
+                    <img src="https://api.dicebear.com/6.x/icons/svg?icon=bug&backgroundType=gradientLinear&backgroundColor=b6e3f4,c0aede" class="custom-avatar-size-2 rounded-2 shadow-grey" />
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -29,34 +29,40 @@
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item mx-2">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Dashboard">My Dashboard</a>
+                                <a class="nav-link text-dark font-childhood h4" asp-area="" asp-controller="Account" asp-action="Dashboard">My Dashboard</a>
                             </li>
                             <li class="nav-item mx-2">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Profile">My Profile</a>
+                                <a class="nav-link text-dark font-childhood h4" asp-area="" asp-controller="Account" asp-action="Profile">My Profile</a>
                             </li>
                             <li class="nav-item mx-2">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Tasks">My Tasks</a>
+                                <a class="nav-link text-dark font-childhood h4" asp-area="" asp-controller="Account" asp-action="Tasks">My Tasks</a>
                             </li>
-                            <li class="nav-item mx-2">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Logout">Logout</a>
+                            <li class="nav-item mx-3">
+                                <a class="nav-link text-dark font-childhood h4 rounded-pill px-sm-4 brd-white shadow-grey" 
+                                asp-area="" asp-controller="Login" asp-action="Logout">
+                                    Logout
+                                </a>
                             </li>
                         }
                         else
                         {
-                            <li class="nav-item mx-2">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <li class="nav-item mx-3">
+                                <a class="nav-link text-dark font-childhood h4" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
-                            <li class="nav-item mx-2">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About</a>
+                            <li class="nav-item mx-3">
+                                <a class="nav-link text-dark font-childhood h4" asp-area="" asp-controller="Home" asp-action="About">About</a>
                             </li>
-                            <li class="nav-item mx-2">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <li class="nav-item mx-3">
+                                <a class="nav-link text-dark font-childhood h4" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                             </li>
-                            <li class="nav-item mx-2">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
+                            <li class="nav-item mx-3">
+                                <a class="nav-link text-dark font-childhood h4" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
                             </li>
-                            <li class="nav-item mx-2">
-                                <a class="nav-link text-dark rounded-pill bg-grad-1 px-sm-4 brd-white-pop" asp-area="" asp-controller="Login" asp-action="Login">Login</a>
+                            <li class="nav-item mx-5">
+                                <a class="nav-link text-dark font-childhood h4 rounded-pill bg-grad-dusk-rose px-sm-4 brd-white shadow-grey"
+                                asp-area="" asp-controller="Login" asp-action="Login">
+                                    Login
+                                </a>
                             </li>
                         }
                     </ul>
