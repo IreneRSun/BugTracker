@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Drawing;
+using System.Security.Cryptography;
 
 namespace BugTracker.Models
 {
@@ -32,10 +33,22 @@ namespace BugTracker.Models
         /// <param name="seed">The seed to generate the avatar from.</param>
         /// <param name="backgroundType">The background type of the avatar (gradientLinear or solid).</param>
         /// <param name="radius">The border radius of the avatar, default gives a round avatar.</param>
-        /// <returns></returns>
+        /// <returns>The generated avatar image source.</returns>
         public static string GetSeededAvatar(string seed, string backgroundType = "gradientLinear", int radius = 50)
         {
             return $"https://api.dicebear.com/6.x/shapes/svg?seed={seed}&backgroundType={backgroundType}&radius={radius}";
+        }
+
+        /// <summary>
+        /// Method <c>GenerateColor</c> generates a random color that can be used in a cshtml page.
+        /// </summary>
+        /// <returns>The generated color.</returns>
+        public static string GenerateColor()
+        {
+            var random = new Random();
+            var color = Color.FromArgb(random.Next(256), random.Next(256), random.Next(256));
+            var htmlColor = ColorTranslator.ToHtml(color);
+            return htmlColor;
         }
     }
 }

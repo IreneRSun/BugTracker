@@ -29,17 +29,17 @@
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item mx-2">
-                                <a class="nav-link text-dark font-childhood h4" asp-area="" asp-controller="Account" asp-action="Dashboard">My Dashboard</a>
+                                <a class="nav-link txt-grey" asp-area="" asp-controller="Account" asp-action="Dashboard">My Dashboard</a>
                             </li>
                             <li class="nav-item mx-2">
-                                <a class="nav-link text-dark font-childhood h4" asp-area="" asp-controller="Account" asp-action="Profile">My Profile</a>
+                                <a class="nav-link txt-grey" asp-area="" asp-controller="Account" asp-action="Profile">My Profile</a>
                             </li>
                             <li class="nav-item mx-2">
-                                <a class="nav-link text-dark font-childhood h4" asp-area="" asp-controller="Account" asp-action="Tasks">My Tasks</a>
+                                <a class="nav-link txt-grey" asp-area="" asp-controller="Account" asp-action="Tasks">My Tasks</a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link text-dark font-childhood h4 rounded-pill px-sm-4 brd-white shadow-grey" 
-                                asp-area="" asp-controller="Login" asp-action="Logout">
+                                <a class="nav-link text-dark rounded-pill px-4 brd-white shadow-grey"
+                               asp-area="" asp-controller="Login" asp-action="Logout">
                                     Logout
                                 </a>
                             </li>
@@ -47,19 +47,19 @@
                         else
                         {
                             <li class="nav-item mx-3">
-                                <a class="nav-link text-dark font-childhood h4" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                <a class="nav-link txt-grey" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link text-dark font-childhood h4" asp-area="" asp-controller="Home" asp-action="About">About</a>
+                                <a class="nav-link txt-grey" asp-area="" asp-controller="Home" asp-action="About">About</a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link text-dark font-childhood h4" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                <a class="nav-link txt-grey" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link text-dark font-childhood h4" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
+                                <a class="nav-link txt-grey" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
                             </li>
                             <li class="nav-item mx-5">
-                                <a class="nav-link text-dark font-childhood h4 rounded-pill bg-grad-dusk-rose px-sm-4 brd-white shadow-grey"
+                                <a class="nav-link text-dark rounded-pill bg-grad-dusk-rose px-4 brd-white shadow-grey"
                                 asp-area="" asp-controller="Login" asp-action="Login">
                                     Login
                                 </a>

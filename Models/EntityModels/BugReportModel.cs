@@ -1,4 +1,6 @@
-﻿namespace BugTracker.Models.EntityModels
+﻿using System.Drawing;
+
+namespace BugTracker.Models.EntityModels
 {
     /// <summary>
     /// Class <c>BugReportModel</c> models a bug report.
@@ -61,6 +63,10 @@
 		/// Property <c>Upvotes</c> represents the number of upvotes the report has.
 		/// </value>
 		public int Upvotes { get; }
+        /// <value>
+		/// Property <c>DisplayColor</c> represents the color to display the bug report in.
+		/// </value>
+        public string DisplayColor { get; }
         
         /// <summary>
         /// Method <c>BugReportModel</c> initializes this class with a bug report's data.
@@ -96,6 +102,7 @@
             HelpWanted = helpWanted;
             Date = creationDate;
             Upvotes = upvotes;
+            DisplayColor = Utils.GenerateColor();
         }
     }
 }

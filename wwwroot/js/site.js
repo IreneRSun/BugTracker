@@ -50,7 +50,7 @@ function formatProject(result) {
     if (result.avatar) {
         return $(`<div><img src="${result.avatar}" class="custom-avatar-size-1 rounded-circle" /> ${result.name} <br> ${result.date}</div>`);
     } else {
-        return null;
+        return $(`<div><i class="fa fa-search" aria-hidden="true"></i> Search for a project ...</div>`);
     }
 }
 
@@ -58,7 +58,7 @@ function formatProjectSelection(result) {
     if (result.id) {
         return $(`<div><img src="${result.avatar}" class="custom-avatar-size-1 rounded-circle" /> ${result.name}</div>`) || result.text;
     } else {
-        return null;
+        return $(`<div><i class="fa fa-search" aria-hidden="true"></i> Search for a project ...</div>`);
     }
 }
 
@@ -73,7 +73,7 @@ function formatUser(result) {
     } else if (result.name) {
         return $(`<div><span class="custom-avatar-size-1 rounded-circle"><i class="fa fa-user-circle-o"></i></span> ${result.name}</div>`);
     } else {
-        return null;
+        return $(`<div><i class="fa fa-user-plus" aria-hidden="true"></i> Search for a user ...</div>`);
     }
 }
 
@@ -83,7 +83,7 @@ function formatUserSelection(result) {
     } else if (result.name) {
         return $(`<div><span class="custom-avatar-size-1 rounded-circle"><i class="fa fa-user-circle-o"></i></span> ${result.name}</div>`) || result.text;
     } else {
-        return null;
+        return $(`<div><i class="fa fa-user-plus" aria-hidden="true"></i> Search for a user ...</div>`);
     }
 }
 
@@ -110,7 +110,7 @@ $(document).ready(function () {
                     return {
                         id: item.ID,
                         name: item.Name,
-                        date: item.CreationDate,
+                        date: item.Date,
                         avatar: item.Avatar
                     };
                 });

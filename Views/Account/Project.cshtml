@@ -1,20 +1,34 @@
 ﻿@model BugTracker.Models.ViewDataModels.ProjectViewModel
 
-<img src=@Model.Project.Avatar alt="project avatar" class="custom-avatar-size-3 rounded-circle" />
-<h2>@Model.Project.Name</h2>
-<label>Created at <i>@Model.Project.Date</i></label>
-
-<!-- project statistics -->
-<label>New <b>@Model.NewBugs</b></label>
-<label>Pending <b>@Model.PendingBugs</b></label>
-<label>Fixed <b>@Model.FixedBugs</b></label>
-
-<!-- bug reporting modal dialog -->
-<div class="btn-toolbar">
-    <button type="button" class="btn btn-primary" id="create-report-btn" data-bs-toggle="modal" data-bs-target="#create-report-dialog">Report a Bug</button>
-    <a asp-controller="Account" asp-action="Reports" asp-route-projectId=@Model.Project.ID>See Bug Reports</a>
+<!-- project information -->
+<div class="row">
+    <div class="col-auto">
+        <img src=@Model.Project.Avatar alt="project avatar" class="custom-avatar-size-3 rounded-circle" />
+    </div>
+    <div class="col-auto mt-5">
+        <h2>@Model.Project.Name</h2>
+    </div>
+    <div class="col-auto offset-1 mx-1">
+        <h3 class="txt-grey">New <sup class="text-dark">@Model.NewBugs</sup></h3>
+    </div>
+    <div class="col-auto mx-1">
+        <h3 class="txt-grey">Pending <sup class="text-dark">@Model.PendingBugs</sup></h3>
+    </div>
+    <div class="col-auto mx-1">
+        <h3 class="txt-grey">Fixed <sup class="text-dark">@Model.FixedBugs</sup></h3>
+    </div>
+    <div class="txt-grey">
+        <i>Created at @Model.Project.Date</i>
+    </div>
 </div>
 
+<!-- bug report toolbar -->
+<div class="btn-toolbar my-3">
+    <button type="button" class="btn btn-primary" id="create-report-btn" data-bs-toggle="modal" data-bs-target="#create-report-dialog">Report a Bug</button>
+    <a asp-controller="Account" asp-action="Reports" asp-route-projectId=@Model.Project.ID class="mx-3">See Bug Reports > </a>
+</div>
+
+<!-- bug report modal dialog -->
 <div class="modal fade" id="create-report-dialog" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -51,32 +65,40 @@
 </div>
 
 <!-- collaborators list -->
-<h5>Developers</h5>
-<ul>
+<h4 class="mt-3">Developers</h4>
+<div class="row">
     @foreach (var developer in Model.Developers)
     {
-        <li>
-            <img src=@developer.Avatar alt="" class="custom-avatar-size-2 rounded-circle" />
-            <label>@developer.Name</label>
-        </li>
+        <div class="col-2 m-1">
+            @if (developer.Avatar != null)
+            {
+                <img src=@developer.Avatar alt="" class="custom-avatar-size-2 rounded-circle" />
+            }
+            else
+            {
+                <span class="material-symbols-outlined custom-avatar-size-3 rounded-circle">account_circle</span>
+            }
+            @developer.Name
+        </div>
     }
-</ul>
+</div>
 
 <!-- collaborator addition -->
-@if (Model.IsDeveloper == true) 
+@if (Model.IsDeveloper) 
 {
     <form id="add-developer-form" method="post" class="mt-1" asp-controller="Account" asp-action="AddDeveloper">
         <input type="hidden" name="project-id" value=@Model.Project.ID />
-        <label>Add Collaborators</label>
-        <select name="user-search" class="user-search screen-width" onchange="submitForm('add-developer-form')"></select>
+        <h5>Add Collaborators</h5>
+        <select name="user-search" class="user-search half-screen-width" onchange="submitForm('add-developer-form')"></select>
     </form>
+
 }
 
-<!-- form for project deletion -->
-@if (Model.IsDeveloper == true)
+<!-- project deletion -->
+@if (Model.IsDeveloper)
 {
-    <form method="post" onSubmit="return confirm('This action is not cannot be undone. Are you sure you wish to proceed?');" class="mt-sm-5" asp-controller="AccountActions" asp-action="DeleteProject">
+    <form method="post" onSubmit="return confirm('This action is not cannot be undone. Are you sure you wish to proceed?');" class="mt-5" asp-controller="AccountActions" asp-action="DeleteProject">
         <input type="hidden" name="project-id" value=@Model.Project.ID />
-        <button type="submit" class="btn-danger">Delete Project</button>
+        <button type="submit" class="custom-danger-btn">Delete Project</button>
     </form>
 }

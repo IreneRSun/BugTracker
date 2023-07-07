@@ -1,17 +1,39 @@
 ﻿@model BugTracker.Models.ViewDataModels.DashboardViewModel
 
-<!-- project creation button -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-project-dialog">New Project</button>
+<div class="row">
 
-<!-- project search bar -->
-<form id="search-project-form" method="post" asp-controller="AccountActions" asp-action="SelectProject">
-    <select name="project-search" class="project-search select2 screen-width" onchange="submitForm('search-project-form')"></select>
-</form>
+    <!-- project creation button -->
+    <div class="col-auto">
+        <button type="button" class="btn btn-primary my-1" data-bs-toggle="modal" data-bs-target="#create-project-dialog">Create Project</button>
+    </div>
+
+    <!-- project search bar -->
+    <div class="col-auto mt-1">
+        <form id="search-project-form" method="post" asp-controller="AccountActions" asp-action="SelectProject">
+            <select name="project-search" class="project-search select2 half-screen-width" onchange="submitForm('search-project-form')"></select>
+        </form>
+    </div>
+
+</div>
 
 <!-- welcome message -->
-<div>
-    <img src="@Model.User.Avatar" alt="user avatar" class="custom-avatar-size-3 rounded-circle" />
-    <h3>Welcome @Model.User.Name</h3>
+<div class="row my-4">
+
+    <div class="col-auto">
+        @if (Model.User.Avatar != null)
+        {
+            <img src="@Model.User.Avatar" alt="user avatar" class="custom-avatar-size-3 rounded-circle" />
+        }
+        else
+        {
+            <span class="material-symbols-outlined custom-avatar-size-3 rounded-circle">account_circle</span>
+        }
+    </div>
+
+    <div class="col-auto mt-5">
+        <h3>Welcome @Model.User.Name</h3>
+    </div>
+
 </div>
 
 <!-- project creation modal dialog -->
@@ -19,18 +41,26 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <form method="post" asp-controller="AccountActions" asp-action="CreateProject">
+
                 <div class="modal-header">
                     <h5 class="modal-title">Create Project</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
+
                 <div class="modal-body">
-                    <label>Enter a name for the project: </label>
-                    <input type="text" name="project-name" placeholder="Project Name" required />
+                    <div class="row">
+                        <label for="project-name"><i>Enter a name for the project</i></label>
+                    </div>
+                    <div class="row">
+                        <input type="text" id="project-name" name="project-name" placeholder="Project Name" required />
+                    </div>
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Create Project</button>
                 </div>
+
             </form>
         </div>
     </div>
@@ -38,20 +68,27 @@
 
 <!-- user's projects -->
 <h2>Projects</h2>
-<div class="container">
+@if (Model.UserProjects.Count > 0)
+{ 
     <div class="row">
         @foreach (var project in Model.UserProjects)
         {
-            <div class="col-md-2 hover-push">
+            <div class="col-4 hover-push m-1">
                 <a asp-controller="Account" asp-action="Project" asp-route-projectId=@project.ID>
                     <div class="card custom-rounded">
-                        <img src=@project.Avatar alt="project avatar" class="card-img custom-rounded" />
+                        <img src=@project.Avatar alt="" class="card-img custom-rounded" />
                         <div class="card-img-overlay bg-grad-fog custom-rounded">
-                            <h5 class="card-title txt-white txt-outline-black text-center">@project.Name</h5>
+                            <h5 class="card-title text-white txt-outline-black text-center">@project.Name</h5>
                         </div>
                     </div>
                 </a>
             </div>
         }
     </div>
-</div>
+}
+else
+{
+    <div class="mt-3 txt-grey">
+        No projects available. Join a project or create one.
+    </div>
+}

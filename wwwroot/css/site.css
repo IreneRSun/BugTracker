@@ -1,7 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
-
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
@@ -36,19 +34,15 @@ body {
 }
 
 .shadow-grey {
-    box-shadow: 0px 0px 5px gray;
+    box-shadow: 0px 0px 10px gray;
 }
 
-.txt-white {
-    color: white;
+.txt-grey {
+    color: darkgrey;
 }
 
 .txt-outline-black {
     text-shadow: 1px 1px 2px black;
-}
-
-.font-childhood {
-    font-family: 'Indie Flower', cursive;
 }
 
 .hover-push:hover {
@@ -56,27 +50,37 @@ body {
     transition: 0.8s;
 }
 
+.custom-danger-btn {
+    color: #dc3545;
+    background: white;
+    border-color: #dc3545;
+    border-radius: 20%;
+}
+
 .custom-avatar-size-1 {
     width: 30px;
     height: 30px;
+    font-size: 30px !important;
 }
 
 .custom-avatar-size-2 {
     width: 50px;
     height: 50px;
+    font-size: 50px !important;
 }
 
 .custom-avatar-size-3 {
     width: 100px;
     height: 100px;
+    font-size: 100px !important;
 }
 
 .custom-rounded {
     border-radius: 40%;
 }
 
-.screen-width {
-    width: 100%;
+.half-screen-width {
+    width: 50vw;
 }
 
 .select2-container--default .select2-selection--single {
