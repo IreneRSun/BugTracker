@@ -234,6 +234,9 @@ namespace BugTracker.Controllers
 				}
 				System.Diagnostics.Debug.WriteLine(developers.Count);
 
+				// check if the user is a developer of the project
+				bool isDeveloper = await dbCx.IsDeveloper(userId, report.ProjectID);
+
 				// get the comments of the bug report
 				List<CommentModel> comments = await dbCx.GetComments(report.ID);
 				foreach (var comment in comments)
@@ -253,6 +256,7 @@ namespace BugTracker.Controllers
 					BugReport = report,
 					Assignees = assignees,
 					AvailableDevelopers = developers,
+					IsDeveloper = isDeveloper,
 					CurrentUserId = userId,
 					UserUpvoted = userUpvoted,
 					Comments = comments

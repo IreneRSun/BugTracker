@@ -35,20 +35,27 @@
 </div>
 
 <!-- help wanted status actions -->
-<div class="row my-3">
-	<div class="col-auto">
-		<div class="rounded-pill p-1">Help Wanted</div>
+@if (Model.IsDeveloper)
+{
+	<div class="row my-3">
+		<div class="col-auto">
+			<div class="rounded-pill p-1">Help Wanted</div>
+		</div>
+		<div class="col-auto">
+			<form method="post" id="help-wanted-form" asp-controller="AccountActions" asp-action="UpdateHelpWanted">
+				<input type="hidden" name="report-id" value=@Model.BugReport.ID />
+				<label class="switch">
+					<input type="checkbox" name="help-wanted" checked=@Model.BugReport.HelpWanted onchange="submitForm('help-wanted-form')">
+					<span class="slider"></span>
+				</label>
+			</form>
+		</div>
 	</div>
-	<div class="col-auto">
-		<form method="post" id="help-wanted-form" asp-controller="AccountActions" asp-action="UpdateHelpWanted">
-			<input type="hidden" name="report-id" value=@Model.BugReport.ID />
-			<label class="switch">
-				<input type="checkbox" name="help-wanted" checked=@Model.BugReport.HelpWanted onchange="submitForm('help-wanted-form')">
-				<span class="slider"></span>
-			</label>
-		</form>
-	</div>
-</div>
+}
+else if (Model.BugReport.HelpWanted)
+{
+	<div class="rounded-pill bg-success text-light d-inline p-1">Help Wanted</div>
+}
 
 <!-- bug report assignee information -->
 <h4 class="my-3">Assignees</h4>
@@ -73,13 +80,16 @@
 					<div class="col-auto">
 						@developer.Name
 					</div>
-					<div class="col-auto custom-ms">
-						<button type="submit" class="bg-white border-0 custom-avatar-size-1">
-							<span class="material-symbols-outlined">
-								person_remove
-							</span>
-						</button>
-					</div>
+					@if (Model.IsDeveloper)
+					{
+						<div class="col-auto custom-ms">
+							<button type="submit" class="bg-white border-0 custom-avatar-size-1">
+								<span class="material-symbols-outlined">
+									person_remove
+								</span>
+							</button>
+						</div>
+					}
 				</div>				
 			</form>
 		</li>
@@ -87,86 +97,107 @@
 </ul>
 
 <!-- developer assignment -->
-<div class="row my-3">
-	<form id="assign-developer-form" method="post" asp-controller="AccountActions" asp-action="AddAssignment">
-		<input type="hidden" name="report-id" value=@Model.BugReport.ID />
-		<label>Assign Developers</label>
-		<select name="developer-select" class="developer-select half-screen-width" onchange="submitForm('assign-developer-form')">
-			<option selected hidden disabled></option>
-			@foreach (var developer in Model.AvailableDevelopers)
-			{
-				@if (developer.Status != "Busy")
+@if (Model.IsDeveloper)
+{
+	<div class="row my-3">
+		<form id="assign-developer-form" method="post" asp-controller="AccountActions" asp-action="AddAssignment">
+			<input type="hidden" name="report-id" value=@Model.BugReport.ID />
+			<label>Assign Developers</label>
+			<select name="developer-select" class="developer-select half-screen-width" onchange="submitForm('assign-developer-form')">
+				<option selected hidden disabled></option>
+				@foreach (var developer in Model.AvailableDevelopers)
 				{
-					<option value=@developer.ID>
-						<div class="row">
-							<div class="col-auto">
-								@if (developer.Avatar != null)
-								{
-									<img src=@developer.Avatar alt="" class="custom-avatar-size-1 rounded-circle" />
-								}
-								else
-								{
-									<span class="material-symbols-outlined custom-avatar-size-1 rounded-circle">account_circle</span>
-								}
+					@if (developer.Status != "Busy")
+					{
+						<option value=@developer.ID>
+							<div class="row">
+								<div class="col-auto">
+									@if (developer.Avatar != null)
+									{
+										<img src=@developer.Avatar alt="" class="custom-avatar-size-1 rounded-circle" />
+									}
+									else
+									{
+										<span class="material-symbols-outlined custom-avatar-size-1 rounded-circle">account_circle</span>
+									}
+								</div>
+								<div class="col-auto">
+									@developer.Name
+								</div>
 							</div>
-							<div class="col-auto">
-								@developer.Name
-							</div>
-						</div>
-					</option>
+						</option>
+					}
 				}
-			}
-		</select>
-	</form>
-</div>
+			</select>
+		</form>
+	</div>
+}
 
-<!-- status change forms -->
+<!-- status change forms / status display -->
 <div class="row my-3">
+	
+	@if (Model.IsDeveloper)
+	{
+		<!-- status change form -->
+		<div class="col-auto mx-2">
+			<form id="status-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-tagType="status">
+				<input type="hidden" name="report-id" value=@Model.BugReport.ID />
+				<label for="status-select">Status</label>
+				<select id="status-select" name="status-select" onchange="submitForm('status-change-form')">
+					<option selected hidden>@Model.BugReport.Status</option>
+					<option>Deferred</option>
+					<option>Rejected</option>
+					<option>Duplicate</option>
+					<option>Not a Bug</option>
+					<option>Open</option>
+					<option>Closed</option>
+				</select>
+			</form>
+		</div>
 
-	<!-- status change form -->
-	<div class="col-auto mx-2">
-		<form id="status-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-tagType="status">
-			<input type="hidden" name="report-id" value=@Model.BugReport.ID />
-			<label>Status</label>
-			<select name="status-select" onchange="submitForm('status-change-form')">
-				<option selected hidden>@Model.BugReport.Status</option>
-				<option>Deferred</option>
-				<option>Rejected</option>
-				<option>Duplicate</option>
-				<option>Not a Bug</option>
-				<option>Open</option>
-				<option>Closed</option>
-			</select>
-		</form>
-	</div>
+		<!-- priority change form -->
+		<div class="col-auto mx-2">
+			<form id="priority-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="priority">
+				<input type="hidden" name="report-id" value=@Model.BugReport.ID />
+				<label for="priority-select">Priority</label>
+				<select id="priority-select" name="priority-select" onchange="submitForm('priority-change-form')">
+					<option selected hidden>@Model.BugReport.Priority</option>
+					<option>Low</option>
+					<option>Medium</option>
+					<option>High</option>
+				</select>
+			</form>
+		</div>
 
-	<!-- priority change form -->
-	<div class="col-auto mx-2">
-		<form id="priority-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="priority">
-			<input type="hidden" name="report-id" value=@Model.BugReport.ID />
-			<label>Priority</label>
-			<select name="priority-select" onchange="submitForm('priority-change-form')">
-				<option selected hidden>@Model.BugReport.Priority</option>
-				<option>Low</option>
-				<option>Medium</option>
-				<option>High</option>
-			</select>
-		</form>
-	</div>
-
-	<!-- severity change form -->
-	<div class="col-auto mx-2">
-		<form id="severity-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="severity">
-			<input type="hidden" name="report-id" value=@Model.BugReport.ID />
-			<label>Severity</label>
-			<select name="severity-select" onchange="submitForm('severity-change-form')">
-				<option selected hidden>@Model.BugReport.Severity</option>
-				<option>Low</option>
-				<option>Medium</option>
-				<option>High</option>
-			</select>
-		</form>
-	</div>
+		<!-- severity change form -->
+		<div class="col-auto mx-2">
+			<form id="severity-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="severity">
+				<input type="hidden" name="report-id" value=@Model.BugReport.ID />
+				<label for="severity-select">Severity</label>
+				<select id="severity-select" name="severity-select" onchange="submitForm('severity-change-form')">
+					<option selected hidden>@Model.BugReport.Severity</option>
+					<option>Low</option>
+					<option>Medium</option>
+					<option>High</option>
+				</select>
+			</form>
+		</div>
+	}
+	else
+	{
+		<div class="col-auto mx-2">
+			<label for="status">Status</label>
+			<p id="status">@Model.BugReport.Status</p>
+		</div>
+		<div class="col-auto mx-2">
+			<label for="priority">Priority</label>
+			<p id="priority">@Model.BugReport.Priority</p>
+		</div>
+		<div class="col-auto mx-2">
+			<label for="severity">Severity</label>
+			<p id="severity">@Model.BugReport.Severity</p>
+		</div>
+	}
 </div>
 
 <!-- bug information -->

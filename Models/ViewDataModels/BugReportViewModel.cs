@@ -7,6 +7,7 @@ namespace BugTracker.Models.ViewDataModels
         public BugReportModel BugReport { get; set; }
         public List<UserModel> Assignees { get; set; }
         public List<UserModel> AvailableDevelopers { get; set; }
+        public bool IsDeveloper { get; set; }
         public string CurrentUserId { get; set; }
         public bool UserUpvoted { get; set; }
         public List<CommentModel> Comments { get; set; }
