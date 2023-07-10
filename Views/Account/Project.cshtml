@@ -3,12 +3,12 @@
 <!-- project information -->
 <div class="row">
     <div class="col-auto">
-        <img src=@Model.Project.Avatar alt="project avatar" class="custom-avatar-size-3 rounded-circle" />
+        <img src=@Model.Project.Avatar alt="" class="custom-avatar-size-3 rounded-circle" />
     </div>
     <div class="col-auto mt-5">
         <h2>@Model.Project.Name</h2>
     </div>
-    <div class="col-auto offset-1 mx-1">
+    <div class="col-auto ms-5 me-1">
         <h3 class="txt-grey">New <sup class="text-dark">@Model.NewBugs</sup></h3>
     </div>
     <div class="col-auto mx-1">
@@ -17,8 +17,8 @@
     <div class="col-auto mx-1">
         <h3 class="txt-grey">Fixed <sup class="text-dark">@Model.FixedBugs</sup></h3>
     </div>
-    <div class="txt-grey">
-        <i>Created at @Model.Project.Date</i>
+    <div class="col-12">
+        <i class="txt-grey">Created at @Model.Project.Date</i>
     </div>
 </div>
 
@@ -83,20 +83,17 @@
     }
 </div>
 
-<!-- collaborator addition -->
+<!-- developer-specific features -->
 @if (Model.IsDeveloper) 
 {
+    <!-- collaborator addition -->
     <form id="add-developer-form" method="post" class="mt-1" asp-controller="Account" asp-action="AddDeveloper">
         <input type="hidden" name="project-id" value=@Model.Project.ID />
         <h5>Add Collaborators</h5>
         <select name="user-search" class="user-search half-screen-width" onchange="submitForm('add-developer-form')"></select>
     </form>
 
-}
-
-<!-- project deletion -->
-@if (Model.IsDeveloper)
-{
+    <!-- project deletion -->
     <form method="post" onSubmit="return confirm('This action is not cannot be undone. Are you sure you wish to proceed?');" class="mt-5" asp-controller="AccountActions" asp-action="DeleteProject">
         <input type="hidden" name="project-id" value=@Model.Project.ID />
         <button type="submit" class="custom-danger-btn">Delete Project</button>

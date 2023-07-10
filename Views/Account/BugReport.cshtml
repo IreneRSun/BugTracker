@@ -1,130 +1,214 @@
 ﻿@model BugTracker.Models.ViewDataModels.BugReportViewModel
 
-<h2>@Model.BugReport.ID</h2>
+<!-- bug report id information -->
+<div class="row">
+	<div class="col-auto">
+		<h2><span class="material-symbols-outlined col-auto" style="color: @Model.BugReport.DisplayColor;">bug_report</span></h2>
+	</div>
+	<div class="col-auto">
+		<h2>ID #@Model.BugReport.ID</h2>
+	</div>
+	<div class="col-12">
+		<i class="txt-grey">Reported on @Model.BugReport.Date</i>
+	</div>
+</div>
 
-<label>Date</label>
-<p>@Model.BugReport.Date</p>
+<!-- user upvoting -->
+<div class="row my-3">
+	<div class="col-auto">
+		@if (Model.UserUpvoted)
+		{
+			<form method="post" asp-controller="AccountActions" asp-action="RemoveUpvote">
+				<input type="hidden" name="report-id" value=@Model.BugReport.ID />
+				<button type="submit" class="bg-white border-0"><i class="fa fa-caret-up" style="color: black"></i></button>
+			</form>
+		}
+		else
+		{
+			<form method="post" asp-controller="AccountActions" asp-action="Upvote">
+				<input type="hidden" name="report-id" value=@Model.BugReport.ID />
+				<button type="submit" class="bg-white border-0"><i class="fa fa-caret-up" style="color: grey"></i></button>
+			</form>
+		}
+	</div>
+	<div class="col-auto">@Model.BugReport.Upvotes</div>
+</div>
 
-@if (Model.BugReport.HelpWanted == true)
-{
-	<label>Help Wanted</label>
-	<form method="post" asp-controller="AccountActions" asp-action="RemoveHelpWanted">
-		<input type="hidden" name="report-id" value=@Model.BugReport.ID />
-		<button type="submit">Remove Help Wanted Label</button>
-	</form>
-}
-else if (Model.BugReport.HelpWanted == false)
-{
-	<form method="post" asp-controller="AccountActions" asp-action="AddHelpWanted">
-		<input type="hidden" name="report-id" value=@Model.BugReport.ID />
-		<button type="submit">Add Help Wanted</button>
-	</form>
-}
+<!-- help wanted status actions -->
+<div class="row my-3">
+	<div class="col-auto">
+		<div class="rounded-pill p-1">Help Wanted</div>
+	</div>
+	<div class="col-auto">
+		<form method="post" id="help-wanted-form" asp-controller="AccountActions" asp-action="UpdateHelpWanted">
+			<input type="hidden" name="report-id" value=@Model.BugReport.ID />
+			<label class="switch">
+				<input type="checkbox" name="help-wanted" checked=@Model.BugReport.HelpWanted onchange="submitForm('help-wanted-form')">
+				<span class="slider"></span>
+			</label>
+		</form>
+	</div>
+</div>
 
-@if (Model.UserUpvoted == true)
-{
-	<form method="post" asp-controller="AccountActions" asp-action="RemoveUpvote">
-		<input type="hidden" name="report-id" value=@Model.BugReport.ID />
-		<button type="submit"><i class="fa fa-caret-up" style="color: black"></i></button>
-	</form>
-} 
-else if (Model.UserUpvoted == false)
-{
-	<form method="post" asp-controller="AccountActions" asp-action="Upvote">
-		<input type="hidden" name="report-id" value=@Model.BugReport.ID />
-		<button type="submit"><i class="fa fa-caret-up" style="color: grey"></i></button>
-	</form>
-}
-<div>@Model.BugReport.Upvotes</div>
-
-<label>Assignees</label>
-<ul>
+<!-- bug report assignee information -->
+<h4 class="my-3">Assignees</h4>
+<ul class="list-unstyled">
 	@foreach (var developer in Model.Assignees)
 	{
 		<li>
 			<form method="post" asp-controller="AccountActions" asp-action="DeleteAssignment">
 				<input type="hidden" name="report-id" value=@Model.BugReport.ID />
 				<input type="hidden" name="developer-id" value=@developer.ID />
-				<img src=@developer.Avatar alt="project avatar" class="custom-avatar-size-1 rounded-circle">
-				<label>@developer.Name</label>
-				<button type="submit" class="rounded-circle bg-white"><i class="fa fa-user-times"></i></button>
+				<div class="row">
+					<div class="col-auto">
+						@if (developer.Avatar != null)
+						{
+							<img src="@developer.Avatar" alt="" class="custom-avatar-size-1 rounded-circle" />
+						}
+						else
+						{
+							<span class="material-symbols-outlined custom-avatar-size-1 rounded-circle">account_circle</span>
+						}
+					</div>
+					<div class="col-auto">
+						@developer.Name
+					</div>
+					<div class="col-auto custom-ms">
+						<button type="submit" class="bg-white border-0 custom-avatar-size-1">
+							<span class="material-symbols-outlined">
+								person_remove
+							</span>
+						</button>
+					</div>
+				</div>				
 			</form>
 		</li>
 	}
 </ul>
 
-<form id="assign-developer-form" method="post" asp-controller="AccountActions" asp-action="AddAssignment" >
-	<input type="hidden" name="report-id" value=@Model.BugReport.ID />
-	<label>Assign Developers</label>
-	<select name="developer-select" class="developer-select screen-width" onchange="submitForm('assign-developer-form')">
-		@foreach (var developer in Model.AvailableDevelopers)
-		{
-			@if (developer.Status != "Busy")
+<!-- developer assignment -->
+<div class="row my-3">
+	<form id="assign-developer-form" method="post" asp-controller="AccountActions" asp-action="AddAssignment">
+		<input type="hidden" name="report-id" value=@Model.BugReport.ID />
+		<label>Assign Developers</label>
+		<select name="developer-select" class="developer-select half-screen-width" onchange="submitForm('assign-developer-form')">
+			<option selected hidden disabled></option>
+			@foreach (var developer in Model.AvailableDevelopers)
 			{
-				<option value=@developer.ID>@developer.Name</option>
+				@if (developer.Status != "Busy")
+				{
+					<option value=@developer.ID>
+						<div class="row">
+							<div class="col-auto">
+								@if (developer.Avatar != null)
+								{
+									<img src=@developer.Avatar alt="" class="custom-avatar-size-1 rounded-circle" />
+								}
+								else
+								{
+									<span class="material-symbols-outlined custom-avatar-size-1 rounded-circle">account_circle</span>
+								}
+							</div>
+							<div class="col-auto">
+								@developer.Name
+							</div>
+						</div>
+					</option>
+				}
 			}
-		}
-	</select>
-</form>
+		</select>
+	</form>
+</div>
 
-<form id="status-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-tagType="status">
-	<input type="hidden" name="report-id" value=@Model.BugReport.ID />
-	<label>Status</label>
-	<select name="status-select" onchange="submitForm('status-change-form')">
-		<option selected hidden>@Model.BugReport.Status</option>
-		<option>Deferred</option>
-		<option>Rejected</option>
-		<option>Duplicate</option>
-		<option>Not a Bug</option>
-		<option>Open</option>
-		<option>Closed</option>
-	</select>
-</form>
+<!-- status change forms -->
+<div class="row my-3">
 
-<form id="priority-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="priority">
-	<input type="hidden" name="report-id" value=@Model.BugReport.ID />
-	<label>Priority</label>
-	<select name="priority-select" onchange="submitForm('priority-change-form')">
-		<option selected hidden>@Model.BugReport.Priority</option>
-		<option>Low</option>
-		<option>Medium</option>
-		<option>High</option>
-	</select>
-</form>
+	<!-- status change form -->
+	<div class="col-auto mx-2">
+		<form id="status-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-tagType="status">
+			<input type="hidden" name="report-id" value=@Model.BugReport.ID />
+			<label>Status</label>
+			<select name="status-select" onchange="submitForm('status-change-form')">
+				<option selected hidden>@Model.BugReport.Status</option>
+				<option>Deferred</option>
+				<option>Rejected</option>
+				<option>Duplicate</option>
+				<option>Not a Bug</option>
+				<option>Open</option>
+				<option>Closed</option>
+			</select>
+		</form>
+	</div>
 
-<form id="severity-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="severity">
-	<input type="hidden" name="report-id" value=@Model.BugReport.ID />
-	<label>Severity</label>
-	<select name="severity-select" onchange="submitForm('severity-change-form')">
-		<option selected hidden>@Model.BugReport.Severity</option>
-		<option>Low</option>
-		<option>Medium</option>
-		<option>High</option>
-	</select>
-</form>
+	<!-- priority change form -->
+	<div class="col-auto mx-2">
+		<form id="priority-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="priority">
+			<input type="hidden" name="report-id" value=@Model.BugReport.ID />
+			<label>Priority</label>
+			<select name="priority-select" onchange="submitForm('priority-change-form')">
+				<option selected hidden>@Model.BugReport.Priority</option>
+				<option>Low</option>
+				<option>Medium</option>
+				<option>High</option>
+			</select>
+		</form>
+	</div>
 
-<label>Operating System</label>
-<p>@Model.BugReport.OS</p>
+	<!-- severity change form -->
+	<div class="col-auto mx-2">
+		<form id="severity-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="severity">
+			<input type="hidden" name="report-id" value=@Model.BugReport.ID />
+			<label>Severity</label>
+			<select name="severity-select" onchange="submitForm('severity-change-form')">
+				<option selected hidden>@Model.BugReport.Severity</option>
+				<option>Low</option>
+				<option>Medium</option>
+				<option>High</option>
+			</select>
+		</form>
+	</div>
+</div>
 
-<label>Device</label>
-<p>@Model.BugReport.Device</p>
+<!-- bug information -->
+<label for="os">Operating System</label>
+<p id="os">@Model.BugReport.OS</p>
 
-<label>Details</label>
-<p>@Model.BugReport.Details</p>
+<label for="device">Device</label>
+<p id="device">@Model.BugReport.Device</p>
 
-<h5>Comments</h5>
+<label for="bug-details">Details</label>
+<p id="bug-details">@Model.BugReport.Details</p>
+
+<!-- comment section -->
+<h5 class="mt-5">Comments</h5>
+
 <form method="post" asp-controller="AccountActions" asp-action="Comment">
 	<input type="hidden" name="report-id" value=@Model.BugReport.ID />
 	<input type="text" name="user-comment" placeholder="Enter a comment here" />
-	<button type="submit">
+	<button type="submit" class="bg-white">
 		<i class="fa fa-angle-double-right"></i>
 	</button>
 </form>
-<ul>
+
+<ul class="list-unstyled mt-2">
 	@foreach (var comment in Model.Comments)
 	{
 		<li>
-			@comment.Comment
+			<div class="row">
+				<div class="col-auto">
+					@if (@comment.Commenter != null && comment.Commenter.Avatar != null)
+					{
+						<img src=@comment.Commenter.Avatar alt="" class="custom-avatar-size-1 rounded-circle" />
+					}
+					else
+					{
+						<span class="material-symbols-outlined custom-avatar-size-1 rounded-circle">account_circle</span>
+					}
+				</div>
+				<div class="col-auto">
+					@comment.Comment
+				</div>
+			</div>
 		</li>
 	}
 </ul>

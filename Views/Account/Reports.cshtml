@@ -4,47 +4,79 @@
 <form id="sort-form" method="get" asp-controller="Account" asp-action="Reports">
 	<input type="hidden" name="projectId" value=@Model.ProjectId />
 
-	<label>Filter Type</label>
-	<select name="filter" onchange="submitForm('sort-form')">
-		<option selected hidden>@Model.FilterType</option>
-		<option>All</option>
-		<option>NEW</option>
-		<option>Deferred</option>
-		<option>Rejected</option>
-		<option>Duplicate</option>
-		<option>Not a Bug</option>
-		<option>Open</option>
-		<option>Closed</option>
-	</select>
+	<div class="row">
+		<!-- filter option -->
+		<div class="col-auto">
+			<label for="filter">Filter Type</label>
+			<select id="filter" name="filter" onchange="submitForm('sort-form')">
+				<option selected hidden>@Model.FilterType</option>
+				<option>All</option>
+				<option>NEW</option>
+				<option>Deferred</option>
+				<option>Rejected</option>
+				<option>Duplicate</option>
+				<option>Not a Bug</option>
+				<option>Open</option>
+				<option>Closed</option>
+			</select>
+		</div>
 
-	<label>Sort Type</label>
-	<select name="sortType" onchange="submitForm('sort-form')">
-		<option selected hidden>@Model.SortType</option>
-		<option>Date</option>
-		<option>Severity</option>
-		<option>Priority</option>
-		<option>Upvotes</option>
-	</select>
+		<!-- sort type option -->
+		<div class="col-auto">
+			<label for="sortType">Sort Type</label>
+			<select name="sortType" onchange="submitForm('sort-form')">
+				<option selected hidden>@Model.SortType</option>
+				<option>Date</option>
+				<option>Severity</option>
+				<option>Priority</option>
+				<option>Upvotes</option>
+			</select>
+		</div>
 
-	<label>Sort Order</label>
-	<select name="sortOrder" onchange="submitForm('sort-form')">
-		<option selected hidden>@Model.SortOrder</option>
-		<option>Descending</option>
-		<option>Ascending</option>
-	</select>
+		<!-- sort order option -->
+		<div class="col-auto">
+			<label for="sortOrder">Sort Order</label>
+			<select id="sortOrder" name="sortOrder" onchange="submitForm('sort-form')">
+				<option selected hidden>@Model.SortOrder</option>
+				<option>Descending</option>
+				<option>Ascending</option>
+			</select>
+		</div>
+
+	</div>
 </form>
 
-<h2>@Model.FilterType Bug Reports</h2>
-
-<ul>
+<!-- bug reports list -->
+<h2 class="my-3">@Model.FilterType Bug Reports</h2>
+<div class="row">
 	@foreach (var report in Model.BugReports)
 	{
-		<li>
-			<a asp-controller="Account" asp-action="BugReport" asp-route-reportId=@report.ID>@report.Summary</a>
-			@if (report.HelpWanted)
-			{
-				<label>Help Wanted</label>
-			}
-		</li>
+		<div class="col-3 m-1">
+			<a asp-controller="Account" asp-action="BugReport" asp-route-reportId=@report.ID class="text-decoration-none text-dark">
+				<div class="card hover-push shadow-grey">
+					<div class="card-img-top block-strip bg-grad-sunset"></div>
+					<div class="card-body bg-light">
+
+						<div class="row mb-3">
+							<div class="col-auto">
+								<span class="material-symbols-outlined col-auto" style="color: @report.DisplayColor;">bug_report</span>
+							</div>
+							<div class="col-auto">
+								<h5 class="card-title col-auto">@report.Summary</h5>
+							</div>
+							<div class="col-12">
+								<i class="txt-grey">Reported on @report.Date</i>
+							</div>
+						</div>
+
+						@if (report.HelpWanted)
+						{
+							<div class="rounded-pill bg-success text-light d-inline p-1">Help Wanted</div>
+						}
+
+					</div>
+				</div>
+			</a>
+		</div>
 	}
-</ul>
+</div>

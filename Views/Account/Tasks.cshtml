@@ -1,14 +1,36 @@
 ﻿@model BugTracker.Models.ViewDataModels.TasksViewModel
 
-<ul>
-	@foreach (var report in Model.BugReports)
-	{
-		<li>
-			@report.ID
-			@if (report.HelpWanted)
-			{
-				<label>Help Wanted</label>
-			}
-		</li>
-	}
-</ul>
+<!-- task list -->
+<h3 class="my-3">Tasks</h3>
+<div class="row">
+    @foreach (var report in Model.BugReports)
+    {
+        <div class="col-3 m-1">
+            <a asp-controller="Account" asp-action="BugReport" asp-route-reportId=@report.ID class="text-decoration-none text-dark">
+                <div class="card hover-push shadow-grey">
+                    <div class="card-img-top block-strip bg-grad-sunset"></div>
+                    <div class="card-body bg-light">
+
+                        <div class="row mb-3">
+                            <div class="col-auto">
+                                <span class="material-symbols-outlined col-auto" style="color: @report.DisplayColor;">bug_report</span>
+                            </div>
+                            <div class="col-auto">
+                                <h5 class="card-title col-auto">@report.Summary</h5>
+                            </div>
+                            <div class="col-12">
+                                <i class="txt-grey">Reported on @report.Date</i>
+                            </div>
+                        </div>
+
+                        @if (report.HelpWanted)
+                        {
+                            <div class="rounded-pill bg-success text-light d-inline p-1">Help Wanted</div>
+                        }
+                    </div>
+                </div>
+			</a>
+        </div>
+    }
+</div>
+

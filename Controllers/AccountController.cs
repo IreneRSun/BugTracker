@@ -223,7 +223,7 @@ namespace BugTracker.Controllers
 				List<UserModel> assignees = await dbCx.GetAssignees(reportId);
 				foreach (var assignee in assignees)
 				{
-					await dbCx.GetUserData(assignee);
+					await usrCx.GetUserData(assignee);
 				}
 
 				// get of developers of the project

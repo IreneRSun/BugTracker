@@ -1,38 +1,52 @@
 ﻿@model BugTracker.Models.ViewDataModels.ProfileViewModel
 
-<!-- edit profile form -->
+<!-- edit profile -->
 <form method="post" enctype="multipart/form-data" asp-controller="AccountActions" asp-action="UpdateProfile">
+
     <!-- image upload -->
-    <div class="mt-sm-2">
-        <img id="avatar" src="@Model.User.Avatar" alt="" class="rounded-circle" width="100px" height="100px" />
-        <input type="file" id="image-file" name="image-file" onchange="previewImage()" />
-        <label id="file-size-warning" style="display: none;">File size too large. Select a file smaller than 16MB.</label>
+    <div class="row my-2">
+        <div class="col-auto">
+            <img id="avatar" src="@Model.User.Avatar" alt="" class="rounded-circle custom-avatar-size-3" />
+        </div>
+        <div class="col-auto mt-5 ms-3">
+            <input type="file" id="image-file" name="image-file" onchange="previewImage()" />
+            <label id="file-size-warning" class="d-none">File size too large. Select a file smaller than 5MB.</label>
+        </div>
     </div>
+
     <!-- email -->
-    <div class="mt-sm-4">
+    <div class="row mt-4 ms-2 mb-4">
         <h5>Email</h5>
         <label name="email">@Model.User.Email</label>
     </div>
-    <!-- username edit -->
-    <div class="mt-sm-2">
-        <h5>Username</h5>
-        <input type="text" name="username" value="@Model.User.Name" />
+    
+    <!-- profile information edits -->
+    <div class="row my-3 ms-2">
+        <!-- username edit -->
+        <div class="col-auto">
+            <h5>Username</h5>
+            <input type="text" name="username" value="@Model.User.Name" />
+        </div>
+
+        <!-- status edit -->
+        <div class="col-auto ms-2">
+            <h5>Status</h5>
+            <select name="user-status-select">
+                <option selected hidden>@Model.User.Status</option>
+                <option>Free</option>
+                <option>Busy</option>
+            </select>
+        </div>
     </div>
-    <!-- status edit -->
-    <select name="user-status-select">
-        <option selected hidden>@Model.User.Status</option>
-        <option>Free</option>
-        <option>Busy</option>
-    </select>
+
     <!-- update profile button -->
-    <div class="mt-sm-4">
-        <button type="submit" class="border-light rounded-pill">
-            <span class="material-symbols-outlined">edit</span> Save
-        </button>
-    </div>
+    <button type="submit" class="border-light rounded-pill mt-3 ms-3">
+        <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Save
+    </button>
+
 </form>
 
 <!-- account deletion form -->
-<form method="post" onSubmit="return confirm('This action is not cannot be undone. Are you sure you wish to proceed?');" class="mt-sm-5" asp-controller="AccountActions" asp-action="DeleteAccount">
-    <button type="submit" class="btn-danger">Delete Account</button>
+<form method="post" onSubmit="return confirm('This action is not cannot be undone. Are you sure you wish to proceed?');" class="mt-5 ms-3" asp-controller="AccountActions" asp-action="DeleteAccount">
+    <button type="submit" class="custom-danger-btn">Delete Account</button>
 </form>

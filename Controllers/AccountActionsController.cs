@@ -372,41 +372,26 @@ namespace BugTracker.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> AddHelpWanted()
+		public async Task<IActionResult> UpdateHelpWanted()
 		{
 			// get form input
 			string reportId = Request.Form["report-id"];
+			bool helpWanted = Request.Form["help-wanted"] == "on";
 
 			DatabaseContext? dbCx = GetDbCx();
 
 			if (dbCx != null && reportId != null)
 			{
 				// add help wanted label to bug report and redirect to updated bug report page
-				await dbCx.AddHelpWanted(reportId);
-				return RedirectToAction("BugReport", "Account", new { reportId });
-			}
-			else if (dbCx == null)
-			{
-				throw new Exception("Could not access database services.");
-			}
-			else
-			{
-				throw new Exception("Invalid database action with null values.");
-			}
-		}
-
-		[HttpPost]
-		public async Task<IActionResult> RemoveHelpWanted()
-		{
-			// get form input
-			string reportId = Request.Form["report-id"];
-
-			DatabaseContext? dbCx = GetDbCx();
-
-			if (dbCx != null && reportId != null)
-			{
-				// remove help wanted label from bug report and redirect to updated bug report page
-				await dbCx.RemoveHelpWanted(reportId);
+				if (helpWanted)
+				{
+					await dbCx.AddHelpWanted(reportId);
+				}
+				else
+				{
+					await dbCx.RemoveHelpWanted(reportId);
+				}
+				
 				return RedirectToAction("BugReport", "Account", new { reportId });
 			}
 			else if (dbCx == null)

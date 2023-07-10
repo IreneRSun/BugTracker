@@ -124,7 +124,7 @@ $(document).ready(function () {
             },
             cache: true
         },
-        placeholder: "Search for a project",
+        placeholder: "Search for a project ...",
         minimumInputLength: 3,
         templateResult: formatProject,
         templateSelection: formatProjectSelection
@@ -172,14 +172,12 @@ $(document).ready(function () {
             },
             cache: true
         },
-        placeholder: "Search for a user",
+        placeholder: "Search for a user ...",
         minimumInputLength: 3,
         templateResult: formatUser,
         templateSelection: formatUserSelection
     });
 
     // Handle developer select
-    $(".developer-select").select2({
-        placeholder: "Select a developer"
-    });
+    $(".developer-select").select2();
 });
