@@ -15,68 +15,50 @@ namespace BugTracker.Controllers
         /// <summary>
         /// Method <c>Dashboard</c> gets the ViewResult for a user's dashboard.
         /// </summary>
-		/// <param name="id">The ID of the user to get the dashboard of.
+		/// <param name="uid">The ID of the user to get the dashboard of.
 		/// Defaults to the current user's ID if empty.</param>
         /// <returns>The ViewResult for the user dashboard page.</returns>
         [Authorize]
-        public async Task<IActionResult> Dashboard(string id)
+        public async Task<IActionResult> Dashboard(string uid)
 		{
-			string? userId = id.IsNullOrEmpty() ? GetUserId() : id;
-			UserManagementContext? usrCx = GetUserManagementCx();
-			DatabaseContext? dbCx = GetDbCx();
+			// get database access
+			UserManagementContext usrCx = GetUserManagementCx();
+			DatabaseContext dbCx = GetDbCx();
 
-			if (usrCx != null && dbCx != null && userId != null) {
-				// get representative models for the user and their projects
-				UserModel userModel = await usrCx.GetUser(userId);
-				await dbCx.GetUserData(userModel);
+            // get representative models for the user and their projects
+            string userId = uid.IsNullOrEmpty() ? GetUserId() : uid;
 
-				List<ProjectModel> userProjectModels = await dbCx.GetProjects(userId);
+            UserModel userModel = await usrCx.GetUser(userId);
+            await dbCx.GetUserData(userModel);
 
-				// return ViewResult
-				var viewModel = new DashboardViewModel()
-				{
-					User = userModel,
-					UserProjects = userProjectModels
-				};
+            List<ProjectModel> userProjectModels = await dbCx.GetProjects(userId);
 
-				return View(viewModel);
-			}
-			else
-			{
-				throw new Exception("Could not access database services.");
-			}
+            // return ViewResult
+            var viewModel = new DashboardViewModel(userModel, uid.IsNullOrEmpty(), userProjectModels);
+            return View(viewModel);
 		}
 
 		/// <summary>
 		/// Method <c>Profile</c> gets the ViewResult for the current user's profile.
 		/// </summary>
-		/// <param name="id">The ID of the user to get the dashboard of.
+		/// <param name="uid">The ID of the user to get the dashboard of.
 		/// Defaults to the current user's ID if empty.</param>
 		/// <returns>The ViewResult for the user's profile page.</returns>
 		[Authorize]
-        public async Task<IActionResult> Profile(string id)
+        public async Task<IActionResult> Profile(string uid)
 		{
-			string? userId = id.IsNullOrEmpty() ? GetUserId() : id;
-			UserManagementContext? usrCx = GetUserManagementCx();
-            DatabaseContext? dbCx = GetDbCx();
+			// get database access
+			UserManagementContext usrCx = GetUserManagementCx();
+            DatabaseContext dbCx = GetDbCx();
 
-            if (usrCx != null && dbCx != null && userId != null) {
-                // get representative model of current user
-                UserModel userModel = await usrCx.GetUser(userId);
-				await dbCx.GetUserData(userModel);
+            // get representative model of current user
+            string userId = uid.IsNullOrEmpty() ? GetUserId() : uid;
+            UserModel userModel = await usrCx.GetUser(userId);
+            await dbCx.GetUserData(userModel);
 
-				// return ViewResult
-				var viewModel = new ProfileViewModel()
-				{
-					User = userModel
-				};
-
-				return View(viewModel);
-			}
-			else
-			{
-				throw new Exception("Could not access database services.");
-			}
+			// return ViewResult
+			var viewModel = new ProfileViewModel(userModel, uid.IsNullOrEmpty());
+            return View(viewModel);
 		}
 
         /// <summary>
@@ -87,46 +69,33 @@ namespace BugTracker.Controllers
         [Authorize]
         public async Task<IActionResult> Project(string projectId)
 		{
-            string? userId = GetUserId();
-            UserManagementContext? usrCx = GetUserManagementCx();
-            DatabaseContext? dbCx = GetDbCx();
+			// get database access
+            UserManagementContext usrCx = GetUserManagementCx();
+            DatabaseContext dbCx = GetDbCx();
 
-            if (usrCx != null && dbCx != null && userId != null)
-			{
-				// get representative models for the project and its developers
-				ProjectModel project = await dbCx.GetProject(projectId) ?? throw new Exception($"No projects with the ID {projectId} found.");
-				List<UserModel> developers = await dbCx.GetDevelopers(projectId);
-				foreach (UserModel developer in developers)
-				{
-					await usrCx.GetUserData(developer);
-				}
+            // get representative models for the project and its developers
+            string userId = GetUserId();
 
-				// get project statisics
-				int newBugs = await dbCx.GetProjectStatistic(projectId, "new");
-				int pendingBugs = await dbCx.GetProjectStatistic(projectId, "pending");
-				int fixedBugs = await dbCx.GetProjectStatistic(projectId, "fixed");
+            ProjectModel project = await dbCx.GetProject(projectId) ?? throw new Exception($"No projects with the ID {projectId} found.");
 
-				// check if the current user is a developer of this project
-				bool userIsDeveloper = await dbCx.IsDeveloper(userId, projectId);
+            List<UserModel> developers = await dbCx.GetDevelopers(projectId);
+            foreach (UserModel developer in developers)
+            {
+                await usrCx.GetUserData(developer);
+            }
 
-				// get ViewResult
-				var viewModel = new ProjectViewModel()
-				{
-					Project = project,
-					Developers = developers,
-					NewBugs = newBugs,
-					PendingBugs = pendingBugs,
-					FixedBugs = fixedBugs,
-					IsDeveloper = userIsDeveloper
-				};
+            // get project statisics
+            int newBugs = await dbCx.GetProjectStatistic(projectId, "new");
+            int pendingBugs = await dbCx.GetProjectStatistic(projectId, "pending");
+            int fixedBugs = await dbCx.GetProjectStatistic(projectId, "fixed");
 
-				return View(viewModel);
-			}
-			else
-			{
-				throw new Exception("Could not access database services.");
-			}
-		}
+            // check if the current user is a developer of this project
+            bool userIsDeveloper = await dbCx.IsDeveloper(userId, projectId);
+
+			// get ViewResult
+			var viewModel = new ProjectViewModel(project, newBugs, pendingBugs, fixedBugs, developers, userIsDeveloper);
+            return View(viewModel);
+        }
 
         /// <summary>
         /// Method <c>Tasks</c> gets the ViewResult for the current user's tasks(assigned bugs) page.
@@ -135,23 +104,14 @@ namespace BugTracker.Controllers
         [Authorize]
         public async Task<IActionResult> Tasks()
 		{
-            string? userId = GetUserId();
-            DatabaseContext? dbCx = GetDbCx();
+            // get user assignments from database
+            DatabaseContext dbCx = GetDbCx();
+            string userId = GetUserId();
+            List<BugReportModel> tasks = await dbCx.GetAssignments(userId);
 
-            if (dbCx != null && userId != null)
-			{
-				// return ViewResult with data on user assignments
-				List<BugReportModel> tasks = await dbCx.GetAssignments(userId);
-				var viewModel = new TasksViewModel()
-				{
-					BugReports = tasks
-				};
-				return View(viewModel);
-			}
-			else
-			{
-				throw new Exception("Could not access database services.");
-			}
+			// return ViewResult
+            var viewModel = new TasksViewModel(tasks);
+            return View(viewModel);
 		}
 
 		/// <summary>
@@ -165,42 +125,32 @@ namespace BugTracker.Controllers
 		[Authorize, HttpGet]
 		public async Task<IActionResult> Reports(string projectId, string filter = "All", string sortType = "Date", string sortOrder = "Descending")
 		{
-            DatabaseContext? dbCx = GetDbCx();
+            // get the project's sorted and filtered bug reports and page information
+            DatabaseContext dbCx = GetDbCx();
+            List<BugReportModel> tasks;
 
-            if (dbCx != null)
-			{
-				// return ViewResult with the project's sorted and filtered bug reports and page information
-				List<BugReportModel> tasks;
-                if (sortType == "Upvotes")
-				{
-					tasks = await dbCx.GetReports(projectId, filter, "Date", "Descending");
-					if (sortOrder == "Descending") {
-                        tasks.Sort((report1, report2) => report2.Upvotes.CompareTo(report1.Upvotes));
-                    } else
-					{
-                        tasks.Sort((report1, report2) => report1.Upvotes.CompareTo(report2.Upvotes));
-                    }
-                }
-				else
-				{
-                    tasks = await dbCx.GetReports(projectId, filter, sortType, sortOrder);
-                }
+            if (sortType == "Upvotes")
+            {
+                tasks = await dbCx.GetReports(projectId, filter, "Date", "Descending");
 
-                var viewModel = new ReportsViewModel()
-				{
-					ProjectId = projectId,
-					BugReports = tasks,
-					FilterType = filter,
-					SortType = sortType,
-					SortOrder = sortOrder
-				};
-				return View(viewModel);
-			}
-			else
-			{
-				throw new Exception("Could not access database services.");
-			}
-		}
+                if (sortOrder == "Descending")
+                {
+                    tasks.Sort((report1, report2) => report2.Upvotes.CompareTo(report1.Upvotes));
+                }
+                else
+                {
+                    tasks.Sort((report1, report2) => report1.Upvotes.CompareTo(report2.Upvotes));
+                }
+            }
+            else
+            {
+                tasks = await dbCx.GetReports(projectId, filter, sortType, sortOrder);
+            }
+
+			// return ViewResult
+            var viewModel = new ReportsViewModel(projectId, tasks, filter, sortType, sortOrder);
+            return View(viewModel);
+        }
 
         /// <summary>
         /// Method <c>BugReport<c> gets the ViewResult for a page displaying a bug report.
@@ -210,64 +160,46 @@ namespace BugTracker.Controllers
         [Authorize]
         public async Task<IActionResult> BugReport(string reportId)
 		{
-			string? userId = GetUserId();
-            UserManagementContext? usrCx = GetUserManagementCx();
-            DatabaseContext? dbCx = GetDbCx();
+            // get database access
+            UserManagementContext usrCx = GetUserManagementCx();
+            DatabaseContext dbCx = GetDbCx();
 
-            if (userId != null && usrCx != null && dbCx != null)
-			{
-				// get bug report data
-				BugReportModel report = await dbCx.GetReport(reportId) ?? throw new Exception($"No reports with the ID {reportId} found.");
+            // get bug report data
+            BugReportModel report = await dbCx.GetReport(reportId) ?? throw new Exception($"No reports with the ID {reportId} found.");
 
-				// get developers assigned to the bug report
-				List<UserModel> assignees = await dbCx.GetAssignees(reportId);
-				foreach (var assignee in assignees)
-				{
-					await usrCx.GetUserData(assignee);
-				}
+            // get developers assigned to the bug report
+            List<UserModel> assignees = await dbCx.GetAssignees(reportId);
+            foreach (var assignee in assignees)
+            {
+                await usrCx.GetUserData(assignee);
+            }
 
-				// get of developers of the project
-				List<UserModel> developers = await dbCx.GetDevelopers(report.ProjectID);
-				foreach (var developer in developers)
-				{
-					await usrCx.GetUserData(developer);
-				}
-				System.Diagnostics.Debug.WriteLine(developers.Count);
+            // get of developers of the project
+            List<UserModel> developers = await dbCx.GetDevelopers(report.ProjectID);
+            foreach (var developer in developers)
+            {
+                await usrCx.GetUserData(developer);
+            }
 
-				// check if the user is a developer of the project
-				bool isDeveloper = await dbCx.IsDeveloper(userId, report.ProjectID);
+            // get the comments of the bug report
+            List<CommentModel> comments = await dbCx.GetComments(report.ID);
+            foreach (var comment in comments)
+            {
+                if (comment.Commenter != null)
+                {
+                    await usrCx.GetUserData(comment.Commenter);
+                }
+            }
 
-				// get the comments of the bug report
-				List<CommentModel> comments = await dbCx.GetComments(report.ID);
-				foreach (var comment in comments)
-				{
-					if (comment.Commenter != null)
-					{
-						await usrCx.GetUserData(comment.Commenter);
-					}
-				}
+            // get whether the user has upvoted the bug report and whether it is a developer of the project
+            string userId = GetUserId();
+            bool userUpvoted = await dbCx.IsUserUpvoted(reportId, userId);
+            bool isDeveloper = await dbCx.IsDeveloper(userId, report.ProjectID);
 
-				// get whether the user has upvoted the bug report
-				bool userUpvoted = await dbCx.IsUserUpvoted(reportId, userId);
-
-				// return the ViewResult with the page data
-				var viewModel = new BugReportViewModel()
-				{
-					BugReport = report,
-					Assignees = assignees,
-					AvailableDevelopers = developers,
-					IsDeveloper = isDeveloper,
-					CurrentUserId = userId,
-					UserUpvoted = userUpvoted,
-					Comments = comments
-				};
-				return View(viewModel);
-			}
-			else
-			{
-				throw new Exception("Could not access database services.");
-			}
-		}
+            // return the ViewResult with the page data
+            var viewModel = new BugReportViewModel(report, assignees, userUpvoted, comments, developers, userId, isDeveloper);
+            return View(viewModel);
+        }
 
 		/// <summary>
 		/// Method <c>LoggedOut</c> gets the ViewResult for the page indicating that the user has logged out.

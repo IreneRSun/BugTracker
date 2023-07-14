@@ -1,8 +1,7 @@
 ﻿@model BugTracker.Models.ViewDataModels.ReportsViewModel
 
 <!-- sort options -->
-<form id="sort-form" method="get" asp-controller="Account" asp-action="Reports">
-	<input type="hidden" name="projectId" value=@Model.ProjectId />
+<form id="sort-form" method="get" asp-controller="Account" asp-action="Reports" asp-route-projectId=@Model.ProjectId>
 
 	<div class="row">
 		<!-- filter option -->
@@ -49,14 +48,16 @@
 <!-- bug reports list -->
 <h2 class="my-3">@Model.FilterType Bug Reports</h2>
 <div class="row">
+
 	@foreach (var report in Model.BugReports)
 	{
 		<div class="col-3 m-1">
 			<a asp-controller="Account" asp-action="BugReport" asp-route-reportId=@report.ID class="text-decoration-none text-dark">
 				<div class="card hover-push shadow-grey">
-					<div class="card-img-top block-strip bg-grad-sunset"></div>
-					<div class="card-body bg-light">
 
+					<div class="card-img-top block-strip bg-grad-sunset"></div>
+
+					<div class="card-body bg-light">
 						<div class="row mb-3">
 							<div class="col-auto">
 								<span class="material-symbols-outlined col-auto" style="color: @report.DisplayColor;">bug_report</span>
@@ -65,7 +66,7 @@
 								<h5 class="card-title col-auto">@report.Summary</h5>
 							</div>
 							<div class="col-12">
-								<i class="txt-grey">Reported on @report.Date</i>
+								<i class="text-grey">Reported on @report.Date</i>
 							</div>
 						</div>
 
@@ -79,4 +80,5 @@
 			</a>
 		</div>
 	}
+
 </div>

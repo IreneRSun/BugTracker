@@ -339,13 +339,6 @@ namespace BugTracker.Models.DatabaseContexts
 		}
 
         /// <summary>
-        /// Method <c>GetAvatar</c> gets the avatar of the user in string form.
-        /// Returns null if no such avatar exists.
-        /// </summary>
-        /// <param name="userId">The user ID of the user to get the avatar for.</param>
-        /// <returns>The avatar of the user.</returns>
-
-        /// <summary>
         /// Method <c>SetAvatar</c> sets the avatar of the user.
         /// </summary>
         /// <param name="userId">The user ID of the user to set the avatar of.</param>

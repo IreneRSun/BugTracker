@@ -3,15 +3,22 @@
 <!-- edit profile -->
 <form method="post" enctype="multipart/form-data" asp-controller="AccountActions" asp-action="UpdateProfile">
 
-    <!-- image upload -->
+    <!-- avatar image upload / avatar view -->
     <div class="row my-2">
         <div class="col-auto">
-            <img id="avatar" src="@Model.User.Avatar" alt="" class="rounded-circle custom-avatar-size-3" />
+            <img id="avatar" src="@Model.User.Avatar" class="rounded-circle avatar-size-100" />
         </div>
-        <div class="col-auto mt-5 ms-3">
-            <input type="file" id="image-file" name="image-file" onchange="previewImage()" />
-            <label id="file-size-warning" class="d-none">File size too large. Select a file smaller than 5MB.</label>
-        </div>
+        @if (Model.IsCurrentUser)
+        {
+            <div class="col-auto mt-5 ms-3">
+                <div class="row">
+                    <input type="file" id="image-file-upload" name="image-file" onchange="previewImage()" />
+                </div>
+                <div class="row">
+                    <label id="file-size-warning" class="d-none text-danger">File size too large. Select a file smaller than 64KB.</label>
+                </div>
+            </div>
+        }
     </div>
 
     <!-- email -->
@@ -20,33 +27,69 @@
         <label name="email">@Model.User.Email</label>
     </div>
     
-    <!-- profile information edits -->
     <div class="row my-3 ms-2">
+
         <!-- username edit -->
         <div class="col-auto">
             <h5>Username</h5>
-            <input type="text" name="username" value="@Model.User.Name" />
+            @if (Model.IsCurrentUser)
+            {
+                <input type="text" name="username-input" value=@Model.User.Name />
+            }
+            else
+            {
+                <label name="username">@Model.User.Name</label>
+            }
         </div>
 
         <!-- status edit -->
         <div class="col-auto ms-2">
             <h5>Status</h5>
-            <select name="user-status-select">
-                <option selected hidden>@Model.User.Status</option>
-                <option>Free</option>
-                <option>Busy</option>
-            </select>
+            @if (Model.IsCurrentUser)
+            {
+                <select name="user-status-select">
+                    <option selected hidden>@Model.User.Status</option>
+                    <option>Free</option>
+                    <option>Busy</option>
+                </select>
+            }
+            else
+            {
+                <label name="user-status">@Model.User.Status</label>
+            }
         </div>
+
     </div>
 
-    <!-- update profile button -->
-    <button type="submit" class="border-light rounded-pill mt-3 ms-3">
-        <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Save
-    </button>
+    @if (Model.IsCurrentUser)
+    {
+        <!-- update profile button -->
+        <button type="submit" class="border-light rounded-pill mt-3 ms-3">
+            <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Save
+        </button>
+    }
 
 </form>
 
-<!-- account deletion form -->
-<form method="post" onSubmit="return confirm('This action is not cannot be undone. Are you sure you wish to proceed?');" class="mt-5 ms-3" asp-controller="AccountActions" asp-action="DeleteAccount">
-    <button type="submit" class="custom-danger-btn">Delete Account</button>
-</form>
+@if (Model.IsCurrentUser)
+{
+    <!-- account deletion form -->
+    <form method="post" class="mt-5 ms-3" asp-controller="AccountActions" asp-action="DeleteAccount"
+          onSubmit="return confirm('This action is not cannot be undone. Are you sure you wish to proceed?');">
+        <button type="submit" class="danger-btn-invert">Delete Account</button>
+    </form>
+}
+else
+{
+    <!-- user dashboard link -->
+    <a asp-controller="Account" asp-action="Dashboard" asp-route-uid=@Model.User.ID class="mx-3 shift-obj-container text-decoration-none">
+        <div class="row">
+            <div class="col-auto">
+                See User Dashboard
+            </div>
+            <div class="col-auto ms-left-shift right-shift-obj">
+                >>>
+            </div>
+        </div>
+    </a>
+}

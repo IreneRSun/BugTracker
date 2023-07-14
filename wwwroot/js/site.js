@@ -11,7 +11,7 @@ function submitForm(formId) {
 
 // Function updates the profile image on the profile page to the uploaded image for previewing when called
 function previewImage() {
-    const input = document.getElementById("image-file");
+    const input = document.getElementById("image-file-upload");
     const avatar = document.getElementById("avatar");
     const warning = document.getElementById("file-size-warning");
 
@@ -26,12 +26,12 @@ function previewImage() {
         const selectedFile = input.files[0];
 
         // check the file size
-        const fileSizeMB = selectedFile.size / (1024 * 1024);
-        if (fileSizeMB > 5) {
-            warning.style.display = "block";
+        const fileSizeKB = selectedFile.size / (1024);
+        if (fileSizeKB >= 64) {
+            warning.classList.remove("d-none");
             return;
         } else {
-            warning.style.display = "none";
+            warning.classList.add("d-none");
         }
 
         // read the file

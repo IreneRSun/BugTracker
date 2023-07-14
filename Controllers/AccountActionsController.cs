@@ -17,58 +17,44 @@ namespace BugTracker.Controllers
     {
         /// <summary>
         /// Method <c>CreateProject</c> handles project creation.
+		/// Throws an exception if no project name is found.
         /// </summary>
         /// <returns>The action result for the updated user dashboard page.</returns>
         [HttpPost]
         public async Task<IActionResult> CreateProject()
         {
-            // get data for creating project
-            string? projectName = Request.Form["project-name"];
-            string? userId = GetUserId();
-            DatabaseContext? dbCx = GetDbCx();
+            var projectName = Request.Form["project-name"];
 
-            if (dbCx != null && userId != null && projectName != null)
+            if (!projectName.IsNullOrEmpty())
             {
-				// add project to database and direct to the updated dashboard
-				await dbCx.AddProject(projectName, userId);
-				return RedirectToAction("Dashboard", "Account");
+                // add project to database
+                string userId = GetUserId();
+                DatabaseContext dbCx = GetDbCx();
+                await dbCx.AddProject(projectName, userId);
+
+                // direct to the updated dashboard
+                return RedirectToAction("Dashboard", "Account");
 			}
-            else if (dbCx == null)
-            {
-				throw new Exception("Could not access database services.");
-			}
-			else
-			{
-				throw new Exception("Invalid database action with null values.");
-			}
-		}
+
+            throw new Exception("Invalid database action with null values: No project name found.");
+        }
 
         /// <summary>
         /// Method <c>DeleteProject</c> handles deleting the current user from a project.
 		/// If user is the only developer, the project is deleted as well.
         /// </summary>
+		/// <param name="projectId">The ID of the project to delete.</param>
         /// <returns>The action result of the updated user dashboard page.</returns>
         [HttpPost]
-        public async Task<IActionResult> DeleteProject()
+        public async Task<IActionResult> DeleteProject(string projectId)
         {
-			string? projectId = Request.Form["project-id"];
-            string? userId = GetUserId();
-            DatabaseContext? dbCx = GetDbCx();
+			// delete project
+            string userId = GetUserId();
+            DatabaseContext dbCx = GetDbCx();
+            await dbCx.DeleteProject(projectId, userId);
 
-            if (dbCx != null && userId != null && projectId != null)
-            {
-				// delete project and redirect to the current user's dashboard
-				await dbCx.DeleteProject(projectId, userId);
-				return RedirectToAction("Dashboard", "Account");
-			}
-			else if (dbCx == null)
-			{
-				throw new Exception("Could not access database services.");
-			}
-			else
-			{
-				throw new Exception("Invalid database action with null values.");
-			}
+            // redirect to the current user's dashboard
+            return RedirectToAction("Dashboard", "Account");
 		}
 
 		/// <summary>
@@ -80,33 +66,30 @@ namespace BugTracker.Controllers
 		[HttpGet]
 		public async Task<IActionResult> SearchProjects(string search, int page)
 		{
-            DatabaseContext? dbCx = GetDbCx();
+            DatabaseContext dbCx = GetDbCx();
 
-            if (dbCx != null)
-			{
-				List<ProjectModel> searchResults = await dbCx.SearchProjects(search);
-                string resultJson = JsonConvert.SerializeObject(searchResults);
-                return Json(resultJson);
-			}
-			else
-			{
-				throw new Exception("Could not access database services.");
-			}
+            List<ProjectModel> searchResults = await dbCx.SearchProjects(search);
+            string resultJson = JsonConvert.SerializeObject(searchResults);
+
+            return Json(resultJson);
 		}
 
         /// <summary>
         /// Method <c>SelectProject</c> directs the website to the dashboard of the selected project.
+		/// Throws an exception if no project is found.
         /// </summary>
         /// <returns>The action result of the selected project's dashboard.</returns>
         [HttpPost]
 		public IActionResult SelectProject()
 		{
 			var projectId = Request.Form["project-search"];
+
 			if (!projectId.IsNullOrEmpty())
 			{
                 return RedirectToAction("Project", "Account", new { projectId });
             }
-			throw new Exception("Invalid action with null values.");
+
+			throw new Exception("Invalid action with null values: No selected project found.");
 		}
 
         /// <summary>
@@ -118,290 +101,210 @@ namespace BugTracker.Controllers
         [HttpGet]
 		public async Task<IActionResult> SearchUsers(string search, int page)
 		{
-            UserManagementContext? usrCx = GetUserManagementCx();
-            DatabaseContext? dbCx = GetDbCx();
+            UserManagementContext usrCx = GetUserManagementCx();
+            DatabaseContext dbCx = GetDbCx();
 
-            if (usrCx != null && dbCx != null)
-			{
-				List<UserModel> searchResults = usrCx.SearchUsers(search);
-				foreach (var user in searchResults)
-				{
-					await dbCx.GetUserData(user);
-				}
-				return Json(searchResults);
-			}
-			else
-			{
-				throw new Exception("Could not access database services.");
-			}
-		}
+            List<UserModel> searchResults = usrCx.SearchUsers(search);
+            foreach (var user in searchResults)
+            {
+                await dbCx.GetUserData(user);
+            }
+
+            return Json(searchResults);
+        }
 
 		/// <summary>
 		/// Method <c>AddDeveloper</c> adds a user as a developer to a project.
+		/// Throws an exception if no selected user is found.
 		/// </summary>
+		/// <param name="projectId">The ID of the project to add the developer to.</param>
 		/// <returns>The action result of the updated project dashboard.</returns>
 		[HttpPost]
-        public async Task<IActionResult> AddDeveloper()
+        public async Task<IActionResult> AddDeveloper(string projectId)
         {
-			// get form input
-			string? projectId = Request.Form["project-id"];
-			string? userId = Request.Form["user-search"];
+			var userId = Request.Form["user-search"];
 
-            DatabaseContext? dbCx = GetDbCx();
-
-            if (dbCx != null && projectId != null && userId != null)
+            if (!userId.IsNullOrEmpty())
             {
-                // add the developer and redirect to the updated project dashboard
-				await dbCx.AddDeveloper(projectId, userId);
-				return RedirectToAction("Project", "Account", new { projectId });
+                // add the developer
+                DatabaseContext dbCx = GetDbCx();
+                await dbCx.AddDeveloper(projectId, userId);
+
+                // redirect to the updated project dashboard
+                return RedirectToAction("Project", "Account", new { projectId });
 			}
-			else if (dbCx == null)
-			{
-				throw new Exception("Could not access database services.");
-			}
-			else
-			{
-				throw new Exception("Invalid database action with null values.");
-			}
+
+            throw new Exception("Invalid database action with null values: No selected user found.");
         }
 
         /// <summary>
         /// Method<c>ReportBug</c> handles bug report creation.
+		/// Throws an exception if the required input for creating the bug report is not found.
         /// </summary>
         /// <param name="projectId">The ID of the project the bug report is for.</param>
         /// <returns>The action result of the updated project dashboard.</returns>
         [HttpPost]
-        public async Task<IActionResult> ReportBug()
+        public async Task<IActionResult> ReportBug(string projectId)
         {
-			// get form input
-			string? projectId = Request.Form["project-id"];
-			string? summary = Request.Form["report-summary"];
-			string? softwareVersion = Request.Form["software-version"];
-			string? device = Request.Form["device"];
-			string? os = Request.Form["os"];
-			string? details = Request.Form["details"];
-
-            // add bug report to database
-            string? userId = GetUserId();
-            DatabaseContext? dbCx = GetDbCx();
-
-            if (dbCx != null && projectId != null && userId != null && summary != null && softwareVersion != null && os != null && details != null)
+			var summary = Request.Form["report-summary"];
+			var softwareVersion = Request.Form["software-version"];
+			var device = Request.Form["device"];
+			var os = Request.Form["os"];
+			var details = Request.Form["details"];
+            
+			if (!summary.IsNullOrEmpty() && !softwareVersion.IsNullOrEmpty() && !os.IsNullOrEmpty() && !details.IsNullOrEmpty())
             {
-                // add bug report to database and redirect to the updated project dashboard
-				await dbCx.AddReport(projectId, userId, summary, softwareVersion.AsDecimal(), device, os, details);
-				return RedirectToAction("Project", "Account", new { projectId });
+                // add bug report to database
+                string userId = GetUserId();
+                DatabaseContext dbCx = GetDbCx();
+                await dbCx.AddReport(projectId, userId, summary, softwareVersion.ToString().AsDecimal(), device, os, details);
+
+                // redirect to the updated project dashboard
+                return RedirectToAction("Project", "Account", new { projectId });
 			}
-			else if (dbCx == null)
-			{
-				throw new Exception("Could not access database services.");
-			}
-			else
-			{
-				throw new Exception("Invalid database action with null values.");
-			}
-		}
+
+            throw new Exception("Invalid database action with null values: Required bug information not found.");
+        }
 
 		/// <summary>
 		/// Method<c>AddAssignment</c> handles the assignment of the selected developer to a bug report.
 		/// </summary>
+		/// <param name="reportId">The ID of the bug report to assign the developer to.</param>
 		/// <returns>The action result of the updated bug report.</returns>
 		[HttpPost]
-		public async Task<IActionResult> AddAssignment()
+		public async Task<IActionResult> AddAssignment(string reportId)
 		{
-			// get form input
-			string reportId = Request.Form["report-id"];
-			string? userId = Request.Form["developer-select"];
+			// update report status
+			var developerId = Request.Form["developer-select"];
+			DatabaseContext dbCx = GetDbCx();
+			await dbCx.AddAssignment(reportId, developerId);
 
-            DatabaseContext? dbCx = GetDbCx();
-
-            if (dbCx != null && reportId != null && userId != null)
-            {
-				// update report status and redirect to the updated bug report
-				await dbCx.AddAssignment(reportId, userId);
-				return RedirectToAction("BugReport", "Account", new { reportId });
-			}
-			else if (dbCx == null)
-			{
-				throw new Exception("Could not access database services.");
-			}
-			else
-			{
-				throw new Exception("Invalid database action with null values.");
-			}
+			// redirect to the updated bug report
+			return RedirectToAction("BugReport", "Account", new { reportId });
 		}
 
 		/// <summary>
 		/// Method<c>DeleteAssignment</c> handles the deletion of an assignment of the selected developer to a bug report.
 		/// </summary>
+		/// <param name="reportId">The ID of the bug report to remove the assignment of.</param>
+		/// <param name="developerId">The ID of the developer to delete the assignment of.</param>
 		/// <returns>The action result of the updated bug report.</returns>
 		[HttpPost]
-		public async Task<IActionResult> DeleteAssignment()
+		public async Task<IActionResult> DeleteAssignment(string reportId, string developerId)
 		{
-			// get form input
-			string reportId = Request.Form["report-id"];
-			string developerId = Request.Form["developer-id"];
-
-			DatabaseContext? dbCx = GetDbCx();
-
-            if (dbCx != null && reportId != null && developerId != null)
-            {
-				// update report status and redirect to the updated bug report
-				await dbCx.DeleteAssignment(reportId, developerId);
-				return RedirectToAction("BugReport", "Account", new { reportId });
-			}
-			else if (dbCx == null)
-			{
-				throw new Exception("Could not access database services.");
-			}
-			else
-			{
-				throw new Exception("Invalid database action with null values.");
-			}
+			// update report status and redirect to the updated bug report
+			DatabaseContext dbCx = GetDbCx();			
+			await dbCx.DeleteAssignment(reportId, developerId);
+			return RedirectToAction("BugReport", "Account", new { reportId });
 		}
 
 		/// <summary>
 		/// Method<c>UpdateBugTag</c> handles bug report tag updating.
+		/// Throws an exception if the tag is not found.
 		/// </summary>
-		/// <param name="tagType">The tag(column) of the bug report to update (status, priority, or severity)</param>
+		/// <param name="reportId">The ID of the report to update the tag of.</param>
+		/// <param name="tagType">The tag(column) of the bug report to update (status, priority, or severity).</param>
 		/// <returns>The action result of the updated bug report.</returns>
 		[HttpPost]
-		public async Task<IActionResult> UpdateBugTag(string tagType)
+		public async Task<IActionResult> UpdateBugTag(string reportId, string tagType)
         {
-			// get form input
-			string reportId = Request.Form["report-id"];
             string selectedStatus = Request.Form[$"{tagType}-select"];
 
-            DatabaseContext? dbCx = GetDbCx();
-
-            if (dbCx != null && reportId != null && selectedStatus != null) {
+            if (!selectedStatus.IsNullOrEmpty()) {
 				// update report tag and redirect to updated bug report
+				DatabaseContext dbCx = GetDbCx();
 				await dbCx.UpdateBugTag(reportId, tagType, selectedStatus);
 				return RedirectToAction("BugReport", "Account", new { reportId });
 
 			}
-			else if (dbCx == null)
-			{
-				throw new Exception("Could not access database services.");
-			}
-			else
-			{
-				throw new Exception("Invalid database action with null values.");
-			}
+
+			throw new Exception("Invalid database action with null values: Specified tag not found.");
 		}
 
 		/// <summary>
 		/// Method <c>Comment</c> handles commenting on bug reports.
+		/// Throws an exception if the comment is not found.
 		/// </summary>
+		/// <param name="reportId">The ID of the report to add a comment to.</param>
 		/// <returns>The action result of the updated bug report.</returns>
 		[HttpPost]
-		public async Task<IActionResult> Comment()
+		public async Task<IActionResult> Comment(string reportId)
 		{
-			// get form input
-			string reportId = Request.Form["report-id"];
 			string comment = Request.Form["user-comment"];
 
-			string? userId = GetUserId();
-			DatabaseContext? dbCx = GetDbCx();
-
-			if (dbCx != null && reportId != null && userId != null && comment != null)
+			if (!comment.IsNullOrEmpty())
 			{
-				// update report tag and redirect to the updated bug report
+				// update report tag
+				DatabaseContext dbCx = GetDbCx();
+				string userId = GetUserId();
 				await dbCx.AddComment(reportId, userId, comment);
+
+				// redirect to the updated bug report
 				return RedirectToAction("BugReport", "Account", new { reportId });
 
 			}
-			else if (dbCx == null)
-			{
-				throw new Exception("Could not access database services.");
-			}
-			else
-			{
-				throw new Exception("Invalid database action with null values.");
-			}
+
+			throw new Exception("Invalid database action with null values: No comment found.");
 		}
 
+		/// <summary>
+		/// Method <c>Upvote</c> adds an upvote to a bug report.
+		/// </summary>
+		/// <param name="reportId">The ID of the report to add an upvote to.</param>
+		/// <returns>The action result of the updated report's page.</returns>
 		[HttpPost]
-		public async Task<IActionResult> Upvote()
+		public async Task<IActionResult> Upvote(string reportId)
 		{
-			// get form input
-			string reportId = Request.Form["report-id"];
+			// upvote bug report
+			DatabaseContext dbCx = GetDbCx();
+			string userId = GetUserId();
+			await dbCx.AddUpvote(reportId, userId);
 
-			string? userId = GetUserId();
-			DatabaseContext? dbCx = GetDbCx();
-
-			if ( dbCx != null && reportId != null && userId != null)
-			{
-				// upvote bug report and redirect to updated bug report page
-				await dbCx.AddUpvote(reportId, userId);
-				return RedirectToAction("BugReport", "Account", new { reportId });
-			}
-			else if (dbCx == null)
-			{
-				throw new Exception("Could not access database services.");
-			}
-			else
-			{
-				throw new Exception("Invalid database action with null values.");
-			}
+			// redirect to updated bug report page
+			return RedirectToAction("BugReport", "Account", new { reportId });
 		}
 
+		/// <summary>
+		/// Method <c>Upvote</c> removes an upvote from a bug report.
+		/// </summary>
+		/// <param name="reportId">The ID of the report to remove an upvote from.</param>
+		/// <returns>The action result of the updated report's page.</returns>
 		[HttpPost]
-
-		public async Task<IActionResult> RemoveUpvote()
+		public async Task<IActionResult> RemoveUpvote(string reportId)
 		{
-			// get form input
-			string reportId = Request.Form["report-id"];
+			// un-upvote bug report
+			DatabaseContext dbCx = GetDbCx();
+			string userId = GetUserId();
+			await dbCx.DeleteUpvote(reportId, userId);
 
-			string? userId = GetUserId();
-			DatabaseContext? dbCx = GetDbCx();
-
-			if (dbCx != null && reportId != null && userId != null)
-			{
-				// un-upvote bug report and redirect to updated bug report page
-				await dbCx.DeleteUpvote(reportId, userId);
-				return RedirectToAction("BugReport", "Account", new { reportId });
-			}
-			else if (dbCx == null)
-			{
-				throw new Exception("Could not access database services.");
-			}
-			else
-			{
-				throw new Exception("Invalid database action with null values.");
-			}
+			// redirect to updated bug report page
+			return RedirectToAction("BugReport", "Account", new { reportId });
 		}
 
+		/// <summary>
+		/// Method <c>UpdateHelpWanted</c> updates the help wanted status of a bug report.
+		/// </summary>
+		/// <param name="reportId">The ID of the report to update the help wanted status of.</param>
+		/// <returns>The action result of the updated bug report's page.</returns>
 		[HttpPost]
-		public async Task<IActionResult> UpdateHelpWanted()
+		public async Task<IActionResult> UpdateHelpWanted(string reportId)
 		{
-			// get form input
-			string reportId = Request.Form["report-id"];
 			bool helpWanted = Request.Form["help-wanted"] == "on";
 
-			DatabaseContext? dbCx = GetDbCx();
+			// add help wanted label to bug report
+			DatabaseContext dbCx = GetDbCx();
 
-			if (dbCx != null && reportId != null)
+			if (helpWanted)
 			{
-				// add help wanted label to bug report and redirect to updated bug report page
-				if (helpWanted)
-				{
-					await dbCx.AddHelpWanted(reportId);
-				}
-				else
-				{
-					await dbCx.RemoveHelpWanted(reportId);
-				}
-				
-				return RedirectToAction("BugReport", "Account", new { reportId });
-			}
-			else if (dbCx == null)
-			{
-				throw new Exception("Could not access database services.");
+				await dbCx.AddHelpWanted(reportId);
 			}
 			else
 			{
-				throw new Exception("Invalid database action with null values.");
+				await dbCx.RemoveHelpWanted(reportId);
 			}
+
+			// redirect to updated bug report page
+			return RedirectToAction("BugReport", "Account", new { reportId });
 		}
 
 		/// <summary>
@@ -411,29 +314,21 @@ namespace BugTracker.Controllers
 		/// <param name="fileInput">The uploaded image.</param>
 		private async Task UpdateAvatar(string userId, IFormFile fileInput)
 		{
-            DatabaseContext? dbCx = GetDbCx();
+            // check file size
+            long fileSize = fileInput.Length;
+            double fileFizeKB = fileSize / (1024.0);
 
-            if (dbCx != null)
-			{
-				// check file size
-				long fileSize = fileInput.Length;
-				double fileFizeKB = fileSize / (1024.0);
+            if (fileSize > 0 && fileFizeKB < 64)
+            {
+                // convert input into byte array
+                using var memoryStream = new MemoryStream();
+                await fileInput.CopyToAsync(memoryStream);
+                byte[] fileData = memoryStream.ToArray();
 
-				if (fileSize > 0 && fileFizeKB < 64)
-				{
-					// convert input into byte array
-					using var memoryStream = new MemoryStream();
-					await fileInput.CopyToAsync(memoryStream);
-					byte[] fileData = memoryStream.ToArray();
-
-					// add data to database
-					await dbCx.SetAvatar(userId, fileData);
-				}
-			}
-			else
-			{
-				throw new Exception("Could not access database services.");
-			}
+                // add data to database
+                DatabaseContext dbCx = GetDbCx();
+                await dbCx.SetAvatar(userId, fileData);
+            }
 		}
 
         /// <summary>
@@ -443,68 +338,45 @@ namespace BugTracker.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateProfile()
         {
-            // get input from form
-            string username = Request.Form["username"];
-			string status = Request.Form["user-status-select"];
-            IFormFile? fileInput = HttpContext.Request.Form.Files["image-file"];
+            var username = Request.Form["username-input"];
+			var status = Request.Form["user-status-select"];
+			IFormFile? fileInput = HttpContext.Request.Form.Files["image-file-upload"];
 
-            string? userId = GetUserId();
-            DatabaseContext? dbCx = GetDbCx();
-            UserManagementContext? usrCx = GetUserManagementCx();
+            string userId = GetUserId();
+            DatabaseContext dbCx = GetDbCx();
+            UserManagementContext usrCx = GetUserManagementCx();
 
-            if (dbCx != null && usrCx != null && userId != null)
-			{
-				// update username in database
-				await usrCx.UpdateUsername(userId, username);
+            // update username in database
+            await usrCx.UpdateUsername(userId, username);
 
-				// update user status in database
-				await dbCx.SetUserStatus(userId, status);
+            // update user status in database
+            await dbCx.SetUserStatus(userId, status);
 
-				// request avatar update
-				if (fileInput != null)
-				{
-					await UpdateAvatar(userId, fileInput);
-				}
+            // update user avatar in database
+            if (fileInput != null)
+            {
+                await UpdateAvatar(userId, fileInput);
+            }
 
-				// direct to updated profile page
-				return RedirectToAction("Profile", "Account");
-			}
-			else if (usrCx == null)
-			{
-				throw new Exception("Could not access database services.");
-			}
-			else
-			{
-				throw new Exception("Invalid database action with null values.");
-			}
-		}
+            // redirect to updated profile page
+            return RedirectToAction("Profile", "Account");
+        }
 
         /// <summary>
-        /// Method <c>DeleteAccount</c> handles the deletion of the user account.
+        /// Method <c>DeleteAccount</c> handles the deletion of the current user's account.
         /// </summary>
         public async Task<IActionResult> DeleteAccount()
         {
-            string? userId = GetUserId();
-            UserManagementContext? usrCx = GetUserManagementCx();
-            DatabaseContext? dbCx = GetDbCx();
+            // delete account from databases
+            UserManagementContext usrCx = GetUserManagementCx();
+            DatabaseContext dbCx = GetDbCx();
 
-            if (usrCx != null && dbCx != null && userId != null)
-			{
-				// delete account from databases
-				await usrCx.DeleteUser(userId);
-				await dbCx.DeleteUser(userId);
+            string userId = GetUserId();
+            await usrCx.DeleteUser(userId);
+            await dbCx.DeleteUser(userId);
 
-				// log the user out
-				return RedirectToAction("LoggedOut", "Account");
-			}
-			else if (userId == null)
-			{
-				throw new Exception("Could not find current user ID.");
-			}
-			else
-			{
-				throw new Exception("Could not access database services.");
-			}
+            // log the user out
+            return RedirectToAction("LoggedOut", "Account");
         }
     }
 }

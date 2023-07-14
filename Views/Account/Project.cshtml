@@ -3,42 +3,59 @@
 <!-- project information -->
 <div class="row">
     <div class="col-auto">
-        <img src=@Model.Project.Avatar alt="" class="custom-avatar-size-3 rounded-circle" />
+        <img src=@Model.Project.Avatar class="avatar-size-100 rounded-circle" />
     </div>
     <div class="col-auto mt-5">
         <h2>@Model.Project.Name</h2>
     </div>
     <div class="col-auto ms-5 me-1">
-        <h3 class="txt-grey">New <sup class="text-dark">@Model.NewBugs</sup></h3>
+        <h3 class="text-grey">New <sup class="text-dark">@Model.NewBugs</sup></h3>
     </div>
     <div class="col-auto mx-1">
-        <h3 class="txt-grey">Pending <sup class="text-dark">@Model.PendingBugs</sup></h3>
+        <h3 class="text-grey">Pending <sup class="text-dark">@Model.PendingBugs</sup></h3>
     </div>
     <div class="col-auto mx-1">
-        <h3 class="txt-grey">Fixed <sup class="text-dark">@Model.FixedBugs</sup></h3>
+        <h3 class="text-grey">Fixed <sup class="text-dark">@Model.FixedBugs</sup></h3>
     </div>
     <div class="col-12">
-        <i class="txt-grey">Created at @Model.Project.Date</i>
+        <i class="text-grey">Created at @Model.Project.Date</i>
     </div>
 </div>
 
-<!-- bug report toolbar -->
 <div class="btn-toolbar my-3">
-    <button type="button" class="btn btn-primary" id="create-report-btn" data-bs-toggle="modal" data-bs-target="#create-report-dialog">Report a Bug</button>
-    <a asp-controller="Account" asp-action="Reports" asp-route-projectId=@Model.Project.ID class="mx-3">See Bug Reports > </a>
+
+    <!-- report bug button -->
+    <button type="button" class="btn btn-primary" id="create-report-btn" data-bs-toggle="modal" data-bs-target="#create-report-dialog">
+        Report a Bug
+    </button>
+
+    <!-- project bug reports link -->
+    <a asp-controller="Account" asp-action="Reports" asp-route-projectId=@Model.Project.ID class="mx-3 shift-obj-container text-decoration-none">
+        <div class="row">
+            <div class="col-auto">
+                See Bug Reports
+            </div>
+            <div class="col-auto ms-left-shift right-shift-obj">
+                >>>
+            </div>
+        </div>
+    </a>
+
 </div>
 
 <!-- bug report modal dialog -->
 <div class="modal fade" id="create-report-dialog" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="post" asp-controller="AccountActions" asp-action="ReportBug">
+
+            <form method="post" asp-controller="AccountActions" asp-action="ReportBug" asp-route-projectId=@Model.Project.ID>
+
                 <div class="modal-header">
                     <h5 class="modal-title">Report Bug</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
+
                 <div class="modal-body">
-                    <input type="hidden" name="project-id" value=@Model.Project.ID />
                     <label>Summary</label>
                     <textarea name="report-summary" rows="2" cols="50" placeholder="Enter a summary of the bug here" maxlength="150" required></textarea>
                     <br />
@@ -55,11 +72,14 @@
                     <textarea name="details" rows="5" cols="50" placeholder="Add details here" required></textarea>
                     <br />
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
+
             </form>
+
         </div>
     </div>
 </div>
@@ -72,30 +92,31 @@
         <div class="col-2 m-1">
             @if (developer.Avatar != null)
             {
-                <img src=@developer.Avatar alt="" class="custom-avatar-size-2 rounded-circle" />
+                <img src=@developer.Avatar class="avatar-size-50 rounded-circle" />
             }
             else
             {
-                <span class="material-symbols-outlined custom-avatar-size-3 rounded-circle">account_circle</span>
+                <span class="material-symbols-outlined avatar-size-50 rounded-circle">account_circle</span>
             }
             @developer.Name
         </div>
     }
 </div>
 
-<!-- developer-specific features -->
 @if (Model.IsDeveloper) 
 {
+
     <!-- collaborator addition -->
-    <form id="add-developer-form" method="post" class="mt-1" asp-controller="Account" asp-action="AddDeveloper">
-        <input type="hidden" name="project-id" value=@Model.Project.ID />
+    <form id="add-developer-form" method="post" class="mt-1"
+      asp-controller="AccountActions" asp-action="AddDeveloper" asp-route-projectId=@Model.Project.ID>
         <h5>Add Collaborators</h5>
         <select name="user-search" class="user-search half-screen-width" onchange="submitForm('add-developer-form')"></select>
     </form>
 
     <!-- project deletion -->
-    <form method="post" onSubmit="return confirm('This action is not cannot be undone. Are you sure you wish to proceed?');" class="mt-5" asp-controller="AccountActions" asp-action="DeleteProject">
-        <input type="hidden" name="project-id" value=@Model.Project.ID />
-        <button type="submit" class="custom-danger-btn">Delete Project</button>
+    <form method="post" class="mt-5" asp-controller="AccountActions" asp-action="DeleteProject" asp-route-projectId=@Model.Project.ID
+          onSubmit="return confirm('This action is not cannot be undone. Are you sure you wish to proceed?');">
+        <button type="submit" class="danger-btn-invert">Delete Project</button>
     </form>
+
 }

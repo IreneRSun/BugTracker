@@ -15,32 +15,39 @@ namespace BugTracker.Controllers
 	{
 		/// <summary>
 		/// Method <c>GetUserManagementCx</c> requests the service that manages users.
+		/// Throws an exception if none found.
 		/// </summary>
 		/// <returns>The context for managing users.</returns>
 		[Authorize]
-		protected UserManagementContext? GetUserManagementCx()
+		protected UserManagementContext GetUserManagementCx()
 		{
-			return HttpContext.RequestServices.GetService(typeof(UserManagementContext)) as UserManagementContext;
+			return HttpContext.RequestServices.GetService(typeof(UserManagementContext)) as UserManagementContext 
+				?? throw new Exception("Unable to access user management database service.");
         }
 
 		/// <summary>
 		/// Method <c>GetDbCx</c> requests the service that manages the database.
+		/// Throws an exception if none found.
 		/// </summary>
 		/// <returns>The context for managing the database.</returns>
 		[Authorize]
-		protected DatabaseContext? GetDbCx()
+		protected DatabaseContext GetDbCx()
 		{
-			return HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+			return HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext
+                ?? throw new Exception("Unable to access database service.");
         }
 
-		/// <summary>
-		/// Method <c>GetUserId</c> gets the ID of the current authenticated & authorized user.
+        /// <summary>
+		/// Method <c>GetUserId</c> gets the ID of the current authenticated and authorized user.
+		/// Throws and exception if unable to.
 		/// </summary>
 		/// <returns>The current user's ID.</returns>
-		[Authorize]
-		protected string? GetUserId()
+		/// <exception cref="Exception"></exception>
+        [Authorize]
+		protected string GetUserId()
 		{
-			return User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+			return User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value
+                ?? throw new Exception("Could not access user's id.");
 		}
-	}
+    }
 }
