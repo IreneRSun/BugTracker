@@ -3,18 +3,18 @@ html {
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }
 
 .block-strip {
@@ -92,6 +92,19 @@ body {
 
 .select2-container--default .select2-selection--single {
     min-height: 35px;
+}
+
+/** toggle using hidden checkbox */
+.toggle input {
+    display: none;
+}
+
+.upvote-arrow {
+    color: grey;
+}
+
+.toggle input:checked + .upvote-arrow {
+    color: black;
 }
 
 /** 

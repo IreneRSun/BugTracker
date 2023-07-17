@@ -248,34 +248,27 @@ namespace BugTracker.Controllers
 		}
 
 		/// <summary>
-		/// Method <c>Upvote</c> adds an upvote to a bug report.
+		/// Method <c>UpdateUpvotes</c> updates the upvotes of a bug report.
 		/// </summary>
-		/// <param name="reportId">The ID of the report to add an upvote to.</param>
+		/// <param name="reportId">The ID of the report to update the upvotes of.</param>
 		/// <returns>The action result of the updated report's page.</returns>
 		[HttpPost]
-		public async Task<IActionResult> Upvote(string reportId)
+		public async Task<IActionResult> UpdateUpvotes(string reportId)
 		{
-			// upvote bug report
+			bool upvoted = Request.Form["user-upvote"] == "on";
+
+			// update user upvotes of bug report
 			DatabaseContext dbCx = GetDbCx();
 			string userId = GetUserId();
-			await dbCx.AddUpvote(reportId, userId);
 
-			// redirect to updated bug report page
-			return RedirectToAction("BugReport", "Account", new { reportId });
-		}
-
-		/// <summary>
-		/// Method <c>Upvote</c> removes an upvote from a bug report.
-		/// </summary>
-		/// <param name="reportId">The ID of the report to remove an upvote from.</param>
-		/// <returns>The action result of the updated report's page.</returns>
-		[HttpPost]
-		public async Task<IActionResult> RemoveUpvote(string reportId)
-		{
-			// un-upvote bug report
-			DatabaseContext dbCx = GetDbCx();
-			string userId = GetUserId();
-			await dbCx.DeleteUpvote(reportId, userId);
+			if (upvoted)
+			{
+				await dbCx.AddUpvote(reportId, userId);
+			}
+			else
+			{
+				await dbCx.DeleteUpvote(reportId, userId);
+			}
 
 			// redirect to updated bug report page
 			return RedirectToAction("BugReport", "Account", new { reportId });
@@ -291,7 +284,7 @@ namespace BugTracker.Controllers
 		{
 			bool helpWanted = Request.Form["help-wanted"] == "on";
 
-			// add help wanted label to bug report
+			// update help wanted label of bug report
 			DatabaseContext dbCx = GetDbCx();
 
 			if (helpWanted)

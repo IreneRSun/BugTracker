@@ -1,45 +1,26 @@
 ﻿@model BugTracker.Models.ViewDataModels.BugReportViewModel
 
-<!-- bug report id information -->
+<!-- bug report header -->
 <div class="row">
-	<div class="col-auto">
+	<div class="col-1">
 		<h2><span class="material-symbols-outlined col-auto" style="color: @Model.BugReport.DisplayColor;">bug_report</span></h2>
 	</div>
-	<div class="col-auto">
-		<h2>ID #@Model.BugReport.ID</h2>
+	<div class="col-11">
+		<h2 class="text-grey">ID #@Model.BugReport.ID</h2>
 	</div>
 	<div class="col-12">
 		<i class="text-grey">Reported on @Model.BugReport.Date</i>
 	</div>
 </div>
 
-<!-- user upvoting -->
 <div class="row my-3">
-	<div class="col-auto">
-		@if (Model.UserUpvoted)
-		{
-			<form method="post" asp-controller="AccountActions" asp-action="RemoveUpvote" asp-route-reportId=@Model.BugReport.ID>
-				<button type="submit" class="bg-white border-0"><i class="fa fa-caret-up" style="color: black"></i></button>
-			</form>
-		}
-		else
-		{
-			<form method="post" asp-controller="AccountActions" asp-action="Upvote" asp-route-reportId=@Model.BugReport.ID>
-				<button type="submit" class="bg-white border-0"><i class="fa fa-caret-up" style="color: grey"></i></button>
-			</form>
-		}
-	</div>
-	<div class="col-auto">@Model.BugReport.Upvotes</div>
-</div>
-
-<!-- help wanted status actions -->
-@if (Model.IsDeveloper)
-{
-	<div class="row my-3">
-		<div class="col-auto">
+	@if (Model.IsDeveloper)
+	{
+		<!-- help wanted status actions -->
+		<div class="col-2">
 			<div class="rounded-pill p-1">Help Wanted</div>
 		</div>
-		<div class="col-auto">
+		<div class="col-4">
 			<form method="post" id="help-wanted-form" asp-controller="AccountActions" asp-action="UpdateHelpWanted" asp-route-reportId=@Model.BugReport.ID>
 				<label class="switch">
 					<input type="checkbox" name="help-wanted" checked=@Model.BugReport.HelpWanted onchange="submitForm('help-wanted-form')">
@@ -47,12 +28,26 @@
 				</label>
 			</form>
 		</div>
+
+	}
+	else if (Model.BugReport.HelpWanted)
+	{
+		<div class="col-6 rounded-pill bg-success text-light d-inline p-1">Help Wanted</div>
+	}
+
+	<!-- user upvoting -->
+	<div class="col-auto">
+		<form method="post" id="user-upvote-form" asp-controller="AccountActions" asp-action="UpdateUpvotes" asp-route-reportId=@Model.BugReport.ID>
+			<label class="toggle">
+				<input type="checkbox" name="user-upvote" checked=@Model.UserUpvoted onchange="submitForm('user-upvote-form')">
+				<span class="upvote-arrow"><i class="fa fa-caret-square-o-up"></i></span>
+			</label>
+		</form>
 	</div>
-}
-else if (Model.BugReport.HelpWanted)
-{
-	<div class="rounded-pill bg-success text-light d-inline p-1">Help Wanted</div>
-}
+	<div class="col-auto">
+		@Model.BugReport.Upvotes
+	</div>
+</div>
 
 <!-- bug report assignee information -->
 <h4 class="my-3">Assignees</h4>
@@ -65,11 +60,11 @@ else if (Model.BugReport.HelpWanted)
 					<div class="col-auto">
 						@if (developer.Avatar != null)
 						{
-							<img src="@developer.Avatar" alt="" class="custom-avatar-size-1 rounded-circle" />
+							<img src="@developer.Avatar" alt="" class="avatar-size-30 rounded-circle" />
 						}
 						else
 						{
-							<span class="material-symbols-outlined custom-avatar-size-1 rounded-circle">account_circle</span>
+							<span class="material-symbols-outlined avatar-size-30 rounded-circle">account_circle</span>
 						}
 					</div>
 					<div class="col-auto">
