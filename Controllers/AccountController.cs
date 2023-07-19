@@ -34,7 +34,7 @@ namespace BugTracker.Controllers
             List<ProjectModel> userProjectModels = await dbCx.GetProjects(userId);
 
             // return ViewResult
-            var viewModel = new DashboardViewModel(userModel, uid.IsNullOrEmpty(), userProjectModels);
+            var viewModel = new DashboardViewModel(userModel, userId == GetUserId(), userProjectModels);
             return View(viewModel);
 		}
 
@@ -57,7 +57,7 @@ namespace BugTracker.Controllers
             await dbCx.GetUserData(userModel);
 
 			// return ViewResult
-			var viewModel = new ProfileViewModel(userModel, uid.IsNullOrEmpty());
+			var viewModel = new ProfileViewModel(userModel, userId == GetUserId());
             return View(viewModel);
 		}
 

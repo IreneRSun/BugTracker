@@ -48,15 +48,15 @@ function formatProject(result) {
     }
 
     if (result.avatar) {
-        return $(`<div><img src="${result.avatar}" class="custom-avatar-size-1 rounded-circle" /> ${result.name} <br> ${result.date}</div>`);
+        return $(`<div><img src="${result.avatar}" class="avatar-size-30 rounded-circle" /> ${result.name} <br /> ${result.date}</div>`);
     } else {
         return $(`<div><i class="fa fa-search" aria-hidden="true"></i> Search for a project ...</div>`);
     }
 }
 
 function formatProjectSelection(result) {
-    if (result.id) {
-        return $(`<div><img src="${result.avatar}" class="custom-avatar-size-1 rounded-circle" /> ${result.name}</div>`) || result.text;
+    if (result.avatar) {
+        return $(`<div><img src="${result.avatar}" class="avatar-size-30 rounded-circle" /> ${result.name}</div>`) || result.text;
     } else {
         return $(`<div><i class="fa fa-search" aria-hidden="true"></i> Search for a project ...</div>`);
     }
@@ -69,9 +69,9 @@ function formatUser(result) {
     }
 
     if (result.avatar) {
-        return $(`<div><img src="${result.avatar}" class="custom-avatar-size-1 rounded-circle" /> ${result.name}</div>`);
+        return $(`<div><img src="${result.avatar}" class="avatar-size-30 rounded-circle" /> ${result.name}</div>`);
     } else if (result.name) {
-        return $(`<div><span class="custom-avatar-size-1 rounded-circle"><i class="fa fa-user-circle-o"></i></span> ${result.name}</div>`);
+        return $(`<div><span class="avatar-size-30 rounded-circle"><i class="fa fa-user-circle-o"></i></span> ${result.name}</div>`);
     } else {
         return $(`<div><i class="fa fa-user-plus" aria-hidden="true"></i> Search for a user ...</div>`);
     }
@@ -79,12 +79,26 @@ function formatUser(result) {
 
 function formatUserSelection(result) {
     if (result.avatar) {
-        return $(`<div><img src="${result.avatar}" class="custom-avatar-size-1 rounded-circle" /> ${result.name}</div>`) || result.text;
+        return $(`<div><img src="${result.avatar}" class="avatar-size-30 rounded-circle" /> ${result.name}</div>`) || result.text;
     } else if (result.name) {
-        return $(`<div><span class="custom-avatar-size-1 rounded-circle"><i class="fa fa-user-circle-o"></i></span> ${result.name}</div>`) || result.text;
+        return $(`<div><span class="avatar-size-30 rounded-circle"><i class="fa fa-user-circle-o"></i></span> ${result.name}</div>`) || result.text;
     } else {
         return $(`<div><i class="fa fa-user-plus" aria-hidden="true"></i> Search for a user ...</div>`);
     }
+}
+
+function formatUserFromData(result) {
+    if (result.loading) {
+        return result.text;
+    }
+
+    var data = $(result.element).data();
+    return formatUser(data);
+}
+
+function formatUserFromDataSelection(result) {
+    var data = $(result.element).data();
+    return formatUserSelection(data);
 }
 
 // Actions when document is ready
@@ -179,5 +193,8 @@ $(document).ready(function () {
     });
 
     // Handle developer select
-    $(".developer-select").select2();
+    $(".developer-select").select2({
+        templateResult: formatUserFromData,
+        templateSelection: formatUserFromDataSelection
+    });
 });

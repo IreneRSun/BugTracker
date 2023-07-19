@@ -90,15 +90,18 @@
     @foreach (var developer in Model.Developers)
     {
         <div class="col-2 m-1">
-            @if (developer.Avatar != null)
+            @if (developer.ID != null)
             {
-                <img src=@developer.Avatar class="avatar-size-50 rounded-circle" />
+                <a asp-controller="Account" asp-action="Profile" asp-route-uid=@developer.ID class="text-decoration-none">
+                    <img src=@developer.Avatar class="avatar-size-50 rounded-circle" />
+                    @developer.Name
+                </a>
             }
             else
             {
                 <span class="material-symbols-outlined avatar-size-50 rounded-circle">account_circle</span>
+                @developer.Name
             }
-            @developer.Name
         </div>
     }
 </div>

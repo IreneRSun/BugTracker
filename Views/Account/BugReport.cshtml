@@ -58,13 +58,17 @@
 			<form method="post" asp-controller="AccountActions" asp-action="DeleteAssignment" asp-route-reportId=@Model.BugReport.ID asp-route-developerId=@developer.ID>
 				<div class="row">
 					<div class="col-auto">
-						@if (developer.Avatar != null)
+						@if (developer.ID != null)
 						{
-							<img src="@developer.Avatar" alt="" class="avatar-size-30 rounded-circle" />
+							<a asp-controller="Account" asp-action="Profile" asp-route-uid=@developer.ID class="text-decoration-none">
+								<img src="@developer.Avatar" alt="" class="avatar-size-30 rounded-circle" />
+								@developer.Name
+							</a>
 						}
 						else
 						{
 							<span class="material-symbols-outlined avatar-size-30 rounded-circle">account_circle</span>
+							@developer.Name
 						}
 					</div>
 					<div class="col-auto">
@@ -98,23 +102,7 @@
 				{
 					@if (developer.Status != "Busy")
 					{
-						<option value=@developer.ID>
-							<div class="row">
-								<div class="col-auto">
-									@if (developer.Avatar != null)
-									{
-										<img src=@developer.Avatar alt="" class="avatar-size-30 rounded-circle" />
-									}
-									else
-									{
-										<span class="material-symbols-outlined avatar-size-30 rounded-circle">account_circle</span>
-									}
-								</div>
-								<div class="col-auto">
-									@developer.Name
-								</div>
-							</div>
-						</option>
+						<option value=@developer.ID data-avatar=@developer.Avatar data-name=@developer.Name>@developer.Name</option>
 					}
 				}
 			</select>
@@ -212,9 +200,12 @@
 		<li>
 			<div class="row">
 				<div class="col-auto">
-					@if (@comment.Commenter != null && comment.Commenter.Avatar != null)
+					@if (@comment.Commenter != null && comment.Commenter.ID != null)
 					{
-						<img src=@comment.Commenter.Avatar alt="" class="avatar-size-30 rounded-circle" />
+						<a asp-controller="Account" asp-action="Profile" asp-route-uid=@comment.Commenter.ID class="text-decoration-none">
+							<img src=@comment.Commenter.Avatar alt="" class="avatar-size-30 rounded-circle" />
+							@comment.Commenter.Name
+						</a>
 					}
 					else
 					{
