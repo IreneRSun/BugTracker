@@ -1,17 +1,32 @@
 ﻿@{
     ViewData["Title"] = "Contact Us";
 }
-<h1>@ViewData["Title"]</h1>
 
-<h3>
-    For issues or inquiries, please contact us using the information below. <br />
-    If you are experiencing functional issues with this bug tracker application, 
-    please report the bug on this app's project page for more timely assistance. <br />
-    We will get back to you as soon as possible.
-</h3>
+<div class="text-center text-gradient tg-grad-digital-blue">
+    <!-- question icon -->
+    <div class="display-1">
+        <i class="fa fa-question-circle text-gradient tg-grad-digital-blue" aria-hidden="true"></i>
+    </div>
 
-<label for="email"><i>Email</i></label>
-<p id="email">irene.rsun@gmail.com</p>
+    <!-- title -->
+    <h1>@ViewData["Title"]</h1>
 
-<label for="github"><i>GitHub</i></label>
-<p id="github">IreneRSun</p>
+    <!-- note regarding inquiries -->
+    <div class="my-3 lead">
+        For issues or inquiries, please contact us using the information below. <br />
+        If you are experiencing functional issues with this bug tracker application,
+        please report the bug on this app's project page for more timely assistance. <br />
+        We will get back to you as soon as possible.
+    </div>
+
+    <!-- contact info -->
+    <div class="my-3 display-6">
+
+        <label for="email"> <i>Email</i> <i class="fa fa-envelope-o" aria-hidden="true"></i> </label>
+        <p id="email">irene.rsun@gmail.com</p>
+
+        <label for="github"> <i>GitHub</i> <i class="fa fa-github" aria-hidden="true"></i> </label>
+        <p id="github">IreneRSun</p>
+
+    </div>
+</div>
