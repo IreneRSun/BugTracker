@@ -50,7 +50,7 @@ function formatProject(result) {
     if (result.avatar) {
         return $(`<div><img src="${result.avatar}" class="avatar-size-30 rounded-circle" /> ${result.name} <br /> ${result.date}</div>`);
     } else {
-        return $(`<div><i class="fa fa-search" aria-hidden="true"></i> Search for a project ...</div>`);
+        return $(`<div class="mt-1"><i class="fa fa-search" aria-hidden="true"></i> Search for a project ...</div>`);
     }
 }
 
@@ -58,7 +58,7 @@ function formatProjectSelection(result) {
     if (result.avatar) {
         return $(`<div><img src="${result.avatar}" class="avatar-size-30 rounded-circle" /> ${result.name}</div>`) || result.text;
     } else {
-        return $(`<div><i class="fa fa-search" aria-hidden="true"></i> Search for a project ...</div>`);
+        return $(`<div class="mt-1"><i class="fa fa-search" aria-hidden="true"></i> Search for a project ...</div>`);
     }
 }
 
@@ -73,7 +73,7 @@ function formatUser(result) {
     } else if (result.name) {
         return $(`<div><span class="avatar-size-30 rounded-circle"><i class="fa fa-user-circle-o"></i></span> ${result.name}</div>`);
     } else {
-        return $(`<div><i class="fa fa-user-plus" aria-hidden="true"></i> Search for a user ...</div>`);
+        return $(`<div class="mt-1"><i class="fa fa-user-plus" aria-hidden="true"></i> Search for a user ...</div>`);
     }
 }
 
@@ -83,7 +83,7 @@ function formatUserSelection(result) {
     } else if (result.name) {
         return $(`<div><span class="avatar-size-30 rounded-circle"><i class="fa fa-user-circle-o"></i></span> ${result.name}</div>`) || result.text;
     } else {
-        return $(`<div><i class="fa fa-user-plus" aria-hidden="true"></i> Search for a user ...</div>`);
+        return $(`<div class="mt-1"><i class="fa fa-user-plus" aria-hidden="true"></i> Search for a user ...</div>`);
     }
 }
 

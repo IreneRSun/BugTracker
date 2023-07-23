@@ -59,10 +59,6 @@
             "RestSharp": {
               "target": "Package",
               "version": "[110.2.0, )"
-            },
-            "toastr": {
-              "target": "Package",
-              "version": "[2.1.1, )"
             }
           },
           "imports": [

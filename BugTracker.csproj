@@ -12,7 +12,6 @@
     <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.9" />
     <PackageReference Include="MySql.Data" Version="8.0.33" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
-    <PackageReference Include="toastr" Version="2.1.1" />
   </ItemGroup>
 
 </Project>

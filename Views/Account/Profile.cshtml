@@ -12,7 +12,7 @@
         {
             <div class="col-auto mt-5 ms-3">
                 <div class="row">
-                    <input type="file" id="image-file-upload" name="image-file" onchange="previewImage()" />
+                    <input type="file" id="image-file-upload" name="image-file" onchange="previewImage()" class="bg-light text-dark" />
                 </div>
                 <div class="row">
                     <label id="file-size-warning" class="d-none text-danger">File size too large. Select a file smaller than 64KB.</label>
@@ -23,28 +23,28 @@
 
     <!-- email -->
     <div class="row mt-4 ms-2 mb-4">
-        <h5>Email</h5>
-        <label name="email">@Model.User.Email</label>
+        <h5 class="text-dark">Email</h5>
+        <label name="email" class="text-dark">@Model.User.Email</label>
     </div>
     
     <div class="row my-3 ms-2">
 
         <!-- username edit -->
         <div class="col-auto">
-            <h5>Username</h5>
+            <h5 class="text-dark">Username</h5>
             @if (Model.IsCurrentUser)
             {
-                <input type="text" name="username-input" value=@Model.User.Name />
+                <input type="text" name="username-input" value=@Model.User.Name class="bg-light text-dark rounded-3" />
             }
             else
             {
-                <label name="username">@Model.User.Name</label>
+                <label name="username" class="text-dark">@Model.User.Name</label>
             }
         </div>
 
         <!-- status edit -->
         <div class="col-auto ms-2">
-            <h5>Status</h5>
+            <h5 class="text-dark">Status</h5>
             @if (Model.IsCurrentUser)
             {
                 <select name="user-status-select">
@@ -55,7 +55,7 @@
             }
             else
             {
-                <label name="user-status">@Model.User.Status</label>
+                <label name="user-status" class="text-dark">@Model.User.Status</label>
             }
         </div>
 
@@ -64,7 +64,7 @@
     @if (Model.IsCurrentUser)
     {
         <!-- update profile button -->
-        <button type="submit" class="border-light rounded-pill mt-3 ms-3">
+        <button type="submit" class="border-light bg-light text-dark rounded-pill mt-3 ms-3">
             <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Save
         </button>
     }
@@ -82,13 +82,13 @@
 else
 {
     <!-- user dashboard link -->
-    <a asp-controller="Account" asp-action="Dashboard" asp-route-uid=@Model.User.ID class="mx-3 shift-obj-container text-decoration-none">
+    <a asp-controller="Account" asp-action="Dashboard" asp-route-uid=@Model.User.ID class="mx-3 shift-obj-container text-decoration-none text-dark">
         <div class="row">
             <div class="col-auto">
                 See User Dashboard
             </div>
             <div class="col-auto ms-left-shift right-shift-obj">
-                >>>
+                &#8618;
             </div>
         </div>
     </a>

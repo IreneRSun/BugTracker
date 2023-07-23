@@ -6,7 +6,7 @@
         <img src=@Model.Project.Avatar class="avatar-size-100 rounded-circle" />
     </div>
     <div class="col-auto mt-5">
-        <h2>@Model.Project.Name</h2>
+        <h2 class="text-gradient tg-dull-gold">@Model.Project.Name</h2>
     </div>
     <div class="col-auto ms-5 me-1">
         <h3 class="text-grey">New <sup class="text-dark">@Model.NewBugs</sup></h3>
@@ -25,18 +25,19 @@
 <div class="btn-toolbar my-3">
 
     <!-- report bug button -->
-    <button type="button" class="btn btn-primary" id="create-report-btn" data-bs-toggle="modal" data-bs-target="#create-report-dialog">
+    <button type="button" class="btn btn-primary bg-grad-standard-blue" id="create-report-btn" data-bs-toggle="modal" data-bs-target="#create-report-dialog">
         Report a Bug
     </button>
 
     <!-- project bug reports link -->
-    <a asp-controller="Account" asp-action="Reports" asp-route-projectId=@Model.Project.ID class="mx-3 shift-obj-container text-decoration-none">
+    <a asp-controller="Account" asp-action="Reports" asp-route-projectId=@Model.Project.ID
+       class="mx-5 mt-1 shift-obj-container text-decoration-none text-dark fs-5 fw-500">
         <div class="row">
             <div class="col-auto">
                 See Bug Reports
             </div>
             <div class="col-auto ms-left-shift right-shift-obj">
-                >>>
+                &#8618;
             </div>
         </div>
     </a>
@@ -46,36 +47,37 @@
 <!-- bug report modal dialog -->
 <div class="modal fade" id="create-report-dialog" tabindex="-1">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content bg-light text-dark">
 
             <form method="post" asp-controller="AccountActions" asp-action="ReportBug" asp-route-projectId=@Model.Project.ID>
 
                 <div class="modal-header">
                     <h5 class="modal-title">Report Bug</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
                 <div class="modal-body">
-                    <label>Summary</label>
-                    <textarea name="report-summary" rows="2" cols="50" placeholder="Enter a summary of the bug here" maxlength="150" required></textarea>
+                    <label for="report-summary">Summary</label>
+                    <textarea id="report-summary" name="report-summary" rows="2" cols="50"
+                              placeholder="Enter a summary of the bug here ..." maxlength="150" required></textarea>
                     <br />
-                    <label>Software Version</label>
-                    <input type="number" name="software-version" min="1" step="0.001" required />
+                    <label for="software-version" class="my-2 width-90">Software Version</label>
+                    <input type="number" id="software-version" name="software-version" min="1" step="0.001"
+                           placeholder="1.0" required />
                     <br />
-                    <label>Device</label>
-                    <input type="text" name="device" placeholder="Enter your device type" maxlength="50" />
+                    <label for="device" class="my-2 width-90">Device</label>
+                    <input type="text" id="device" name="device" placeholder="Enter your device type ..." maxlength="50" />
                     <br />
-                    <label>Operating System</label>
-                    <input type="text" name="os" placeholder="Enter you operating system" maxlength="50" required />
+                    <label for="os" class="my-2 width-90">Operating System</label>
+                    <input type="text" id="os" name="os" placeholder="Enter you operating system ..." maxlength="50" required />
                     <br />
-                    <label>Details</label>
-                    <textarea name="details" rows="5" cols="50" placeholder="Add details here" required></textarea>
+                    <label for="details" class="my-2 width-90">Details</label>
+                    <textarea id="details" name="details" rows="5" cols="50" placeholder="Add details here ..." required></textarea>
                     <br />
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-secondary bg-grad-grey" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary bg-grad-standard-blue">Submit</button>
                 </div>
 
             </form>
@@ -85,14 +87,14 @@
 </div>
 
 <!-- collaborators list -->
-<h4 class="mt-3">Developers</h4>
+<h4 class="mt-5 text-dark">Developers</h4>
 <div class="row">
     @foreach (var developer in Model.Developers)
     {
-        <div class="col-2 m-1">
+        <div class="col-2 m-1 text-dark">
             @if (developer.ID != null)
             {
-                <a asp-controller="Account" asp-action="Profile" asp-route-uid=@developer.ID class="text-decoration-none">
+                <a asp-controller="Account" asp-action="Profile" asp-route-uid=@developer.ID class="text-decoration-none userlink-dark">
                     <img src=@developer.Avatar class="avatar-size-50 rounded-circle" />
                     @developer.Name
                 </a>
@@ -112,7 +114,7 @@
     <!-- collaborator addition -->
     <form id="add-developer-form" method="post" class="mt-1"
       asp-controller="AccountActions" asp-action="AddDeveloper" asp-route-projectId=@Model.Project.ID>
-        <h5>Add Collaborators</h5>
+        <h5 class="text-dark">Add Collaborators</h5>
         <select name="user-search" class="user-search half-screen-width" onchange="submitForm('add-developer-form')"></select>
     </form>
 

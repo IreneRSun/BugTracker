@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
 html {
     font-size: 14px;
 }
@@ -15,6 +17,7 @@ html {
 
 body {
     margin-bottom: 60px;
+    font-family: 'Montserrat', sans-serif !important;
 }
 
 .block-strip {
@@ -24,33 +27,38 @@ body {
 }
 
 .bg-grad-dusk-rose {
-    background: linear-gradient(to right, rgba(237,207,207,1), rgba(255,255,255,1), rgba(122,130,123,1));
+    background: linear-gradient(to right, rgb(237,207,207), rgb(255,255,255), rgb(122,130,123));
 }
 
 .bg-grad-sunset {
-    background: linear-gradient(to right, rgba(63,94,251,1), rgba(252,70,107,1));
+    background: linear-gradient(to right, rgb(63,94,251), rgb(252,70,107));
 }
 
-.bg-grad-silver {
-    background: linear-gradient(to right, rgba(255,255,255,1), rgba(211,211,211,1));
+.bg-grad-dull-gold {
+    background: linear-gradient(to bottom, rgb(77,95,95), rgb(255,224,160));
 }
 
-.tg-grad-dull-gold {
-    background: linear-gradient(90deg, rgba(77,95,95,1), rgba(255,224,160,1));
-    color: darkgoldenrod;
+.bg-grad-standard-blue {
+    background: linear-gradient(to right, rgb(34,0,188), rgb(74,177,255));
 }
 
-.bg-grad-vermillion-peach {
-    background: linear-gradient(90deg, rgba(201,75,75,1), rgba(255,224,160,1));
+.bg-grad-grey {
+    background: linear-gradient(to right, rgb(101,101,101), rgb(186,186,186));
 }
 
-.tg-grad-digital-blue {
-    background: linear-gradient(90deg, rgba(111,136,255,1), rgba(64,243,210,1));
-    color: deepskyblue;
+.tg-digital-blue {
+    background: linear-gradient(to right, rgb(111,136,255), rgb(64,243,210));
+    color: rgb(88,190,233);
 }
 
-.bg-grad-green-yellow {
-    background: linear-gradient(90deg, rgba(22,157,131,1), rgba(255,245,19,1));
+.tg-cool-blue {
+    background: linear-gradient(to right, rgb(0,73,113), rgb(99,144,168));
+    color: rgb(26,96,134);
+}
+
+.tg-dull-gold {
+    background: linear-gradient(to right, rgb(77,95,95), rgb(255,224,160));
+    color: rgb(166,159,128);
 }
 
 .brd-white {
@@ -58,7 +66,7 @@ body {
 }
 
 .shadow-grey {
-    box-shadow: 0px 0px 10px gray;
+    box-shadow: 0px 0px 10px grey;
 }
 
 .text-grey {
@@ -68,6 +76,10 @@ body {
 .text-gradient {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+.fw-500 {
+    font-weight: 500;
 }
 
 .hover-push:hover {
@@ -105,6 +117,20 @@ body {
     font-size: 100px !important;
 }
 
+.userlink-light {
+    --bs-text-opacity: 1;
+    color: rgba(var(--bs-light-rgb), var(--bs-text-opacity)) !important;
+}
+
+.userlink-dark {
+    --bs-text-opacity: 1;
+    color: rgba(var(--bs-dark-rgb), var(--bs-text-opacity)) !important;
+}
+
+[class*="userlink"]:hover {
+    color: #0a58ca !important;
+}
+
 .rounded-30 {
     border-radius: 30%;
 }
@@ -113,8 +139,16 @@ body {
     width: 50vw;
 }
 
+.width-90 {
+    width: 90%;
+}
+
 .ms-left-shift {
     margin-left: -1rem;
+}
+
+.mt-upward-shift {
+    margin-top: -0.6rem;
 }
 
 .mt-40 {

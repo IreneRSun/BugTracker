@@ -10,15 +10,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
-    <link href="toastr.css" rel="stylesheet" />
 </head>
 
-<body>
+<body class="bg-light">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="https://api.dicebear.com/6.x/icons/svg?icon=bug&backgroundType=gradientLinear&backgroundColor=b6e3f4,c0aede" class="custom-avatar-size-2 rounded-2 shadow-grey" />
+                    <img src="https://api.dicebear.com/6.x/icons/svg?icon=bug&backgroundType=gradientLinear&backgroundColor=b6e3f4,c0aede" class="avatar-size-50 rounded-2 shadow-grey" />
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -29,39 +28,53 @@
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item mx-2">
-                                <a class="nav-link txt-grey" asp-area="" asp-controller="Account" asp-action="Dashboard">My Dashboard</a>
+                                <a class="nav-link fw-500" asp-area="" asp-controller="Account" asp-action="Dashboard">
+                                    My Dashboard
+                                </a>
                             </li>
                             <li class="nav-item mx-2">
-                                <a class="nav-link txt-grey" asp-area="" asp-controller="Account" asp-action="Profile">My Profile</a>
+                                <a class="nav-link fw-500" asp-area="" asp-controller="Account" asp-action="Profile">
+                                    My Profile
+                                </a>
                             </li>
                             <li class="nav-item mx-2">
-                                <a class="nav-link txt-grey" asp-area="" asp-controller="Account" asp-action="Tasks">My Tasks</a>
+                                <a class="nav-link fw-500" asp-area="" asp-controller="Account" asp-action="Tasks">
+                                    My Tasks
+                                </a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link text-dark rounded-pill px-4 brd-white shadow-grey"
+                                <a class="nav-link text-black fw-500 rounded-pill px-4 brd-white shadow-grey"
                                asp-area="" asp-controller="Login" asp-action="Logout">
-                                    <strong>Logout</strong>
+                                    Logout
                                 </a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item mx-3">
-                                <a class="nav-link txt-grey" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                <a class="nav-link fw-500" asp-area="" asp-controller="Home" asp-action="Index">
+                                    Home
+                                </a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link txt-grey" asp-area="" asp-controller="Home" asp-action="About">About</a>
+                                <a class="nav-link fw-500" asp-area="" asp-controller="Home" asp-action="About">
+                                    About
+                                </a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link txt-grey" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                <a class="nav-link fw-500" asp-area="" asp-controller="Home" asp-action="Privacy">
+                                    Privacy
+                                </a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link txt-grey" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
+                                <a class="nav-link fw-500" asp-area="" asp-controller="Home" asp-action="Contact">
+                                    Contacts
+                                </a>
                             </li>
                             <li class="nav-item mx-5">
-                                <a class="nav-link text-dark rounded-pill bg-grad-dusk-rose px-4 brd-white shadow-grey"
+                                <a class="nav-link text-black fw-500 rounded-pill bg-grad-dusk-rose px-4 brd-white shadow-grey"
                                 asp-area="" asp-controller="Login" asp-action="Login">
-                                    <strong>Login</strong>
+                                    Login
                                 </a>
                             </li>
                         }
@@ -77,18 +90,15 @@
         </main>
     </div>
 
-    <div id="toast-container"></div>
-
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - BugTracker - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2023 - BugTracker
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="toastr.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
