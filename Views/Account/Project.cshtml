@@ -3,7 +3,7 @@
 <!-- project information -->
 <div class="row">
     <div class="col-auto">
-        <img src=@Model.Project.Avatar class="avatar-size-100 rounded-circle" />
+        <img src=@Model.Project.Avatar class="avatar-size-100 rounded-circle outline-grey" />
     </div>
     <div class="col-auto mt-5">
         <h2 class="text-gradient tg-dull-gold">@Model.Project.Name</h2>
@@ -95,7 +95,7 @@
             @if (developer.ID != null)
             {
                 <a asp-controller="Account" asp-action="Profile" asp-route-uid=@developer.ID class="text-decoration-none userlink-dark">
-                    <img src=@developer.Avatar class="avatar-size-50 rounded-circle" />
+                    <img src=@developer.Avatar class="avatar-size-50 rounded-circle outline-grey" />
                     @developer.Name
                 </a>
             }

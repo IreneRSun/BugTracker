@@ -5,8 +5,8 @@
 	<div class="col-1">
 		<h2><span class="material-symbols-outlined col-auto" style="color: @Model.BugReport.DisplayColor;">bug_report</span></h2>
 	</div>
-	<div class="col-11">
-		<h2 class="text-grey">ID @Model.BugReport.ID</h2>
+	<div class="col-11 ms-left-shift">
+		<h2 class="text-grey">@Model.BugReport.ID</h2>
 	</div>
 </div>
 
@@ -41,7 +41,9 @@
 		<form method="post" id="user-upvote-form" asp-controller="AccountActions" asp-action="UpdateUpvotes" asp-route-reportId=@Model.BugReport.ID>
 			<label class="toggle">
 				<input type="checkbox" name="user-upvote" checked=@Model.UserUpvoted onchange="submitForm('user-upvote-form')">
-				<span class="upvote-arrow"><i class="fa fa-angle-double-up"></i></span>
+				<span class="material-symbols-outlined upvote-icon">
+					thumb_up
+				</span>
 			</label>
 		</form>
 	</div>
@@ -136,7 +138,7 @@
 						@if (developer.ID != null)
 						{
 							<a asp-controller="Account" asp-action="Profile" asp-route-uid=@developer.ID class="text-decoration-none userlink-dark">
-								<img src="@developer.Avatar" alt="" class="avatar-size-30 rounded-circle" />
+								<img src="@developer.Avatar" alt="" class="avatar-size-30 rounded-circle outline-grey" />
 								@developer.Name
 							</a>
 						}
@@ -203,7 +205,7 @@
 					@if (@comment.Commenter != null && comment.Commenter.ID != null)
 					{
 						<a asp-controller="Account" asp-action="Profile" asp-route-uid=@comment.Commenter.ID class="text-decoration-none userlink-dark">
-							<img src=@comment.Commenter.Avatar alt="" class="avatar-size-30 rounded-circle" />
+							<img src=@comment.Commenter.Avatar alt="" class="avatar-size-30 rounded-circle outline-grey" />
 							@comment.Commenter.Name
 						</a>
 					}

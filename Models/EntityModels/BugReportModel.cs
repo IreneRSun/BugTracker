@@ -102,7 +102,7 @@ namespace BugTracker.Models.EntityModels
             HelpWanted = helpWanted;
             Date = creationDate;
             Upvotes = upvotes;
-            DisplayColor = Utils.GenerateColor();
+            DisplayColor = Utils.GenerateSeededColor(reportID);
         }
     }
 }

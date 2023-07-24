@@ -20,44 +20,61 @@ body {
     font-family: 'Montserrat', sans-serif !important;
 }
 
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48
+}
+
 .block-strip {
     display: block;
     width: inherit;
     height: 0.25rem;
 }
 
+.bg-grad-hover {
+    background-size: 200% auto;
+    transition: 0.8s;
+}
+
+.bg-grad-hover:hover {
+    background-position: right center;
+}
+
 .bg-grad-dusk-rose {
-    background: linear-gradient(to right, rgb(237,207,207), rgb(255,255,255), rgb(122,130,123));
+    background-image: linear-gradient(to right, rgb(237,207,207), rgb(255,255,255), rgb(122,130,123));
+}
+
+.bg-grad-evening-sky {
+    background-image: linear-gradient(to right, rgb(252,182,159), rgb(177,217,255), rgb(252,182,159));
 }
 
 .bg-grad-sunset {
-    background: linear-gradient(to right, rgb(63,94,251), rgb(252,70,107));
+    background-image: linear-gradient(to right, rgb(63,94,251), rgb(252,70,107));
 }
 
 .bg-grad-dull-gold {
-    background: linear-gradient(to bottom, rgb(77,95,95), rgb(255,224,160));
+    background-image: linear-gradient(to bottom, rgb(77,95,95), rgb(255,224,160));
 }
 
 .bg-grad-standard-blue {
-    background: linear-gradient(to right, rgb(34,0,188), rgb(74,177,255));
+    background-image: linear-gradient(to right, rgb(34,0,188), rgb(74,177,255));
 }
 
 .bg-grad-grey {
-    background: linear-gradient(to right, rgb(101,101,101), rgb(186,186,186));
+    background-image: linear-gradient(to right, rgb(101,101,101), rgb(186,186,186));
 }
 
 .tg-digital-blue {
-    background: linear-gradient(to right, rgb(111,136,255), rgb(64,243,210));
+    background-image: linear-gradient(to right, rgb(111,136,255), rgb(64,243,210));
     color: rgb(88,190,233);
 }
 
 .tg-cool-blue {
-    background: linear-gradient(to right, rgb(0,73,113), rgb(99,144,168));
+    background-image: linear-gradient(to right, rgb(0,73,113), rgb(99,144,168));
     color: rgb(26,96,134);
 }
 
 .tg-dull-gold {
-    background: linear-gradient(to right, rgb(77,95,95), rgb(255,224,160));
+    background-image: linear-gradient(to right, rgb(77,95,95), rgb(255,224,160));
     color: rgb(166,159,128);
 }
 
@@ -66,11 +83,19 @@ body {
 }
 
 .shadow-grey {
-    box-shadow: 0px 0px 10px grey;
+    box-shadow: 0px 3px 10px grey;
+}
+
+.outline-grey {
+    box-shadow: 1px 1px 2px grey;
 }
 
 .text-grey {
     color: darkgrey;
+}
+
+.text-wheat {
+    color: wheat;
 }
 
 .text-gradient {
@@ -84,6 +109,7 @@ body {
 
 .hover-push:hover {
     transform: translateY(5px);
+    box-shadow: none;
     transition: 0.8s;
 }
 
@@ -168,12 +194,12 @@ body {
     display: none;
 }
 
-.upvote-arrow {
+.upvote-icon {
     color: grey;
 }
 
-.toggle input:checked + .upvote-arrow {
-    color: black;
+.toggle input:checked + .upvote-icon {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
 }
 
 /** 

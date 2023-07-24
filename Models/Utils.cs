@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace BugTracker.Models
 {
@@ -40,13 +41,23 @@ namespace BugTracker.Models
         }
 
         /// <summary>
-        /// Method <c>GenerateColor</c> generates a random color that can be used in a cshtml page.
+        /// Method <c>GenerateSeededColor</c> generates a color that can be used in a cshtml page from the first 12 bytes of string seed (if available).
         /// </summary>
+        /// <param name="seed">The seed to generate the color from.</param>
         /// <returns>The generated color.</returns>
-        public static string GenerateColor()
+        public static string GenerateSeededColor(string seed)
         {
-            var random = new Random();
-            var color = Color.FromArgb(random.Next(256), random.Next(256), random.Next(256));
+			// convert the seed to an appropriate byte array of the required length
+			byte[] bytes = Encoding.UTF8.GetBytes(seed);
+            Array.Resize(ref bytes, 12);
+
+			// get three integers between 0 to 255 from the seed
+			int rValue = Math.Abs(BitConverter.ToInt32(bytes, 0)) % 256;
+            int gValue = Math.Abs(BitConverter.ToInt32(bytes, 4)) % 256;
+            int bValue = Math.Abs(BitConverter.ToInt32(bytes, 8)) % 256;
+
+            // convert integers to an html color
+            var color = Color.FromArgb(rValue, gValue, bValue);
             var htmlColor = ColorTranslator.ToHtml(color);
             return htmlColor;
         }

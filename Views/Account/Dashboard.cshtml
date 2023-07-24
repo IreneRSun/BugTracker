@@ -23,7 +23,7 @@
 <div class="row my-4">
 
     <div class="col-auto">
-        <img src=@Model.User.Avatar class="avatar-size-100 rounded-circle" />
+        <img src=@Model.User.Avatar class="avatar-size-100 rounded-circle outline-grey" />
     </div>
 
     <div class="col-auto mt-2">
@@ -84,7 +84,7 @@
                 <a asp-controller="Account" asp-action="Project" asp-route-projectId=@project.ID class="text-decoration-none">
                     <div class="card hover-push shadow-grey">
                         <img src=@project.Avatar class="card-img" />
-                        <h5 class="card-img-overlay rounded-0 mt-40 fill-height-60 bg-grad-dull-gold" style="color: wheat">@project.Name</h5>
+                        <h5 class="card-img-overlay rounded-0 mt-40 fill-height-60 bg-grad-dull-gold text-wheat">@project.Name</h5>
                     </div>
                 </a>
             </div>
