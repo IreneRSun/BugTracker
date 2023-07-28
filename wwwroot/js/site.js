@@ -101,6 +101,15 @@ function formatUserFromDataSelection(result) {
     return formatUserSelection(data);
 }
 
+// toggling light/dark mode
+function toggleBrightnessMode() {
+    if ($("#light-dark").checked) {
+
+    } else {
+
+    }
+}
+
 // Actions when document is ready
 $(document).ready(function () {
     // Handle project search

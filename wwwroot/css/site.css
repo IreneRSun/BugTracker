@@ -190,82 +190,135 @@ body {
 }
 
 /** toggle using hidden checkbox */
+.toggle {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
 .toggle input {
     display: none;
 }
 
-.upvote-icon {
+.toggle .slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.toggle .slider::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.toggle input:checked + .slider::before {
+    transform: translateX(calc(var(--width) - var(--height)));
+}
+
+.toggle .text-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.toggle .text-slider::before, .toggle .text-slider::after {
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.toggle .text-slider::before {
+    content: attr(data-off);
+    left: 0;
+}
+
+.toggle .text-slider::after {
+    content: attr(data-on);
+    left: calc(var(--width) * -1);
+}
+
+.toggle input:checked + .text-slider::before {
+    transform: translateX(var(--width));
+}
+
+.toggle input:checked + .text-slider::after {
+    transform: translateX(var(--width));
+}
+
+/** upvote toggle */
+#upvote-icon {
     color: grey;
 }
 
-.toggle input:checked + .upvote-icon {
+.toggle input:checked + #upvote-icon {
     font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
 }
 
-/** 
-    Code for toggle switch from w3schools
-    Source: https://www.w3schools.com/howto/howto_css_switch.asp
-*/
+/** help wanted toggle */
+#help-wanted {
+    --width: 200px;
+    --height: 50px;
 
-/* The switch - the box around the slider */
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
+    width: var(--width);
+    height: var(--height);
 }
 
-/* Hide default HTML checkbox */
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+#help-wanted .text-slider {
+    transition: 0.5s ease-in-out;
 }
 
-/* The slider */
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
+#help-wanted .text-slider::before {
+    background-color: grey;
+    color: white;
+    transition: 0.5s ease-in-out;
 }
 
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
+#help-wanted .text-slider::after {
+    background-color: #198754;
+    color: white;
+    border-radius: 50rem;
+    padding: 0.25rem;
+    transition: 0.5s ease-in-out;
 }
 
-input:checked + .slider {
-    background-color: #2196F3;
+
+/** light and dark mode toggle */
+#light-dark {
+    --width: 60px;
+    --height: 30px;
+
+    width: var(--width);
+    height: var(--height);
 }
 
-input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
+#light-dark .slider {
+    background: linear-gradient(90deg, rgba(255,240,116,1) 0%, rgba(255,202,147,1) 100%);
+    padding: 0.25rem;
+    border-radius: 50rem;
+    transition: 0.5s ease-in-out;
 }
 
-input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-}
-
-/* Rounded sliders */
-.slider.round {
-    border-radius: 34px;
-}
-
-.slider.round:before {
+#light-dark .slider::before {
+    width: 50%;
+    height: 100%;
     border-radius: 50%;
+    background: url("https://api.dicebear.com/6.x/icons/svg?icon=sun&backgroundColor=ffecd2,fcb69f&backgroundType=gradientLinear");
+    transition: 0.5s ease-in-out;
+}
+
+#light-dark input:checked + .slider {
+    background: linear-gradient(90deg, rgba(108,15,245,1) 0%, rgba(48,56,229,1) 50%, rgba(65,163,192,1) 100%);
+}
+
+#light-dark input:checked + .slider::before {
+    background: url("https://api.dicebear.com/6.x/icons/svg?icon=moonStars&backgroundColor=b6e3f4,c0aede&backgroundType=gradientLinear");
 }

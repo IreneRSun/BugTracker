@@ -15,33 +15,30 @@
 <i class="text-grey">Reported on @Model.BugReport.Date</i>
 
 <div class="row my-3">
-	@if (Model.IsDeveloper)
-	{
-		<!-- help wanted status actions -->
-		<div class="col-2">
-			<div class="rounded-pill p-1">Help Wanted</div>
-		</div>
-		<div class="col-4">
+	<div class="col-6">
+		<!-- help wanted status -->
+		@if (Model.IsDeveloper)
+		{
 			<form method="post" id="help-wanted-form" asp-controller="AccountActions" asp-action="UpdateHelpWanted" asp-route-reportId=@Model.BugReport.ID>
-				<label class="switch">
+				<label id="help-wanted" class="toggle">
 					<input type="checkbox" name="help-wanted" checked=@Model.BugReport.HelpWanted onchange="submitForm('help-wanted-form')">
-					<span class="slider"></span>
+					<span class="text-slider" data-on="Help Wanted" data-off="Help Not Requested"></span>
 				</label>
 			</form>
-		</div>
 
-	}
-	else if (Model.BugReport.HelpWanted)
-	{
-		<div class="col-6 rounded-pill bg-success text-light d-inline p-1">Help Wanted</div>
-	}
+		}
+		else if (Model.BugReport.HelpWanted)
+		{
+			<div class="rounded-pill bg-success text-light d-inline p-1">Help Wanted</div>
+		}
+	</div>
 
 	<!-- user upvoting -->
 	<div class="col-auto">
 		<form method="post" id="user-upvote-form" asp-controller="AccountActions" asp-action="UpdateUpvotes" asp-route-reportId=@Model.BugReport.ID>
 			<label class="toggle">
 				<input type="checkbox" name="user-upvote" checked=@Model.UserUpvoted onchange="submitForm('user-upvote-form')">
-				<span class="material-symbols-outlined upvote-icon">
+				<span id="upvote-icon" class="material-symbols-outlined">
 					thumb_up
 				</span>
 			</label>
