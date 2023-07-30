@@ -101,15 +101,6 @@ function formatUserFromDataSelection(result) {
     return formatUserSelection(data);
 }
 
-// toggling light/dark mode
-function toggleBrightnessMode() {
-    if ($("#light-dark").checked) {
-
-    } else {
-
-    }
-}
-
 // Actions when document is ready
 $(document).ready(function () {
     // Handle project search
@@ -205,5 +196,39 @@ $(document).ready(function () {
     $(".developer-select").select2({
         templateResult: formatUserFromData,
         templateSelection: formatUserFromDataSelection
+    });
+
+    // Handle light and dark mode
+    const prefersDarkMode = localStorage.getItem("theme") == "dark";
+
+    const brightnessToggle = $("#light-dark input");
+    if (prefersDarkMode) {
+        brightnessToggle.prop("checked", true);
+    }
+
+    brightnessToggle.change(function () {
+        if (prefersDarkMode) {
+            $("body").toggleClass("light");
+            $("body a").toggleClass("light");
+            $("button").toggleClass("light");
+            $(".card").toggleClass("light");
+            $(".modal-content").toggleClass("light");
+            $(".mode-text").toggleClass("light");
+            $(".userlink").toggleClass("light");
+        } else {
+            $("body").toggleClass("dark");
+            $("body a").toggleClass("dark");
+            $("button").toggleClass("dark");
+            $(".card").toggleClass("dark");
+            $(".modal-content").toggleClass("dark");
+            $(".mode-text").toggleClass("dark");
+            $(".userlink").toggleClass("dark");
+        }
+
+        if (brightnessToggle.prop("checked")) {
+            localStorage.setItem("theme", "dark");
+        } else {
+            localStorage.setItem("theme", "light");
+        }
     });
 });

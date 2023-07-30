@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
+:root {
+    --bg-color: var(--bs-light);
+    --text-color: var(--bs-dark);
+}
+
 html {
     font-size: 14px;
 }
@@ -18,6 +23,37 @@ html {
 body {
     margin-bottom: 60px;
     font-family: 'Montserrat', sans-serif !important;
+}
+
+body, body a, button, .card, .modal-content, .mode-text, .userlink {
+    --bg-color: var(--bs-light);
+    --text-color: var(--bs-dark);
+}
+
+body.dark, body a.dark, button.dark, .card.dark, .modal-content.dark, .mode-text.dark, .userlink.dark {
+    --bg-color: var(--bs-dark);
+    --text-color: var(--bs-light);
+}
+
+@media (prefers-color-scheme: dark) {
+    body, body a, button, .card, .modal-content, .mode-text, .userlink {
+        --bg-color: var(--bs-dark);
+        --text-color: var(--bs-light);
+    }
+
+    body.light, body a.light, button.light, .card.light, .modal-content.light, .mode-text.light, .userlink.light {
+        --bg-color: var(--bs-light);
+        --text-color: var(--bs-dark);
+    }
+}
+
+body, body a, button, .card, .modal-content, .mode-text, .userlink  {
+    background-color: var(--bg-color) !important;
+    color: var(--text-color) !important;
+}
+
+[class*="userlink"]:hover {
+    color: #0a58ca !important;
 }
 
 .material-symbols-outlined {
@@ -43,8 +79,8 @@ body {
     background-image: linear-gradient(to right, rgb(237,207,207), rgb(255,255,255), rgb(122,130,123));
 }
 
-.bg-grad-evening-sky {
-    background-image: linear-gradient(to right, rgb(252,182,159), rgb(177,217,255), rgb(252,182,159));
+.bg-grad-neo-blue {
+    background-image: linear-gradient(90deg, rgba(154,254,255,1) 0%, rgba(0,2,78,1) 50%, rgba(154,254,255,1) 100%);
 }
 
 .bg-grad-sunset {
@@ -143,20 +179,6 @@ body {
     font-size: 100px !important;
 }
 
-.userlink-light {
-    --bs-text-opacity: 1;
-    color: rgba(var(--bs-light-rgb), var(--bs-text-opacity)) !important;
-}
-
-.userlink-dark {
-    --bs-text-opacity: 1;
-    color: rgba(var(--bs-dark-rgb), var(--bs-text-opacity)) !important;
-}
-
-[class*="userlink"]:hover {
-    color: #0a58ca !important;
-}
-
 .rounded-30 {
     border-radius: 30%;
 }
@@ -174,7 +196,7 @@ body {
 }
 
 .mt-upward-shift {
-    margin-top: -0.6rem;
+    margin-top: -1rem;
 }
 
 .mt-40 {
@@ -290,18 +312,24 @@ body {
     transition: 0.5s ease-in-out;
 }
 
-
 /** light and dark mode toggle */
+#light-dark-container {
+    position: relative;
+}
+
 #light-dark {
     --width: 60px;
     --height: 30px;
 
+    position: absolute;
+    top: 0;
+    right: 1rem;
     width: var(--width);
     height: var(--height);
 }
 
 #light-dark .slider {
-    background: linear-gradient(90deg, rgba(255,240,116,1) 0%, rgba(255,202,147,1) 100%);
+    background-image: linear-gradient(180deg, rgba(24,196,201,1) 0%, rgba(154,254,255,1) 100%);
     padding: 0.25rem;
     border-radius: 50rem;
     transition: 0.5s ease-in-out;
@@ -311,14 +339,18 @@ body {
     width: 50%;
     height: 100%;
     border-radius: 50%;
-    background: url("https://api.dicebear.com/6.x/icons/svg?icon=sun&backgroundColor=ffecd2,fcb69f&backgroundType=gradientLinear");
+    background: url("https://api.dicebear.com/6.x/icons/svg?icon=sun&backgroundColor=transparent");
     transition: 0.5s ease-in-out;
 }
 
 #light-dark input:checked + .slider {
-    background: linear-gradient(90deg, rgba(108,15,245,1) 0%, rgba(48,56,229,1) 50%, rgba(65,163,192,1) 100%);
+background-image: linear-gradient(180deg, rgba(0,2,78,1) 0%, rgba(119,131,207,1) 100%);
 }
 
 #light-dark input:checked + .slider::before {
-    background: url("https://api.dicebear.com/6.x/icons/svg?icon=moonStars&backgroundColor=b6e3f4,c0aede&backgroundType=gradientLinear");
+    background-image: url("https://api.dicebear.com/6.x/icons/svg?icon=moonStars&backgroundColor=transparent");
+}
+
+#light-dark .slider.no-transition, #light-dark .slider::before.no-transition {
+    transition: 0s;
 }

@@ -11,7 +11,7 @@
 </div>
 
 <!-- bug report basic information -->
-<h2 class="text-dark">@Model.BugReport.Summary</h2>
+<h2>@Model.BugReport.Summary</h2>
 <i class="text-grey">Reported on @Model.BugReport.Date</i>
 
 <div class="row my-3">
@@ -44,7 +44,7 @@
 			</label>
 		</form>
 	</div>
-	<div class="col-auto text-dark">
+	<div class="col-auto">
 		@Model.BugReport.Upvotes
 	</div>
 </div>
@@ -57,7 +57,7 @@
 		<!-- status change form -->
 		<div class="col-auto mx-2">
 			<form id="status-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="status">
-				<label for="status-select" class="text-dark">Status</label>
+				<label for="status-select">Status</label>
 				<select id="status-select" name="status-select" onchange="submitForm('status-change-form')">
 					<option selected hidden>@Model.BugReport.Status</option>
 					<option>Deferred</option>
@@ -73,7 +73,7 @@
 		<!-- priority change form -->
 		<div class="col-auto mx-2">
 			<form id="priority-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="priority">
-				<label for="priority-select" class="text-dark">Priority</label>
+				<label for="priority-select">Priority</label>
 				<select id="priority-select" name="priority-select" onchange="submitForm('priority-change-form')">
 					<option selected hidden>@Model.BugReport.Priority</option>
 					<option>Low</option>
@@ -86,7 +86,7 @@
 		<!-- severity change form -->
 		<div class="col-auto mx-2">
 			<form id="severity-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="severity">
-				<label for="severity-select" class="text-dark">Severity</label>
+				<label for="severity-select">Severity</label>
 				<select id="severity-select" name="severity-select" onchange="submitForm('severity-change-form')">
 					<option selected hidden>@Model.BugReport.Severity</option>
 					<option>Low</option>
@@ -99,33 +99,33 @@
 	else
 	{
 		<div class="col-auto mx-2">
-			<label for="status" class="text-dark">Status</label>
-			<p id="status" class="text-dark">@Model.BugReport.Status</p>
+			<label for="status">Status</label>
+			<p id="status">@Model.BugReport.Status</p>
 		</div>
 		<div class="col-auto mx-2">
-			<label for="priority" class="text-dark">Priority</label>
-			<p id="priority" class="text-dark">@Model.BugReport.Priority</p>
+			<label for="priority">Priority</label>
+			<p id="priority">@Model.BugReport.Priority</p>
 		</div>
 		<div class="col-auto mx-2">
-			<label for="severity" class="text-dark">Severity</label>
-			<p id="severity" class="text-dark">@Model.BugReport.Severity</p>
+			<label for="severity">Severity</label>
+			<p id="severity">@Model.BugReport.Severity</p>
 		</div>
 	}
 </div>
 
 <!-- bug information -->
-<label for="os" class="text-dark">Operating System</label>
-<p id="os" class="text-dark">@Model.BugReport.OS</p>
+<label for="os">Operating System</label>
+<p id="os">@Model.BugReport.OS</p>
 
-<label for="device" class="text-dark">Device</label>
-<p id="device" class="text-dark">@Model.BugReport.Device</p>
+<label for="device">Device</label>
+<p id="device">@Model.BugReport.Device</p>
 
-<label for="bug-details" class="text-dark">Details</label>
-<p id="bug-details" class="text-dark">@Model.BugReport.Details</p>
+<label for="bug-details">Details</label>
+<p id="bug-details">@Model.BugReport.Details</p>
 
 <!-- bug report assignee information -->
-<label for="assignee-list" class="my-3 text-dark">Assignees</label>
-<ul id="assignee-list" class="list-unstyled text-dark">
+<label for="assignee-list" class="my-3">Assignees</label>
+<ul id="assignee-list" class="list-unstyled">
 	@foreach (var developer in Model.Assignees)
 	{
 		<li>
@@ -134,7 +134,7 @@
 					<div class="col-auto">
 						@if (developer.ID != null)
 						{
-							<a asp-controller="Account" asp-action="Profile" asp-route-uid=@developer.ID class="text-decoration-none userlink-dark">
+							<a asp-controller="Account" asp-action="Profile" asp-route-uid=@developer.ID class="text-decoration-none userlink">
 								<img src="@developer.Avatar" alt="" class="avatar-size-30 rounded-circle outline-grey" />
 								@developer.Name
 							</a>
@@ -145,17 +145,10 @@
 							@developer.Name
 						}
 					</div>
-					<div class="col-auto">
-						@developer.Name
-					</div>
 					@if (Model.IsDeveloper)
 					{
 						<div class="col-auto ms-left-shift mt-upward-shift">
-							<button type="submit" class="bg-light text-dark border-0 avatar-size-30">
-								<span class="material-symbols-outlined">
-									person_remove
-								</span>
-							</button>
+							<button type="submit" class="border-0 avatar-size-30">-</button>
 						</div>
 					}
 				</div>
@@ -169,7 +162,7 @@
 {
 	<form id="assign-developer-form" method="post" asp-controller="AccountActions" asp-action="AddAssignment" asp-route-reportId=@Model.BugReport.ID
 	   class="my-3">
-		<label for="developer-select" class="text-dark">Assign Developers</label>
+		<label for="developer-select">Assign Developers</label>
 		<select id="developer-select" name="developer-select" class="developer-select half-screen-width" onchange="submitForm('assign-developer-form')">
 			<option selected hidden disabled></option>
 			@foreach (var developer in Model.AvailableDevelopers)
@@ -184,16 +177,16 @@
 }
 
 <!-- comment section -->
-<h5 class="mt-5 text-dark">Comments</h5>
+<h5 class="mt-5">Comments</h5>
 
 <form method="post" asp-controller="AccountActions" asp-action="Comment" asp-route-reportId=@Model.BugReport.ID>
-	<input type="text" name="user-comment" placeholder="Enter a comment here" class="bg-light text-dark width-90" />
-	<button type="submit" class="bg-light text-dark">
+	<input type="text" name="user-comment" placeholder="Enter a comment here" class="width-90" />
+	<button type="submit">
 		<i class="fa fa-angle-double-right"></i>
 	</button>
 </form>
 
-<ul class="list-unstyled mt-2 text-dark">
+<ul class="list-unstyled mt-2">
 	@foreach (var comment in Model.Comments)
 	{
 		<li>
@@ -201,7 +194,7 @@
 				<div class="col-auto">
 					@if (@comment.Commenter != null && comment.Commenter.ID != null)
 					{
-						<a asp-controller="Account" asp-action="Profile" asp-route-uid=@comment.Commenter.ID class="text-decoration-none userlink-dark">
+						<a asp-controller="Account" asp-action="Profile" asp-route-uid=@comment.Commenter.ID class="text-decoration-none userlink">
 							<img src=@comment.Commenter.Avatar alt="" class="avatar-size-30 rounded-circle outline-grey" />
 							@comment.Commenter.Name
 						</a>

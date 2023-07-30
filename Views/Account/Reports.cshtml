@@ -6,7 +6,7 @@
 	<div class="row">
 		<!-- filter option -->
 		<div class="col-auto">
-			<label for="filter" class="text-dark">Filter Type</label>
+			<label for="filter">Filter Type</label>
 			<select id="filter" name="filter" onchange="submitForm('sort-form')">
 				<option selected hidden>@Model.FilterType</option>
 				<option>All</option>
@@ -22,7 +22,7 @@
 
 		<!-- sort type option -->
 		<div class="col-auto">
-			<label for="sortType" class="text-dark">Sort Type</label>
+			<label for="sortType">Sort Type</label>
 			<select name="sortType" onchange="submitForm('sort-form')">
 				<option selected hidden>@Model.SortType</option>
 				<option>Date</option>
@@ -34,7 +34,7 @@
 
 		<!-- sort order option -->
 		<div class="col-auto">
-			<label for="sortOrder" class="text-dark">Sort Order</label>
+			<label for="sortOrder">Sort Order</label>
 			<select id="sortOrder" name="sortOrder" onchange="submitForm('sort-form')">
 				<option selected hidden>@Model.SortOrder</option>
 				<option>Descending</option>
@@ -46,24 +46,24 @@
 </form>
 
 <!-- bug reports list -->
-<h2 class="my-3 text-dark">@Model.FilterType Bug Reports</h2>
+<h2 class="my-3>@Model.FilterType Bug Reports</h2>
 <div class="row">
 
 	@foreach (var report in Model.BugReports)
 	{
 		<div class="col-3 m-1">
-			<a asp-controller="Account" asp-action="BugReport" asp-route-reportId=@report.ID class="text-decoration-none text-dark">
+			<a asp-controller="Account" asp-action="BugReport" asp-route-reportId=@report.ID class="text-decoration-none">
 				<div class="card hover-push shadow-grey">
 
 					<div class="card-img-top block-strip bg-grad-sunset"></div>
 
-					<div class="card-body bg-light">
+					<div class="card-body">
 						<div class="row mb-3">
 							<div class="col-auto">
 								<span class="material-symbols-outlined col-auto" style="color: @report.DisplayColor;">bug_report</span>
 							</div>
 							<div class="col-auto">
-								<h5 class="card-title col-auto text-dark">@report.Summary</h5>
+								<h5 class="card-title col-auto">@report.Summary</h5>
 							</div>
 							<div class="col-12">
 								<i class="text-grey">Reported on <br /> @report.Date</i>

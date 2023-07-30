@@ -9,12 +9,12 @@
     {
         <div class="col-3 m-1">
 
-            <a asp-controller="Account" asp-action="BugReport" asp-route-reportId=@report.ID class="text-decoration-none text-dark">
+            <a asp-controller="Account" asp-action="BugReport" asp-route-reportId=@report.ID class="text-decoration-none">
                 <div class="card hover-push shadow-grey">
 
                     <div class="card-img-top block-strip bg-grad-sunset"></div>
 
-                    <div class="card-body bg-light">
+                    <div class="card-body">
                         <div class="row mb-3">
                             <div class="col-auto">
                                 <span class="material-symbols-outlined col-auto" style="color: @report.DisplayColor;">bug_report</span>
