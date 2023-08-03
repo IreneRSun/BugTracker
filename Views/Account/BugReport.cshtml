@@ -148,7 +148,7 @@
 					@if (Model.IsDeveloper)
 					{
 						<div class="col-auto ms-left-shift mt-upward-shift">
-							<button type="submit" class="border-0 avatar-size-30">-</button>
+							<button type="submit" class="border-0 avatar-size-30" onclick="showLoading()">-</button>
 						</div>
 					}
 				</div>
@@ -181,7 +181,7 @@
 
 <form method="post" asp-controller="AccountActions" asp-action="Comment" asp-route-reportId=@Model.BugReport.ID>
 	<input type="text" name="user-comment" placeholder="Enter a comment here" class="width-90" />
-	<button type="submit">
+	<button type="submit" onclick="showLoading()">
 		<i class="fa fa-angle-double-right"></i>
 	</button>
 </form>

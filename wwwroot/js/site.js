@@ -3,35 +3,40 @@
 
 // Write your JavaScript code.
 
-// Function that submits a given form
-function submitForm(formId) {
-    const form = document.getElementById(formId);
-    form.submit();
+// Function that shows the loading screen
+function showLoading() {
+    $(".load-screen").removeClass("d-none");
 }
 
-// Function updates the profile image on the profile page to the uploaded image for previewing when called
+// Function that submits a given form
+function submitForm(formId) {
+    showLoading();
+    $(`#${formId}`).submit();
+}
+
+// Function that updates the profile image on the profile page to the uploaded image for previewing when called
 function previewImage() {
-    const input = document.getElementById("image-file-upload");
-    const avatar = document.getElementById("avatar");
-    const warning = document.getElementById("file-size-warning");
+    const inputFiles = $("#image-file-upload").prop("files");
+    const avatar = $("#avatar");
+    const warning = $("#file-size-warning");
 
     // set up file reader
     const reader = new FileReader();
     reader.onload = () => {
-        avatar.setAttribute("src", reader.result);
+        avatar.attr("src", reader.result);
     }
 
     // read the file input or warn the user if a file was selected
-    if (input.files && input.files.length) {
-        const selectedFile = input.files[0];
+    if (inputFiles && inputFiles.length) {
+        const selectedFile = inputFiles[0];
 
         // check the file size
         const fileSizeKB = selectedFile.size / (1024);
         if (fileSizeKB >= 64) {
-            warning.classList.remove("d-none");
+            warning.removeClass("d-none");
             return;
         } else {
-            warning.classList.add("d-none");
+            warning.addClass("d-none");
         }
 
         // read the file

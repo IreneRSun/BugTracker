@@ -121,7 +121,7 @@
     <!-- project deletion -->
     <form method="post" class="mt-5" asp-controller="AccountActions" asp-action="DeleteProject" asp-route-projectId=@Model.Project.ID
           onSubmit="return confirm('This action is not cannot be undone. Are you sure you wish to proceed?');">
-        <button type="submit" class="danger-btn-invert">Delete Project</button>
+        <button type="submit" class="danger-btn-invert" onclick="showLoading()">Delete Project</button>
     </form>
 
 }

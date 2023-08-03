@@ -64,7 +64,7 @@
     @if (Model.IsCurrentUser)
     {
         <!-- update profile button -->
-        <button type="submit" class="border-light rounded-pill mt-3 ms-3">
+        <button type="submit" class="border-light rounded-pill mt-3 ms-3" onclick="showLoading()">
             <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Save
         </button>
     }
@@ -76,7 +76,7 @@
     <!-- account deletion form -->
     <form method="post" class="mt-5 ms-3" asp-controller="AccountActions" asp-action="DeleteAccount"
           onSubmit="return confirm('This action is not cannot be undone. Are you sure you wish to proceed?');">
-        <button type="submit" class="danger-btn-invert">Delete Account</button>
+        <button type="submit" class="danger-btn-invert" onclick="showLoading()">Delete Account</button>
     </form>
 }
 else
