@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Handjet:wght@300&display=swap');
 
 :root {
     --bg-color: var(--bs-light);
@@ -33,18 +33,6 @@ body, body a, button, .card, .modal-content, .mode-text, .userlink {
 body.dark, body a.dark, button.dark, .card.dark, .modal-content.dark, .mode-text.dark, .userlink.dark {
     --bg-color: var(--bs-dark);
     --text-color: var(--bs-light);
-}
-
-@media (prefers-color-scheme: dark) {
-    body, body a, button, .card, .modal-content, .mode-text, .userlink {
-        --bg-color: var(--bs-dark);
-        --text-color: var(--bs-light);
-    }
-
-    body.light, body a.light, button.light, .card.light, .modal-content.light, .mode-text.light, .userlink.light {
-        --bg-color: var(--bs-light);
-        --text-color: var(--bs-dark);
-    }
 }
 
 body, body a, button, .card, .modal-content, .mode-text, .userlink  {
@@ -107,6 +95,10 @@ body, body a, button, .card, .modal-content, .mode-text, .userlink  {
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48
 }
 
+.font-digital {
+    font-family: 'Handjet', cursive !important;
+}
+
 .block-strip {
     display: block;
     width: inherit;
@@ -115,7 +107,7 @@ body, body a, button, .card, .modal-content, .mode-text, .userlink  {
 
 .bg-grad-hover {
     background-size: 200% auto;
-    transition: 0.8s;
+    transition: 0.4s;
 }
 
 .bg-grad-hover:hover {
@@ -146,6 +138,10 @@ body, body a, button, .card, .modal-content, .mode-text, .userlink  {
     background-image: linear-gradient(to right, rgb(101,101,101), rgb(186,186,186));
 }
 
+.bg-grey {
+    background-color: grey;
+}
+
 .tg-digital-blue {
     background-image: linear-gradient(to right, rgb(111,136,255), rgb(64,243,210));
     color: rgb(88,190,233);
@@ -159,6 +155,11 @@ body, body a, button, .card, .modal-content, .mode-text, .userlink  {
 .tg-dull-gold {
     background-image: linear-gradient(to right, rgb(77,95,95), rgb(255,224,160));
     color: rgb(166,159,128);
+}
+
+.tg-grad-grey {
+    background-image: linear-gradient(to right, rgb(101,101,101), rgb(186,186,186));
+    color: grey;
 }
 
 .brd-white {
@@ -226,6 +227,12 @@ body, body a, button, .card, .modal-content, .mode-text, .userlink  {
     font-size: 100px !important;
 }
 
+.avatar-size-150 {
+    width: 150px;
+    height: 150px;
+    font-size: 150px !important;
+}
+
 .rounded-30 {
     border-radius: 30%;
 }
@@ -252,6 +259,14 @@ body, body a, button, .card, .modal-content, .mode-text, .userlink  {
 
 .fill-height-60 {
     height: 60%;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.select2-container--default {
+    color: black !important;
 }
 
 .select2-container--default .select2-selection--single {
@@ -288,41 +303,6 @@ body, body a, button, .card, .modal-content, .mode-text, .userlink  {
     transform: translateX(calc(var(--width) - var(--height)));
 }
 
-.toggle .text-slider {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-}
-
-.toggle .text-slider::before, .toggle .text-slider::after {
-    position: absolute;
-    top: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.toggle .text-slider::before {
-    content: attr(data-off);
-    left: 0;
-}
-
-.toggle .text-slider::after {
-    content: attr(data-on);
-    left: calc(var(--width) * -1);
-}
-
-.toggle input:checked + .text-slider::before {
-    transform: translateX(var(--width));
-}
-
-.toggle input:checked + .text-slider::after {
-    transform: translateX(var(--width));
-}
-
 /** upvote toggle */
 #upvote-icon {
     color: grey;
@@ -330,33 +310,6 @@ body, body a, button, .card, .modal-content, .mode-text, .userlink  {
 
 .toggle input:checked + #upvote-icon {
     font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
-}
-
-/** help wanted toggle */
-#help-wanted {
-    --width: 200px;
-    --height: 50px;
-
-    width: var(--width);
-    height: var(--height);
-}
-
-#help-wanted .text-slider {
-    transition: 0.5s ease-in-out;
-}
-
-#help-wanted .text-slider::before {
-    background-color: grey;
-    color: white;
-    transition: 0.5s ease-in-out;
-}
-
-#help-wanted .text-slider::after {
-    background-color: #198754;
-    color: white;
-    border-radius: 50rem;
-    padding: 0.25rem;
-    transition: 0.5s ease-in-out;
 }
 
 /** light and dark mode toggle */

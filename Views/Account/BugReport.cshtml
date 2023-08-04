@@ -10,29 +10,15 @@
 	</div>
 </div>
 
-<!-- bug report basic information -->
+<!-- bug report summary -->
 <h2>@Model.BugReport.Summary</h2>
-<i class="text-grey">Reported on @Model.BugReport.Date</i>
 
 <div class="row my-3">
-	<div class="col-6">
-		<!-- help wanted status -->
-		@if (Model.IsDeveloper)
-		{
-			<form method="post" id="help-wanted-form" asp-controller="AccountActions" asp-action="UpdateHelpWanted" asp-route-reportId=@Model.BugReport.ID>
-				<label id="help-wanted" class="toggle">
-					<input type="checkbox" name="help-wanted" checked=@Model.BugReport.HelpWanted onchange="submitForm('help-wanted-form')">
-					<span class="text-slider" data-on="Help Wanted" data-off="Help Not Requested"></span>
-				</label>
-			</form>
-
-		}
-		else if (Model.BugReport.HelpWanted)
-		{
-			<div class="rounded-pill bg-success text-light d-inline p-1">Help Wanted</div>
-		}
+	<!-- bug report date -->
+	<div class="col-10">
+		<i class="text-grey">Reported on @Model.BugReport.Date</i>
 	</div>
-
+	
 	<!-- user upvoting -->
 	<div class="col-auto">
 		<form method="post" id="user-upvote-form" asp-controller="AccountActions" asp-action="UpdateUpvotes" asp-route-reportId=@Model.BugReport.ID>
@@ -49,8 +35,34 @@
 	</div>
 </div>
 
+<!-- help wanted status -->
+<div class="offset-10">
+	@if (Model.IsDeveloper)
+	{
+		<form method="post" id="help-wanted-form" asp-controller="AccountActions" asp-action="UpdateHelpWanted" asp-route-reportId=@Model.BugReport.ID>
+			<label id="help-wanted cursor-pointer">
+				<input type="checkbox" name="help-wanted" class="d-none"
+					   checked=@Model.BugReport.HelpWanted onchange="submitForm('help-wanted-form')">
+				@if (Model.BugReport.HelpWanted)
+				{
+					<span class="rounded-pill bg-success text-white d-inline p-1">Help Wanted</span>
+				}
+				else
+				{
+					<span class="bg-grey text-white">Help Not Requested</span>
+				}
+			</label>
+		</form>
+
+	}
+	else if (Model.BugReport.HelpWanted)
+	{
+		<div class="rounded-pill bg-success text-white d-inline p-1">Help Wanted</div>
+	}
+</div>
+
 <!-- status change forms / status display -->
-<div class="row my-3">
+<div class="row my-3 ms-left-shift">
 	
 	@if (Model.IsDeveloper)
 	{
@@ -114,17 +126,17 @@
 </div>
 
 <!-- bug information -->
-<label for="os">Operating System</label>
+<h3 class="mt-5">Operating System</h3>
 <p id="os">@Model.BugReport.OS</p>
 
-<label for="device">Device</label>
+<h3>Device</h3>
 <p id="device">@Model.BugReport.Device</p>
 
-<label for="bug-details">Details</label>
+<h3>Details</h3>
 <p id="bug-details">@Model.BugReport.Details</p>
 
 <!-- bug report assignee information -->
-<label for="assignee-list" class="my-3">Assignees</label>
+<h3 class="mt-5">Assignees</h3>
 <ul id="assignee-list" class="list-unstyled">
 	@foreach (var developer in Model.Assignees)
 	{
@@ -162,7 +174,6 @@
 {
 	<form id="assign-developer-form" method="post" asp-controller="AccountActions" asp-action="AddAssignment" asp-route-reportId=@Model.BugReport.ID
 	   class="my-3">
-		<label for="developer-select">Assign Developers</label>
 		<select id="developer-select" name="developer-select" class="developer-select half-screen-width" onchange="submitForm('assign-developer-form')">
 			<option selected hidden disabled></option>
 			@foreach (var developer in Model.AvailableDevelopers)
@@ -177,12 +188,12 @@
 }
 
 <!-- comment section -->
-<h5 class="mt-5">Comments</h5>
+<h3 class="mt-5">Comments</h3>
 
 <form method="post" asp-controller="AccountActions" asp-action="Comment" asp-route-reportId=@Model.BugReport.ID>
-	<input type="text" name="user-comment" placeholder="Enter a comment here" class="width-90" />
-	<button type="submit" onclick="showLoading()">
-		<i class="fa fa-angle-double-right"></i>
+	<input type="text" name="user-comment" placeholder="Enter a comment here ..." class="width-90" />
+	<button type="submit" onclick="showLoading()" class="border-0">
+		<i class="fa fa-paper-plane-o" aria-hidden="true"></i>
 	</button>
 </form>
 
@@ -190,13 +201,13 @@
 	@foreach (var comment in Model.Comments)
 	{
 		<li>
-			<div class="row">
-				<div class="col-auto">
+			<div class="card outline-grey">
+				<div class="card-header">
 					@if (@comment.Commenter != null && comment.Commenter.ID != null)
 					{
 						<a asp-controller="Account" asp-action="Profile" asp-route-uid=@comment.Commenter.ID class="text-decoration-none userlink">
 							<img src=@comment.Commenter.Avatar alt="" class="avatar-size-30 rounded-circle outline-grey" />
-							@comment.Commenter.Name
+							<span class="mx-1">@comment.Commenter.Name</span>
 						</a>
 					}
 					else
@@ -204,7 +215,7 @@
 						<span class="material-symbols-outlined avatar-size-30 rounded-circle">account_circle</span>
 					}
 				</div>
-				<div class="col-auto">
+				<div class="card-body">
 					@comment.Comment
 				</div>
 			</div>

@@ -53,7 +53,7 @@ function formatProject(result) {
     }
 
     if (result.avatar) {
-        return $(`<div><img src="${result.avatar}" class="avatar-size-30 rounded-circle" /> ${result.name} <br /> ${result.date}</div>`);
+        return $(`<div><img src="${result.avatar}" class="avatar-size-30 rounded-circle" /> ${result.name} <div class="text-grey">${result.date}</div> </div>`);
     } else {
         return $(`<div class="mt-1"><i class="fa fa-search" aria-hidden="true"></i> Search for a project ...</div>`);
     }
@@ -67,7 +67,7 @@ function formatProjectSelection(result) {
     }
 }
 
-// User search result template
+// User search result template (for adding users)
 function formatUser(result) {
     if (result.loading) {
         return result.text;
@@ -75,35 +75,52 @@ function formatUser(result) {
 
     if (result.avatar) {
         return $(`<div><img src="${result.avatar}" class="avatar-size-30 rounded-circle" /> ${result.name}</div>`);
-    } else if (result.name) {
-        return $(`<div><span class="avatar-size-30 rounded-circle"><i class="fa fa-user-circle-o"></i></span> ${result.name}</div>`);
     } else {
-        return $(`<div class="mt-1"><i class="fa fa-user-plus" aria-hidden="true"></i> Search for a user ...</div>`);
+        return $(`<div class="mt-1"><i class="fa fa-user-plus" aria-hidden="true"></i> Search for a user to add ...</div>`);
     }
 }
 
 function formatUserSelection(result) {
     if (result.avatar) {
         return $(`<div><img src="${result.avatar}" class="avatar-size-30 rounded-circle" /> ${result.name}</div>`) || result.text;
-    } else if (result.name) {
-        return $(`<div><span class="avatar-size-30 rounded-circle"><i class="fa fa-user-circle-o"></i></span> ${result.name}</div>`) || result.text;
     } else {
-        return $(`<div class="mt-1"><i class="fa fa-user-plus" aria-hidden="true"></i> Search for a user ...</div>`);
+        return $(`<div class="mt-1"><i class="fa fa-user-plus" aria-hidden="true"></i> Search for a user to add ...</div>`);
     }
 }
 
+// Developer select result template
 function formatUserFromData(result) {
     if (result.loading) {
         return result.text;
     }
 
     var data = $(result.element).data();
-    return formatUser(data);
+    if (data.avatar) {
+        return $(`<div><img src="${data.avatar}" class="avatar-size-30 rounded-circle" /> ${data.name}</div>`);
+    } else {
+        return $(`<div class="mt-1">Select an available user to assign to this bug report ...</div>`);
+    }
 }
 
 function formatUserFromDataSelection(result) {
     var data = $(result.element).data();
-    return formatUserSelection(data);
+
+    if (data.avatar) {
+        return $(`<div><img src="${data.avatar}" class="avatar-size-30 rounded-circle" /> ${data.name}</div>`) || data.text;
+    } else {
+        return $(`<div class="mt-1">Select an available user to assign to this bug report ...</div>`);
+    }
+}
+
+// Function to toggle dark theme of all applicable elements
+function toggleDark() {
+    $("body").toggleClass("dark");
+    $("body a").toggleClass("dark");
+    $("button").toggleClass("dark");
+    $(".card").toggleClass("dark");
+    $(".modal-content").toggleClass("dark");
+    $(".mode-text").toggleClass("dark");
+    $(".userlink").toggleClass("dark");
 }
 
 // Actions when document is ready
@@ -209,26 +226,11 @@ $(document).ready(function () {
     const brightnessToggle = $("#light-dark input");
     if (prefersDarkMode) {
         brightnessToggle.prop("checked", true);
+        toggleDark();
     }
 
     brightnessToggle.change(function () {
-        if (prefersDarkMode) {
-            $("body").toggleClass("light");
-            $("body a").toggleClass("light");
-            $("button").toggleClass("light");
-            $(".card").toggleClass("light");
-            $(".modal-content").toggleClass("light");
-            $(".mode-text").toggleClass("light");
-            $(".userlink").toggleClass("light");
-        } else {
-            $("body").toggleClass("dark");
-            $("body a").toggleClass("dark");
-            $("button").toggleClass("dark");
-            $(".card").toggleClass("dark");
-            $(".modal-content").toggleClass("dark");
-            $(".mode-text").toggleClass("dark");
-            $(".userlink").toggleClass("dark");
-        }
+        toggleDark();
 
         if (brightnessToggle.prop("checked")) {
             localStorage.setItem("theme", "dark");

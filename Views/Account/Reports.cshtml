@@ -1,7 +1,8 @@
 ﻿@model BugTracker.Models.ViewDataModels.ReportsViewModel
 
 <!-- sort options -->
-<form id="sort-form" method="get" asp-controller="Account" asp-action="Reports" asp-route-projectId=@Model.ProjectId>
+<form id="sort-form" method="get" asp-controller="Account" asp-action="Reports">
+	<input type="hidden" name="projectId" value=@Model.ProjectId />
 
 	<div class="row">
 		<!-- filter option -->
@@ -46,38 +47,47 @@
 </form>
 
 <!-- bug reports list -->
-<h2 class="my-3>@Model.FilterType Bug Reports</h2>
+<h1 class="my-3">@Model.FilterType Bug Reports</h1>
 <div class="row">
-
-	@foreach (var report in Model.BugReports)
+	@if (Model.BugReports.Count > 0)
 	{
-		<div class="col-3 m-1">
-			<a asp-controller="Account" asp-action="BugReport" asp-route-reportId=@report.ID class="text-decoration-none">
-				<div class="card hover-push shadow-grey">
+		@foreach (var report in Model.BugReports)
+		{
+			<div class="col-3 m-1">
+				<a asp-controller="Account" asp-action="BugReport" asp-route-reportId=@report.ID class="text-decoration-none">
+					<div class="card hover-push shadow-grey">
 
-					<div class="card-img-top block-strip bg-grad-sunset"></div>
+						<div class="card-img-top block-strip bg-grad-sunset"></div>
 
-					<div class="card-body">
-						<div class="row mb-3">
-							<div class="col-auto">
-								<span class="material-symbols-outlined col-auto" style="color: @report.DisplayColor;">bug_report</span>
+						<div class="card-body">
+							<div class="row mb-3">
+								<div class="col-auto">
+									<span class="material-symbols-outlined col-auto" style="color: @report.DisplayColor;">bug_report</span>
+								</div>
+								<div class="col-auto">
+									<h5 class="card-title col-auto">@report.Summary</h5>
+								</div>
+								<div class="col-12">
+									<i class="text-grey">Reported on <br /> @report.Date</i>
+								</div>
 							</div>
-							<div class="col-auto">
-								<h5 class="card-title col-auto">@report.Summary</h5>
-							</div>
-							<div class="col-12">
-								<i class="text-grey">Reported on <br /> @report.Date</i>
-							</div>
+
+							@if (report.HelpWanted)
+							{
+								<div class="rounded-pill bg-success text-white d-inline p-1">Help Wanted</div>
+							}
+
 						</div>
 
-						@if (report.HelpWanted)
-						{
-							<div class="rounded-pill bg-success text-light d-inline p-1">Help Wanted</div>
-						}
-
 					</div>
-				</div>
-			</a>
+				</a>
+			</div>
+		}
+	}
+	else
+	{
+		<div class="mt-3 text-grey">
+			No bug reports available. Go to the project's page to make a report.
 		</div>
 	}
 

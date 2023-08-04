@@ -6,19 +6,28 @@
         <img src=@Model.Project.Avatar class="avatar-size-100 rounded-circle outline-grey" />
     </div>
     <div class="col-auto mt-5">
-        <h2 class="text-gradient tg-dull-gold">@Model.Project.Name</h2>
+        <h1 class="text-gradient tg-dull-gold">@Model.Project.Name</h1>
     </div>
     <div class="col-auto ms-5 me-1">
-        <h3 class="text-grey">New <sup class="mode-text">@Model.NewBugs</sup></h3>
+        <h3>
+            <span class="text-gradient tg-grad-grey">New</span>
+            <sup class="mode-text">@Model.NewBugs</sup>
+        </h3>
     </div>
     <div class="col-auto mx-1">
-        <h3 class="text-grey">Pending <sup class="mode-text">@Model.PendingBugs</sup></h3>
+        <h3>
+            <span class="text-gradient tg-grad-grey">Pending</span>
+            <sup class="mode-text">@Model.PendingBugs</sup>
+        </h3>
     </div>
     <div class="col-auto mx-1">
-        <h3 class="text-grey">Fixed <sup class="mode-text">@Model.FixedBugs</sup></h3>
+        <h3>
+            <span class="text-gradient tg-grad-grey">Fixed</span>
+            <sup class="mode-text">@Model.FixedBugs</sup>
+        </h3>
     </div>
     <div class="col-12">
-        <i class="text-grey">Created at @Model.Project.Date</i>
+        <i class="text-gradient tg-grad-grey">Created at @Model.Project.Date</i>
     </div>
 </div>
 
@@ -87,7 +96,7 @@
 </div>
 
 <!-- collaborators list -->
-<h4 class="mt-5">Developers</h4>
+<h3 class="mt-5">Developers</h3>
 <div class="row">
     @foreach (var developer in Model.Developers)
     {
@@ -112,9 +121,8 @@
 {
 
     <!-- collaborator addition -->
-    <form id="add-developer-form" method="post" class="mt-1"
+    <form id="add-developer-form" method="post" class="my-1"
       asp-controller="AccountActions" asp-action="AddDeveloper" asp-route-projectId=@Model.Project.ID>
-        <h5>Add Collaborators</h5>
         <select name="user-search" class="user-search half-screen-width" onchange="submitForm('add-developer-form')"></select>
     </form>
 

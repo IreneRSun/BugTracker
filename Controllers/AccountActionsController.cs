@@ -309,9 +309,9 @@ namespace BugTracker.Controllers
 		{
             // check file size
             long fileSize = fileInput.Length;
-            double fileFizeKB = fileSize / (1024.0);
+            double fileSizeKB = fileSize / (1024.0);
 
-            if (fileSize > 0 && fileFizeKB < 64)
+            if (fileSize > 0 && fileSizeKB < 64)
             {
                 // convert input into byte array
                 using var memoryStream = new MemoryStream();
@@ -333,7 +333,7 @@ namespace BugTracker.Controllers
         {
             var username = Request.Form["username-input"];
 			var status = Request.Form["user-status-select"];
-			IFormFile? fileInput = HttpContext.Request.Form.Files["image-file-upload"];
+			IFormFile? fileInput = HttpContext.Request.Form.Files["image-file"];
 
             string userId = GetUserId();
             DatabaseContext dbCx = GetDbCx();
