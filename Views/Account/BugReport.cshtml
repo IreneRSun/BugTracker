@@ -191,10 +191,12 @@
 <h3 class="mt-5">Comments</h3>
 
 <form method="post" asp-controller="AccountActions" asp-action="Comment" asp-route-reportId=@Model.BugReport.ID>
-	<input type="text" name="user-comment" placeholder="Enter a comment here ..." class="width-90" />
-	<button type="submit" onclick="showLoading()" class="border-0">
-		<i class="fa fa-paper-plane-o" aria-hidden="true"></i>
-	</button>
+	<div class="submit-box">
+		<input type="text" name="user-comment" placeholder="Enter a comment here ..." />
+		<button type="submit" onclick="showLoading()" class="border-0 bg-white text-black">
+			<i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+		</button>
+	</div>
 </form>
 
 <ul class="list-unstyled mt-2">

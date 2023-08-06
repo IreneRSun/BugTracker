@@ -115,12 +115,11 @@ function formatUserFromDataSelection(result) {
 // Function to toggle dark theme of all applicable elements
 function toggleDark() {
     $("body").toggleClass("dark");
-    $("body a").toggleClass("dark");
+    $("a").toggleClass("dark");
     $("button").toggleClass("dark");
     $(".card").toggleClass("dark");
     $(".modal-content").toggleClass("dark");
     $(".mode-text").toggleClass("dark");
-    $(".userlink").toggleClass("dark");
 }
 
 // Actions when document is ready
