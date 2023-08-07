@@ -2,11 +2,12 @@
 
 ## Setup
 ### App Dependencies Setup
-For the set up for this application, go to the appsettings.json file and fill in your setting's information.
-Ensure your Auth0 account has the Callback URLs and Logout URLs for your application configured.
+For the set up for this application, go to the [appsettings.json file](https://github.com/IreneRSun/BugTracker/blob/main/appsettings.json) and fill in your setting's information. </br>
+Ensure your Auth0 account has the Callback URLs and Logout URLs for your application configured. </br>
 
 ### MySQL Database Setup
-Use the following commands to set up your MySQL database:
+Use the following commands to set up your MySQL database: </br>
+[BugTrackerSQL.txt](https://github.com/IreneRSun/BugTracker/files/12271477/BugTrackerSQL.txt) </br>
 
 ## Tutorials/Guides Used
 Name: How to write a software requirement document (with template) </br>
@@ -35,27 +36,27 @@ Name: CSS Gradient Text </br>
 Source: https://cssgradient.io/blog/css-gradient-text/ </br>
 
 Name: W3Schools Online Web Tutorials </br>
-Source: https://www.w3schools.com/
+Source: https://www.w3schools.com/ </br>
 
 ## Documentation Used
-Source: https://developer.mozilla.org/en-US/
-Usage: Referred to for C# Documentation
+Source: https://developer.mozilla.org/en-US/ </br>
+Usage: Referred to for C# Documentation </br>
 
-Source: https://learn.microsoft.com/en-us/dotnet/
-Usage: Referred to for .NET documentation
+Source: https://learn.microsoft.com/en-us/dotnet/ </br>
+Usage: Referred to for .NET documentation </br>
 
-https://auth0.com/docs
-Usage: Referred to for implementing login and requests to the Auth0 Management API
+Source: https://auth0.com/docs </br>
+Usage: Referred to for implementing login and requests to the Auth0 Management API </br>
 
 ## Libraries Used
-Source: https://www.dicebear.com/
-Usage: Avatars and icons
+Source: https://www.dicebear.com/ </br>
+Usage: Avatars and icons </br>
 
-Source: https://fonts.google.com/icons
-Usage: Icons
+Source: https://fonts.google.com/icons </br>
+Usage: Icons </br>
 
-Source: https://fontawesome.com/v4/icons/
-Usage: Icons
+Source: https://fontawesome.com/v4/icons/ </br>
+Usage: Icons </br>
 
-Source: https://select2.org/
-Usage: Dropdown Select Elements
+Source: https://select2.org/ </br>
+Usage: Dropdown Select Elements </br>
