@@ -2,81 +2,60 @@
 
 ## Setup
 ### App Dependencies Setup
-...
+For the set up for this application, go to the appsettings.json file and fill in your setting's information.
+Ensure your Auth0 account has the Callback URLs and Logout URLs for your application configured.
 
 ### MySQL Database Setup
 Use the following commands to set up your MySQL database:
 
-DROP DATABASE IF EXISTS bug_tracker;
-CREATE DATABASE bug_tracker;
-USE bug_tracker;
-
-CREATE TABLE users (
-uid VARCHAR(64) PRIMARY KEY,
-avatar BLOB,
-status VARCHAR(30)
-);
-
-CREATE TABLE projects (
-pid CHAR(64) PRIMARY KEY,
-name VARCHAR(50) NOT NULL,
-date DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
-);
-
-CREATE TABLE reports (
-bid CHAR(64) PRIMARY KEY,
-reportee VARCHAR(64),
-project CHAR(64) NOT NULL,
-summary VARCHAR(150) NOT NULL,
-software_version DECIMAL NOT NULL,
-device VARCHAR(50),
-os VARCHAR(50) NOT NULL,
-details TEXT NOT NULL,
-priority VARCHAR(10),
-severity VARCHAR(10),
-status VARCHAR(30) DEFAULT "NEW" NOT NULL,
-help_wanted TINYINT DEFAULT 0 NOT NULL,
-date DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-FOREIGN KEY (reportee) REFERENCES users(uid) ON DELETE SET NULL,
-FOREIGN KEY (project) REFERENCES projects(pid) ON DELETE CASCADE
-);
-
-CREATE TABLE comments (
-cid CHAR(64) PRIMARY KEY,
-commenter VARCHAR(64),
-report CHAR(64) NOT NULL,
-comment TEXT NOT NULL,
-date DATETIME DEFAULT CURRENT_TIMESTAMP,
-FOREIGN KEY (commenter) REFERENCES users(uid) ON DELETE SET NULL,
-FOREIGN KEY (report) REFERENCES reports(bid) ON DELETE CASCADE
-);
-
-CREATE TABLE developments (
-project CHAR(64) NOT NULL,
-developer VARCHAR(64),
-FOREIGN KEY (project) REFERENCES projects(pid) ON DELETE CASCADE,
-FOREIGN KEY (developer) REFERENCES users(uid) ON DELETE SET NULL
-);
-
-CREATE TABLE assignments (
-assignee VARCHAR(64),
-report CHAR(64),
-FOREIGN KEY (assignee) REFERENCES users(uid) ON DELETE SET NULL,
-FOREIGN KEY (report) REFERENCES reports(bid) ON DELETE CASCADE
-);
-
-CREATE TABLE upvotes (
-user VARCHAR(64),
-report CHAR(64),
-FOREIGN KEY (user) REFERENCES users(uid) ON DELETE SET NULL,
-FOREIGN KEY (report) REFERENCES reports(bid) ON DELETE CASCADE
-);
-
-## Tutorials/Guides
+## Tutorials/Guides Used
 Name: How to write a software requirement document (with template) </br>
 Author: Team Asana </br>
 Source: https://asana.com/resources/software-requirement-document-template </br>
 
+Name: A Guide to the Entity Relationship Diagram (ERD) </br>
+Source: https://www.databasestar.com/entity-relationship-diagram/ </br>
+
 Name: Getting started with ASP.NET Core and MySQL Connector/NET </br>
 Author: Roberto Garciab </br>
 Source: https://dev.mysql.com/blog-archive/getting-started-with-asp-net-core-and-mysql-connectornet/ </br>
+
+Name: Auth0 ASP.NET Core MVC SDK Quickstarts: Add Login to your ASP.NET MVC application <br/>
+Source: https://auth0.com/docs/quickstart/webapp/aspnet-core/interactive <br/>
+
+Name: Data Types in MySQL: Tutorial and Full List with Examples of Data Formats </br>
+Author: dbForge Team </br>
+Source: https://blog.devart.com/mysql-data-types.html </br>
+
+Name: A Complete Guide to Dark Mode on the Web </br>
+Author: Adhuham <br/>
+Source: https://css-tricks.com/a-complete-guide-to-dark-mode-on-the-web/ </br>
+
+Name: CSS Gradient Text </br>
+Source: https://cssgradient.io/blog/css-gradient-text/ </br>
+
+Name: W3Schools Online Web Tutorials </br>
+Source: https://www.w3schools.com/
+
+## Documentation Used
+Source: https://developer.mozilla.org/en-US/
+Usage: Referred to for C# Documentation
+
+Source: https://learn.microsoft.com/en-us/dotnet/
+Usage: Referred to for .NET documentation
+
+https://auth0.com/docs
+Usage: Referred to for implementing login and requests to the Auth0 Management API
+
+## Libraries Used
+Source: https://www.dicebear.com/
+Usage: Avatars and icons
+
+Source: https://fonts.google.com/icons
+Usage: Icons
+
+Source: https://fontawesome.com/v4/icons/
+Usage: Icons
+
+Source: https://select2.org/
+Usage: Dropdown Select Elements

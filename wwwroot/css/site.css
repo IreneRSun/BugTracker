@@ -68,15 +68,19 @@ body, button, .card, .modal-content {
     transform: translate(-50%, -50%);
     -moz-transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
-    font-size: 50px;
+    font-size: 70px;
     animation: pulse-text 4s infinite;
     transition: 0.5s;
+}
+
+.load-screen .bug-icon:hover {
+    animation: 0;
 }
 
 .loading-text {
     position: sticky;
     display: inline-block;
-    top: calc(45% + 55px);
+    top: calc(40% + 70px);
     left: 50%;
     transform: translate(-50%, -50%);
     -moz-transform: translate(-50%, -50%);
