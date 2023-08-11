@@ -294,6 +294,10 @@ body, button, .card, .modal-content {
     width: 90%;
 }
 
+.full-width {
+    width: 100%;
+}
+
 .fill-height-60 {
     height: 60%;
 }

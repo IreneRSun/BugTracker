@@ -34,7 +34,8 @@
 <div class="btn-toolbar my-3">
 
     <!-- report bug button -->
-    <button type="button" class="btn btn-primary bg-grad-standard-blue" id="create-report-btn" data-bs-toggle="modal" data-bs-target="#create-report-dialog">
+    <button type="button" class="btn btn-primary bg-grad-standard-blue text-white"
+            id="create-report-btn" data-bs-toggle="modal" data-bs-target="#create-report-dialog">
         Report a Bug
     </button>
 
@@ -67,20 +68,23 @@
                 <div class="modal-body">
                     <label for="report-summary">Summary</label>
                     <textarea id="report-summary" name="report-summary" rows="2" cols="50"
-                              placeholder="Enter a summary of the bug here ..." maxlength="150" required></textarea>
+                              placeholder="Enter a summary of the bug here ..." class="full-width" maxlength="150" required></textarea>
                     <br />
-                    <label for="software-version" class="my-2 width-90">Software Version</label>
+                    <label for="software-version" class="my-2">Software Version</label>
                     <input type="number" id="software-version" name="software-version" min="1" step="0.001"
-                           placeholder="1.0" required />
+                           placeholder="1.0" class="full-width" required />
                     <br />
-                    <label for="device" class="my-2 width-90">Device</label>
-                    <input type="text" id="device" name="device" placeholder="Enter your device type ..." maxlength="50" />
+                    <label for="device" class="my-2">Device</label>
+                    <input type="text" id="device" name="device" placeholder="Enter your device type ..." maxlength="50"
+                           class="full-width" />
                     <br />
                     <label for="os" class="my-2 width-90">Operating System</label>
-                    <input type="text" id="os" name="os" placeholder="Enter you operating system ..." maxlength="50" required />
+                    <input type="text" id="os" name="os" placeholder="Enter you operating system ..."
+                           class="full-width" maxlength="50" required />
                     <br />
-                    <label for="details" class="my-2 width-90">Details</label>
-                    <textarea id="details" name="details" rows="5" cols="50" placeholder="Add details here ..." required></textarea>
+                    <label for="details" class="my-2">Details</label>
+                    <textarea id="details" name="details" rows="5" cols="50"
+                        class="full-width" placeholder="Add details here ..." required></textarea>
                     <br />
                 </div>
 
