@@ -55,7 +55,14 @@
             }
             else
             {
-                <label name="user-status">@Model.User.Status</label>
+                @if (Model.User.Status != null && Model.User.Status.Length != 0)
+                {
+                    <label name="user-status">@Model.User.Status</label>
+                }
+                else
+                {
+                    <label name="user-status">None</label>
+                }
             }
         </div>
 

@@ -111,16 +111,40 @@
 	else
 	{
 		<div class="col-auto mx-2">
+
 			<label for="status">Status</label>
-			<p id="status">@Model.BugReport.Status</p>
+			@if (Model.BugReport.Status != null && Model.BugReport.Status.Length != 0)
+			{
+				<p id="status">@Model.BugReport.Status</p>
+			}
+			else
+			{
+				<p id="status">None</p>
+			}
 		</div>
+
 		<div class="col-auto mx-2">
 			<label for="priority">Priority</label>
-			<p id="priority">@Model.BugReport.Priority</p>
+			@if (Model.BugReport.Priority != null && Model.BugReport.Priority.Length != 0)
+			{
+				<p id="priority">@Model.BugReport.Priority</p>
+			}
+			else
+			{
+				<p id="priority">None</p>
+			}
 		</div>
+
 		<div class="col-auto mx-2">
 			<label for="severity">Severity</label>
-			<p id="severity">@Model.BugReport.Severity</p>
+			@if (Model.BugReport.Severity != null && Model.BugReport.Severity.Length != 0)
+			{
+				<p id="severity">@Model.BugReport.Severity</p>
+			}
+			else
+			{
+				<p id="severity">None</p>
+			}
 		</div>
 	}
 </div>
