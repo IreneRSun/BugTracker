@@ -639,13 +639,14 @@ namespace BugTracker.Models.DatabaseContexts
         }
 
         /// <summary>
-        /// Method <c>GetAssignments</c> gets the bugs assigned to the user.
+        /// Method <c>GetTasks</c> gets all new or open bugs assigned to the user.
         /// </summary>
         /// <param name="userId">The ID of the user to get the assignments for.</param>
-        /// <returns>The list of bug reports that are assigned to the user.</returns>
-        public async Task<List<BugReportModel>> GetAssignments(string userId)
+        /// <returns>The list of new or open bug reports that are assigned to the user.</returns>
+        public async Task<List<BugReportModel>> GetTasks(string userId)
         {
-            var query = "SELECT * FROM reports WHERE bid IN (SELECT report FROM assignments WHERE assignee = @uid)";
+            var query = "SELECT * FROM reports WHERE bid IN (SELECT report FROM assignments WHERE assignee = @uid) " +
+                "AND (status = 'NEW' OR status = 'Open')";
             var parameters = new Dictionary<string, object?> {
                 { "@uid", userId }
             };

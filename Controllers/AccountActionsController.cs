@@ -1,4 +1,5 @@
-﻿using BugTracker.Models.DatabaseContexts;
+﻿using Auth0.ManagementApi.Models;
+using BugTracker.Models.DatabaseContexts;
 using BugTracker.Models.EntityModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -109,8 +110,9 @@ namespace BugTracker.Controllers
             {
                 await dbCx.GetUserData(user);
             }
+			string resultJson = JsonConvert.SerializeObject(searchResults);
 
-            return Json(searchResults);
+            return Json(resultJson);
         }
 
 		/// <summary>

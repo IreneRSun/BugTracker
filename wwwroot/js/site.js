@@ -169,37 +169,30 @@ $(document).ready(function () {
     $(".user-search").select2({
         ajax: {
             url: "/AccountActions/SearchUsers",
+            type: "GET",
             dataType: "json",
             delay: 250,
             data: function (params) {
                 return {
-                    q: params.term,
+                    search: params.term,
                     page: params.page
                 };
             },
             processResults: function (data, params) {
                 params.page = params.page || 1;
+                console.log(data);
+
+                var datalist = JSON.parse(data);
+                var items = datalist.map(function (item) {
+                    return {
+                        id: item.ID,
+                        name: item.Name,
+                        avatar: item.Avatar
+                    };
+                });
 
                 return {
-                    results: function (data, params) {
-                        params.page = params.page || 1;
-
-                        var datalist = JSON.parse(data);
-                        var items = datalist.map(function (item) {
-                            return {
-                                id: item.ID,
-                                name: item.Name,
-                                avatar: item.Avatar
-                            };
-                        });
-
-                        return {
-                            results: items,
-                            pagination: {
-                                more: (params.page * 30) < data.total_count
-                            }
-                        };
-                    },
+                    results: items,
                     pagination: {
                         more: (params.page * 30) < data.total_count
                     }

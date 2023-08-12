@@ -13,6 +13,11 @@ C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\Google.Protobuf.dll
 C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\K4os.Compression.LZ4.dll
 C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\K4os.Compression.LZ4.Streams.dll
 C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\K4os.Hash.xxHash.dll
+C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\System.Web.Razor.dll
+C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\System.Web.Helpers.dll
+C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\System.Web.WebPages.Deployment.dll
+C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\System.Web.WebPages.Razor.dll
+C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\System.Web.WebPages.dll
 C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.OpenIdConnect.dll
 C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll
 C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
@@ -20,10 +25,12 @@ C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\Microsoft.IdentityModel.Logg
 C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
 C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\Microsoft.Web.Infrastructure.dll
 C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\MySql.Data.dll
 C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\Newtonsoft.Json.dll
 C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\BouncyCastle.Crypto.dll
+C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\RestSharp.dll
 C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll
 C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\System.Drawing.Common.dll
 C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
@@ -68,10 +75,3 @@ C:\Users\irene\VS\repos\BugTracker\obj\Debug\net6.0\refint\BugTracker.dll
 C:\Users\irene\VS\repos\BugTracker\obj\Debug\net6.0\BugTracker.pdb
 C:\Users\irene\VS\repos\BugTracker\obj\Debug\net6.0\BugTracker.genruntimeconfig.cache
 C:\Users\irene\VS\repos\BugTracker\obj\Debug\net6.0\ref\BugTracker.dll
-C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\RestSharp.dll
-C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\System.Web.Razor.dll
-C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\System.Web.Helpers.dll
-C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\System.Web.WebPages.Deployment.dll
-C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\System.Web.WebPages.Razor.dll
-C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\System.Web.WebPages.dll
-C:\Users\irene\VS\repos\BugTracker\bin\Debug\net6.0\Microsoft.Web.Infrastructure.dll

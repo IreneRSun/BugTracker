@@ -107,7 +107,7 @@ namespace BugTracker.Controllers
             // get user assignments from database
             DatabaseContext dbCx = GetDbCx();
             string userId = GetUserId();
-            List<BugReportModel> tasks = await dbCx.GetAssignments(userId);
+            List<BugReportModel> tasks = await dbCx.GetTasks(userId);
 
 			// return ViewResult
             var viewModel = new TasksViewModel(tasks);
