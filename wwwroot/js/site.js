@@ -122,6 +122,25 @@ function toggleDark() {
     $(".mode-text").toggleClass("dark");
 }
 
+// Function to loop through app exhibit photos
+function exhibitCarousel() {
+    var curr = 0;
+    var numPhotos = 5;
+
+    // remove visibility of previous visible element
+    $("#app-exhibit img").each(function (index, element) {
+        if (element.classList.contains("visible")) {
+            curr = (index == numPhotos - 1) ? 0 : index + 1;
+            element.classList.remove("visible");
+        }
+    });
+
+    // show next element
+    $("#app-exhibit img").eq(curr).addClass("visible");
+
+    setTimeout(exhibitCarousel, 2000);
+}
+
 // Actions when document is ready
 $(document).ready(function () {
     // Handle project search
@@ -230,4 +249,9 @@ $(document).ready(function () {
             localStorage.setItem("theme", "light");
         }
     });
+
+    // Handle app exhibit slideshow
+    if ($("#app-exhibit img").length) {
+        exhibitCarousel();
+    }
 });

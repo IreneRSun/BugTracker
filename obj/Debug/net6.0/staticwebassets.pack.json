@@ -13,6 +13,26 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\BugReport.png",
+      "PackagePath": "staticwebassets\\images\\BugReport.png"
+    },
+    {
+      "Id": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\Login.png",
+      "PackagePath": "staticwebassets\\images\\Login.png"
+    },
+    {
+      "Id": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\ProjectDashboard.png",
+      "PackagePath": "staticwebassets\\images\\ProjectDashboard.png"
+    },
+    {
+      "Id": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\UserDashboard.png",
+      "PackagePath": "staticwebassets\\images\\UserDashboard.png"
+    },
+    {
+      "Id": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\UserTasks.png",
+      "PackagePath": "staticwebassets\\images\\UserTasks.png"
+    },
+    {
       "Id": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },
