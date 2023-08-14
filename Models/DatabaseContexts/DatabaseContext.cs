@@ -455,7 +455,7 @@ namespace BugTracker.Models.DatabaseContexts
             int numDevelopers = await QueryDatabase(query, queryParameters, ParseCount);
 
             // delete project if user is the only developer, otherwise remove developer from the project
-            var cmd = numDevelopers > 1 ? "DELETE FROM developments WHERE developer = @uid" : "DELETE FROM projects WHERE pid = @pid";
+            var cmd = numDevelopers > 1 ? "DELETE FROM developments WHERE developer = @uid AND project = @pid" : "DELETE FROM projects WHERE pid = @pid";
             var cmdParameters = new Dictionary<string, object?>
             {
                 { "@uid", developerId },

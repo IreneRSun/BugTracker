@@ -34,7 +34,7 @@
             <h5>Username</h5>
             @if (Model.IsCurrentUser)
             {
-                <input type="text" name="username-input" value=@Model.User.Name class="rounded-3" maxlength="15" required />
+                <input type="text" name="username-input" value=@Model.User.Name class="rounded-3" minlength="3" maxlength="15" required />
             }
             else
             {
