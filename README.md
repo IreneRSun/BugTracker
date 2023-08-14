@@ -1,5 +1,8 @@
 # BugTracker
 
+## Demo
+Check out the demo videos at our [wiki](https://github.com/IreneRSun/BugTracker/wiki).
+
 ## Setup
 ### App Dependencies Setup
 For the set up for this application, go to the [appsettings.json file](https://github.com/IreneRSun/BugTracker/blob/main/appsettings.json) and fill in your setting's information. </br>
