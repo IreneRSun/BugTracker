@@ -13,12 +13,6 @@ Use the following commands to set up your MySQL database: </br>
 [BugTrackerSQL.txt](https://github.com/IreneRSun/BugTracker/files/12271477/BugTrackerSQL.txt) </br>
 
 ## Tutorials/Guides Used
-Name: How to write a software requirement document (with template) </br>
-Author: Team Asana </br>
-Source: https://asana.com/resources/software-requirement-document-template </br>
-
-Name: A Guide to the Entity Relationship Diagram (ERD) </br>
-Source: https://www.databasestar.com/entity-relationship-diagram/ </br>
 
 Name: Getting started with ASP.NET Core and MySQL Connector/NET </br>
 Author: Roberto Garciab </br>
