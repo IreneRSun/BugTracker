@@ -49,6 +49,9 @@ Usage: Referred to for implementing login and requests to the Auth0 Management A
 Source: https://www.dicebear.com/ </br>
 Usage: Avatars and icons </br>
 
+Source: https://fonts.google.com/ </br>
+Usage: Fonts </br>
+
 Source: https://fonts.google.com/icons </br>
 Usage: Icons </br>
 
