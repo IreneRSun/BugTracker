@@ -5,7 +5,7 @@ Check out the demo videos at our [wiki](https://github.com/IreneRSun/BugTracker/
 
 ## Setup
 ### App Dependencies Setup
-For the set up for this application, go to the [appsettings.json file](https://github.com/IreneRSun/BugTracker/blob/main/appsettings.json) and fill in your setting's information. </br>
+For the set up this application with your own databases, go to the [appsettings.json file](https://github.com/IreneRSun/BugTracker/blob/main/appsettings.json) and replace the existing information with your Auth0 account settings and database information. </br>
 Ensure your Auth0 account has the Callback URLs and Logout URLs for your application configured. </br>
 
 ### MySQL Database Setup
@@ -46,17 +46,24 @@ Source: https://auth0.com/docs </br>
 Usage: Referred to for implementing login and requests to the Auth0 Management API </br>
 
 ## Libraries Used
+<i>For the following libraries, their corresponding documentation was also referenced when making this project</i>
+
 Source: https://www.dicebear.com/ </br>
 Usage: Avatars and icons </br>
+License: MIT, CC0 1.0
 
 Source: https://fonts.google.com/ </br>
 Usage: Fonts </br>
+License: SIL Open Font </br>
 
 Source: https://fonts.google.com/icons </br>
 Usage: Icons </br>
+License: Apache License Version 2.0 </br>
 
 Source: https://fontawesome.com/v4/icons/ </br>
 Usage: Icons </br>
+License: MIT </br>
 
 Source: https://select2.org/ </br>
 Usage: Dropdown Select Elements </br>
+License: MIT </br>
