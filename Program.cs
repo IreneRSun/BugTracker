@@ -18,7 +18,7 @@ builder.Services
     });
 
 // Auth0 Management API services
-var authCx = new UserManagementContext(
+var authCx = new Auth0UsrCx(
 	builder.Configuration["Auth0:Domain"],
 	builder.Configuration["Auth0:ClientId"],
 	builder.Configuration["Auth0:ClientSecret"],
@@ -26,7 +26,7 @@ var authCx = new UserManagementContext(
 builder.Services.Add(new ServiceDescriptor(typeof(UserManagementContext), authCx));
 
 // Database services
-var sqlCx = new DatabaseContext(builder.Configuration.GetConnectionString("DefaultConnection"));
+var sqlCx = new MySQLDbCx(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.Add(new ServiceDescriptor(typeof(DatabaseContext), sqlCx));
 
 var app = builder.Build();

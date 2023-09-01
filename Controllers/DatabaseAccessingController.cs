@@ -13,12 +13,12 @@ namespace BugTracker.Controllers
 	/// </summary>
 	public abstract class DatabaseAccessingController : Controller
 	{
-		/// <summary>
-		/// Method <c>GetUserManagementCx</c> requests the service that manages users.
-		/// Throws an exception if none found.
-		/// </summary>
-		/// <returns>The context for managing users.</returns>
-		[Authorize]
+        /// <summary>
+        /// Method <c>GetUserManagementCx</c> requests the service that manages users.
+        /// Throws an exception if none found.
+        /// </summary>
+        /// <returns>The context for managing users.</returns>
+        [Authorize]
 		protected UserManagementContext GetUserManagementCx()
 		{
 			return HttpContext.RequestServices.GetService(typeof(UserManagementContext)) as UserManagementContext 
@@ -42,7 +42,6 @@ namespace BugTracker.Controllers
 		/// Throws and exception if unable to.
 		/// </summary>
 		/// <returns>The current user's ID.</returns>
-		/// <exception cref="Exception"></exception>
         [Authorize]
 		protected string GetUserId()
 		{
