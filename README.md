@@ -5,8 +5,13 @@ Check out the demo videos at our [wiki](https://github.com/IreneRSun/BugTracker/
 
 ## Setup
 ### App Dependencies Setup
-For the set up this application with your own databases, go to the [appsettings.json file](https://github.com/IreneRSun/BugTracker/blob/main/appsettings.json) and replace the existing information with your Auth0 account settings and database information. </br>
-Ensure your Auth0 account has the Callback URLs and Logout URLs for your application configured. </br>
+For the set up this application with your own databases, go to the [appsettings.json file](https://github.com/IreneRSun/BugTracker/blob/main/appsettings.json) and replace the existing information (placeholders have curly brackets) with your Auth0 account settings and MySQL database information. </br>
+</br>
+Ensure your Auth0 account has the Callback URLs and Logout URLs for your application configured:
+1. Navigate to your application from the Auth0 Dashboard.
+2. Go to your application's Settings tab.
+3. Under Allowed Callback URLs, add https://{YOUR_SERVER}/callback.
+4. Under Allowed Logout URLs, add https://{YOUR_SERVER}/Account/LoggedOut.
 
 ### MySQL Database Setup
 Use the following commands to set up your MySQL database: </br>
