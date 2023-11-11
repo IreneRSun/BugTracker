@@ -3,6 +3,13 @@
 :root {
     --bg-color: var(--bs-light);
     --text-color: var(--bs-dark);
+    --primary-theme-color: #0a5b83;
+    --secondary-theme-color: #1c799f;
+    --accent-theme-color: #f88c49;
+    --on-primary-theme-color: #5ec4db;
+    --light-theme-color: #f1f4dc;
+    --neutral-theme-color: #f5deb3;
+    --theme-gradient: linear-gradient(to bottom, rgb(77,95,95), rgb(255,224,160));
 }
 
 html {
@@ -23,6 +30,123 @@ html {
 body {
     margin-bottom: 60px;
     font-family: 'Montserrat', sans-serif !important;
+}
+
+/** theme color utilities */
+.bg-theme-primary, .btn-theme-primary {
+    background-color: var(--primary-theme-color) !important;
+    color: var(--on-primary-theme-color);
+}
+
+.bg-theme-secondary, .btn-theme-secondary {
+    background-color: var(--secondary-theme-color) !important;
+    color: white;
+}
+
+.bg-theme-accent, .btn-theme-accent {
+    background-color: var(--accent-theme-color) !important;
+    color: white;
+}
+
+.bg-theme-gradient, .btn-theme-gradient {
+    background-color: var(--theme-gradient) !important;
+    color: var(--neutral-theme-color);
+}
+
+.bg-theme-on-primary, .btn-theme-on-primary {
+    background-color: var(--on-primary-theme-color) !important;
+    color: black;
+}
+
+.bg-theme-light, .btn-theme-light {
+    background-color: var(--light-theme-color) !important;
+    color: black;
+}
+
+.bg-theme-neutral, .btn-theme-neutral {
+    background-color: var(--neutral-theme-color) !important;
+    color: black;
+}
+
+[class*="btn-theme"] {
+    cursor: pointer;
+    text-transform: none;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    margin: 0;
+    border-radius: 0.375rem;
+    -webkit-appearance: button;
+}
+
+.btn-theme:hover {
+    filter: brightness(95%);
+}
+
+.btn-theme:active {
+    transform: scale(0.90);
+    box-shadow: 0 2px #666;
+}
+
+.text-theme-primary {
+    color: var(--primary-theme-color) !important;
+}
+
+.text-theme-secondary {
+    color: var(--secondary-theme-color) !important;
+}
+
+.text-theme-accent {
+    color: var(--accent-theme-color) !important;
+}
+
+.text-theme-gradient {
+    color: var(--theme-gradient) !important;
+}
+
+.text-theme-on-primary {
+    color: var(--on-primary-theme-color) !important;
+}
+
+.text-theme-light {
+    color: var(--light-theme-color) !important;
+}
+
+.text-theme-neutral {
+    color: var(--neutral-theme-color) !important;
+}
+
+.border-theme-primary {
+    border-color: var(--primary-theme-color) !important;
+}
+
+.border-theme-secondary {
+    border-color: var(--secondary-theme-color) !important;
+}
+
+.border-theme-accent {
+    border-color: var(--accent-theme-color) !important;
+}
+
+.border-theme-gradient {
+    border-color: var(--theme-gradient) !important;
+}
+
+.border-theme-on-primary {
+    border-color: var(--on-primary-theme-color) !important;
+}
+
+.border-theme-light {
+    border-color: var(--light-theme-color) !important;
+}
+
+.border-theme-neutral {
+    border-color: var(--neutral-theme-color) !important;
+}
+
+[class*="border-theme"] {
+    border-style: solid;
+    border-width: 5px;
 }
 
 /** light and dark mode */
