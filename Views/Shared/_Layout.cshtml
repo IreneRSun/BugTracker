@@ -20,10 +20,10 @@
 
     <!-- header with nav bar -->
     <header class="glassmorphism">
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="https://api.dicebear.com/6.x/icons/svg?icon=bug&backgroundType=gradientLinear&backgroundColor=b6e3f4,c0aede" class="avatar-size-50 rounded-2 shadow-grey" />
+                    <img src="https://api.dicebear.com/6.x/icons/svg?icon=bug&backgroundType=gradientLinear&backgroundColor=1c799f,f5deb3" class="avatar-size-50 rounded-2 shadow-grey" />
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -48,9 +48,9 @@
                                     My Tasks
                                 </a>
                             </li>
-                            <li class="nav-item mx-3">
-                                <a class="nav-link text-black fw-500"
-                               asp-area="" asp-controller="Login" asp-action="Logout">
+                            <li class="nav-item mx-3 btn-theme bg-theme-gradient border-theme-secondary border-1">
+                                <a class="nav-link fw-500 text-theme-primary p-2"
+                                    asp-area="" asp-controller="Login" asp-action="Logout">
                                     Logout
                                 </a>
                             </li>
@@ -77,8 +77,8 @@
                                     Contacts
                                 </a>
                             </li>
-                            <li class="nav-item mx-3 btn-theme btn-theme-gradient text-black">
-                                <a class="nav-link fw-500 text-black p-2"
+                            <li class="nav-item mx-3 btn-theme btn-theme-gradient border-theme-secondary border-1">
+                                <a class="nav-link text-theme-primary fw-500 p-2"
                                    asp-area="" asp-controller="Login" asp-action="Login">
                                     Login
                                 </a>

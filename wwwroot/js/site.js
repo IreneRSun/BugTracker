@@ -112,16 +112,6 @@ function formatUserFromDataSelection(result) {
     }
 }
 
-// Function to toggle dark theme of all applicable elements
-function toggleDark() {
-    $("body").toggleClass("dark");
-    $("a").toggleClass("dark");
-    $("button").toggleClass("dark");
-    $(".card").toggleClass("dark");
-    $(".modal-content").toggleClass("dark");
-    $(".mode-text").toggleClass("dark");
-}
-
 // Function to loop through app exhibit photos
 function exhibitCarousel() {
     var curr = 0;
@@ -229,25 +219,6 @@ $(document).ready(function () {
     $(".developer-select").select2({
         templateResult: formatUserFromData,
         templateSelection: formatUserFromDataSelection
-    });
-
-    // Handle light and dark mode
-    const prefersDarkMode = localStorage.getItem("theme") == "dark";
-
-    const brightnessToggle = $("#light-dark input");
-    if (prefersDarkMode) {
-        brightnessToggle.prop("checked", true);
-        toggleDark();
-    }
-
-    brightnessToggle.change(function () {
-        toggleDark();
-
-        if (brightnessToggle.prop("checked")) {
-            localStorage.setItem("theme", "dark");
-        } else {
-            localStorage.setItem("theme", "light");
-        }
     });
 
     // Handle app exhibit slideshow
