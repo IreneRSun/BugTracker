@@ -17,12 +17,32 @@
       "PackagePath": "staticwebassets\\images\\BugReport.png"
     },
     {
+      "Id": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\Feedback&Discussion.svg",
+      "PackagePath": "staticwebassets\\images\\Feedback&Discussion.svg"
+    },
+    {
       "Id": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\Login.png",
       "PackagePath": "staticwebassets\\images\\Login.png"
     },
     {
+      "Id": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\ProgressTracking.svg",
+      "PackagePath": "staticwebassets\\images\\ProgressTracking.svg"
+    },
+    {
       "Id": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\ProjectDashboard.png",
       "PackagePath": "staticwebassets\\images\\ProjectDashboard.png"
+    },
+    {
+      "Id": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\QualityAssurance.svg",
+      "PackagePath": "staticwebassets\\images\\QualityAssurance.svg"
+    },
+    {
+      "Id": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\TaskManagement.svg",
+      "PackagePath": "staticwebassets\\images\\TaskManagement.svg"
+    },
+    {
+      "Id": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\Team.svg",
+      "PackagePath": "staticwebassets\\images\\Team.svg"
     },
     {
       "Id": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\UserDashboard.png",

@@ -3,13 +3,14 @@
 :root {
     --bg-color: var(--bs-light);
     --text-color: var(--bs-dark);
+
     --primary-theme-color: #0a5b83;
     --secondary-theme-color: #1c799f;
     --accent-theme-color: #f88c49;
     --on-primary-theme-color: #5ec4db;
     --light-theme-color: #f1f4dc;
     --neutral-theme-color: #f5deb3;
-    --theme-gradient: linear-gradient(to bottom, rgb(77,95,95), rgb(255,224,160));
+    --theme-gradient: linear-gradient(rgb(77,95,95), rgb(255,224,160));
 }
 
 html {
@@ -35,7 +36,7 @@ body {
 /** theme color utilities */
 .bg-theme-primary, .btn-theme-primary {
     background-color: var(--primary-theme-color) !important;
-    color: var(--on-primary-theme-color);
+    color: white;
 }
 
 .bg-theme-secondary, .btn-theme-secondary {
@@ -49,8 +50,8 @@ body {
 }
 
 .bg-theme-gradient, .btn-theme-gradient {
-    background-color: var(--theme-gradient) !important;
-    color: var(--neutral-theme-color);
+    background: var(--theme-gradient) !important;
+    color: black;
 }
 
 .bg-theme-on-primary, .btn-theme-on-primary {
@@ -100,10 +101,6 @@ body {
     color: var(--accent-theme-color) !important;
 }
 
-.text-theme-gradient {
-    color: var(--theme-gradient) !important;
-}
-
 .text-theme-on-primary {
     color: var(--on-primary-theme-color) !important;
 }
@@ -147,6 +144,62 @@ body {
 [class*="border-theme"] {
     border-style: solid;
     border-width: 5px;
+}
+
+/** gradient utilities */
+.bg-gradient-2 {
+    background: linear-gradient(var(--color1), var(--color2));
+}
+
+.text-gradient {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/** glassmorphism effects */
+.glassmorphism {
+    backdrop-filter: blur(100px);
+}
+
+#page-backdrop {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: -1;
+}
+
+#page-backdrop-object {
+    width: 1000px;
+    height: 50px;
+    border-top: 10px solid var(--on-primary-theme-color);
+    border-bottom: 10px solid var(--light-theme-color);
+    transform: skewY(20deg);
+}
+
+/** content resizing */
+.object-contain {
+    object-fit: contain;
+}
+
+/** screen size specific styling */
+@media (min-width: 768px) {
+    .d-block-md {
+        display: block !important;
+    }
+
+    .text-start-md {
+        text-align: start;
+    }
+}
+
+@media (min-width: 992px) {
+    .d-block-lg {
+        display: block !important;
+    }
+
+    .text-start-lg {
+        text-align: start;
+    }
 }
 
 /** light and dark mode */
@@ -340,11 +393,6 @@ body, button, .card, .modal-content {
 
 .text-wheat {
     color: wheat;
-}
-
-.text-gradient {
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
 /** custom hover effects */

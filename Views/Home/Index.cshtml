@@ -2,45 +2,141 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
+<div class="flex flex-column w-100 h-100 justify-content-center align-items-center text-center gap-5">
 
     <!-- welcome message -->
-    <div class="display-4 p-1 text-gradient tg-digital-blue mb-3">
+    <h1 class="display-4 bg-gradient-2 text-gradient text-theme-primary py-5 px-4 px-md-8 px-lg-8" style="--color1: var(--secondary-theme-color); --color2: var(--on-primary-theme-color);">
         Welcome to Bug Tracker 1.0
+    </h1>
+
+    <!-- project concept, need to add svg -->
+    <div class="flex flex-col w-100 h-100 gap-2 my-5 bg-gradient-2 py-4 py-md-8 py-lg-8" style="--color1: var(--light-theme-color); --color2: grey;">
+        <div class="w-100">
+            <img src="~/images/Team.svg" class="object-contain w-100" />
+        </div>
+        <h3 class="px-4 px-md-8 px-lg-8 text-theme-primary">
+            Pursuing Efficiency and Quality in Fast-Paced Collaborative Environments
+        </h3>
+        <h5 class="px-4 px-md-8 px-lg-8">
+            Equip your team with the essential tools for monitoring project progress and receiving feedback.
+        </h5>
     </div>
 
-    <!-- outline of features -->
-    <h1 class="mt-5 text-gradient tg-grad-grey d-inline text-shadow-grey">Features</h1>
-    <p class="mt-3">
-        Tired of losing track of what issues need to be addressed after your software product has been released?
-        Bug Tracker 1.0 offers a solution by streamlining the post-product release progress.
-
+    <!-- basic introduction of how the app works -->
+    <div class="flex flex-col w-100 h-100 my-5 gap-1 p-4 p-md-8 p-lg-8">
+        <h2 class="bg-gradient-2 text-gradient text-theme-primary" style="--color1: var(--primary-theme-color); --color2: grey;">
+            How does it work?
+        </h2>
+        <p>
+            Tired of losing track of what issues need to be addressed after your software product has been released? <br/>
+            Bug Tracker 1.0 offers a solution by streamlining the post-product release progress.
+        </p>
         <div class="row">
-            <div class="col-6">
-                <div class="material-symbols-outlined avatar-size-50 rounded-circle outline-grey bg-grad-dull-gold text-white">
-                    query_stats
+            <div class="col-12 col-md-4 col-lg-4 mt-2">
+                <div class="flex flex-col w-100 h-100 bg-gradient-2 text-white p-3 text-center text-start-md text-start-lg rounded-3" style="--color1: var(--primary-theme-color); --color2: cadetblue;">
+                    <h3>Create Your Project</h3>
+                    <p>
+                        Get started by creating a project. 
+                        Once your project is added, you can start tracking and monitoring it on the site.
+                    </p>
                 </div>
-                Tracking of projects and bugs
             </div>
-            <div class="col-6">
-                <div class="material-symbols-outlined avatar-size-50 rounded-circle outline-grey bg-grad-dull-gold text-white">
-                    add_task
+            <div class="col-12 col-md-4 col-lg-4 mt-2">
+                <div class="flex flex-col w-100 h-100 bg-gradient-2 text-white p-3 text-center text-start-md text-start-lg rounded-3" style="--color1: var(--secondary-theme-color); --color2: lightblue;">
+                    <h3>Report Bugs</h3>
+                    <p>
+                        Found a bug? Search for the project and report it, quick and simple.
+                    </p>
                 </div>
-                Easily see what tasks you have been assigned
             </div>
-            <div class="col-6">
-                <div class="material-symbols-outlined avatar-size-50 rounded-circle outline-grey bg-grad-dull-gold text-white">
-                    bug_report
+            <div class="col-12 col-md-4 col-lg-4 mt-2">
+                <div class="flex flex-col w-100 h-100 bg-gradient-2 text-white p-3 text-center text-start-md text-start-lg rounded-3" style="--color1: var(--accent-theme-color); --color2: navajowhite;">
+                    <h3>Provide Feedback</h3>
+                    <p>
+                        Easily provide feedback and spark discussion on bugs by navigating to the Bug Reports page of the corresponding project.
+                        Ensure your concerns are heard.
+                    </p>
                 </div>
-                Effortlessly provide and discuss feedback
             </div>
-            <div class="col-6">
-                <div class="material-symbols-outlined avatar-size-50 rounded-circle outline-grey bg-grad-dull-gold text-white">
-                    sort
-                </div>
-                Filter and sort bugs to find high priority issues fast
-            </div>
-
         </div>
-    </p>
+    </div>
+
+    <!-- outline of some features it provides -->
+    <div class="flex flex-col w-100 h-100 my-5 px-4 px-md-8 px-lg-8">
+        <h2 class="bg-gradient-2 text-gradient text-theme-primary" style="--color1: var(--primary-theme-color); --color2: grey;">
+            Why Us?
+        </h2>
+        <div class="row flex justify-content-center align-items-center my-3">
+            <div class="col-12 col-md-6 col-lg-6 h-100">
+                <h5 class="bg-gradient-2 text-gradient text-theme-secondary" style="--color1: var(--secondary-theme-color); --color2: grey;">
+                    Progress Tracking
+                </h5>
+                <ul>
+                    <li>
+                        Provides tracking of your projects and their bugs to help you manage tasks.
+                    </li>
+                    <li>
+                        Organizes and provides an overview of projects to keep your workflow straightforward.
+                    </li>
+                </ul>
+            </div>
+            <div class="d-none d-block-md d-block-lg col-6">
+                <img src="~/images/ProgressTracking.svg" class="object-contain w-100" />
+            </div>
+        </div>
+        <div class="row flex justify-content-center align-items-center my-3">
+            <div class="d-none d-block-md d-block-lg col-6">
+                <img src="~/images/QualityAssurance.svg" class="object-contain w-100" />
+            </div>
+            <div class="col-12 col-md-6 col-lg-6 h-100">
+                <h5 class="bg-gradient-2 text-gradient text-theme-secondary" style="--color1: var(--secondary-theme-color); --color2: grey;">
+                    Quality Assurance
+                </h5>
+                <ul>
+                    <li>
+                        Allows users to make bug reports, allowing the team to offer timely support and improve or maintain project quality.
+                    </li>
+                    <li>
+                        Helps developers detect and tackle important issues early.
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row flex justify-content-center align-items-center my-3">
+            <div class="col-12 col-md-6 col-lg-6 h-100">
+                <h5 class="bg-gradient-2 text-gradient text-theme-secondary" style="--color1: var(--secondary-theme-color); --color2: grey;">
+                    Task Management
+                </h5>
+                <ul>
+                    <li>
+                        Provides a place for developers to manage their tasks.
+                    </li>
+                    <li>
+                        Keep track of task delegation and progress.
+                    </li>
+                </ul>
+            </div>
+            <div class="d-none d-block-md d-block-lg col-6">
+                <img src="~/images/TaskManagement.svg" class="object-contain w-100" />
+            </div>
+        </div>
+        <div class="row flex justify-content-center align-items-center my-3">
+            <div class="d-none d-block-md d-block-lg col-6">
+                <img src="~/images/Feedback&Discussion.svg" class="object-contain w-100" />
+            </div>
+            <div class="col-12 col-md-6 col-lg-6 h-100">
+                <h5 class="bg-gradient-2 text-gradient text-theme-secondary" style="--color1: var(--secondary-theme-color); --color2: grey;">
+                    Feedback and Discussion
+                </h5>
+                <ul>
+                    <li>
+                        Users can comment and discuss issues in their corresponding reports.
+                    </li>
+                    <li>
+                        Directly connect with the team behind each project on this platform and make your concerns heard.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
