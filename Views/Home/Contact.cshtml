@@ -2,33 +2,40 @@
     ViewData["Title"] = "Contact Us";
 }
 
-<div class="text-center">
-    <!-- question icon -->
-    <div class="display-1">
-        <i class="fa fa-question-circle text-gradient tg-digital-blue" aria-hidden="true"></i>
-    </div>
-
+<div class="flex flex-column w-100 h-100 justify-content-center align-items-center text-center gap-5 px-4 px-md-8 px-lg-8">
     <!-- title -->
-    <h1 class="text-gradient tg-digital-blue">@ViewData["Title"]</h1>
+    <h1 class="bg-gradient-2 text-gradient text-theme-primary py-3 px-4 px-md-8 px-lg-8" style="--color1: var(--secondary-theme-color); --color2: var(--on-primary-theme-color);">
+        @ViewData["Title"]
+    </h1>
 
     <!-- note regarding inquiries -->
-    <div class="my-3 lead">
-        For issues or inquiries, please contact us using the information below. <br />
-        If you are experiencing functional issues with this bug tracker application,
-        please report the bug on this app's project page for more timely assistance. <br />
-        We will get back to you as soon as possible.
-
-        <br />
+    <div class="my-3">
+        <h2 class="bg-gradient-2 text-gradient text-theme-primary" style="--color1: var(--primary-theme-color); --color2: grey;">
+            For Inquiries or Issues
+        </h2>
+        <p>
+            For issues or inquiries, please contact us using the information below. <br />
+            If you are experiencing functional issues with this bug tracker application,
+            please report the bug on this app's project page for more timely assistance. <br />
+            We will get back to you as soon as possible. <br />
+        </p>
     </div>
 
     <!-- contact info -->
-    <div class="my-3 lead">
-
-        <label for="email" class="text-gradient tg-grad-grey"> <i>Email</i> <i class="fa fa-envelope-o" aria-hidden="true"></i> </label>
-        <p id="email">irene.rsun@gmail.com</p>
-
-        <label for="github" class="text-gradient tg-grad-grey"> <i>GitHub</i> <i class="fa fa-github" aria-hidden="true"></i> </label>
-        <p id="github">IreneRSun</p>
-
+    <div class="my-3">
+        <div>
+            <label for="email" class="bg-gradient-2 text-gradient text-theme-primary" style="--color1: var(--primary-theme-color); --color2: grey;">
+                <i>Email</i>
+                <i class="fa fa-envelope-o" aria-hidden="true"></i>
+            </label>
+            <p id="email">irene.rsun@gmail.com</p>
+        </div>
+        <div>
+            <label for="github" class="bg-gradient-2 text-gradient text-theme-primary" style="--color1: var(--primary-theme-color); --color2: grey;">
+                <i>GitHub</i>
+                <i class="fa fa-github" aria-hidden="true"></i>
+            </label>
+            <p id="github">IreneRSun</p>
+        </div>
     </div>
 </div>

@@ -2,52 +2,59 @@
     ViewData["Title"] = "Privacy Policy";
 }
 
-<div class="text-center">
-    <!-- lock icon -->
-    <div class="display-1">
-        <i class="fa fa-lock tg-digital-blue text-gradient" aria-hidden="true"></i>
-    </div>
-
+<div class="flex flex-column w-100 h-100 justify-content-center align-items-center text-center gap-5 px-4 px-md-8 px-lg-8">
     <!-- title -->
-    <h1 class="text-gradient tg-digital-blue">@ViewData["Title"]</h1>
+    <h1 class="bg-gradient-2 text-gradient text-theme-primary py-3 px-4 px-md-8 px-lg-8" style="--color1: var(--secondary-theme-color); --color2: var(--on-primary-theme-color);">
+        @ViewData["Title"]
+    </h1>
 
     <!-- policy on privacy -->
-    <div class="my-3 lead">
-        Here at Bug Tracker 1.0, we take the privacy of users very seriously. <br />
-        You are entrusting your information to us, and we consider it our responsability to protect it and not misuse it. <br />
-        We take appropriate measures to ensure your data is robust and
-        only share information to third parties when it is necessary for the functioning of the app. <br />
-        Below we detail how we collect, protect, use and share your information.
+    <div class="my-3">
+        <h2 class="bg-gradient-2 text-gradient text-theme-primary" style="--color1: var(--primary-theme-color); --color2: grey;">
+            Our Policy on Privacy
+        </h2>
+        <p>
+            The privacy and security of users is very important to us. <br />
+            We take appropriate measures to ensure your data is robust and
+            only track and share information when it is necessary for the functioning of the app. <br />
+            Below we detail how we collect, protect, use and share your information. <br />
+        </p>
     </div>
 
     <!-- privacy policy details -->
-    <h2 class="my-3 text-gradient tg-grad-grey d-inline">
-        Why do we collect your data and what is it used for?
-    </h2>
-    <p>
-        We use your email and profile data, which is collected through a third-party service known as Auth0, to identify you.
-        The primary purpose is for user authentication and authorization.
-        Furthermore, through Auth0, we handle password resets, creation, blocking, and deletion of Bug Tracker accounts.
-        We can also monitor application log data to ensure the application is properly functioning.
-    </p>
+    <div class="my-3">
+        <h2 class="bg-gradient-2 text-gradient text-theme-primary" style="--color1: var(--primary-theme-color); --color2: grey;">
+            Why do we collect your data and what is it used for?
+        </h2>
+        <p>
+            We use your email and profile data, which is collected through a third-party service known as Auth0, to identify you.
+            The primary purpose is for user authentication and authorization.
+            Furthermore, through Auth0, we handle password resets, creation, blocking, and deletion of Bug Tracker accounts.
+            We can also monitor application log data to ensure the application is properly functioning.
+        </p>
+    </div>
 
-    <h2 class="my-3 text-gradient tg-grad-grey d-inline">
-        How is my data protected?
-    </h2>
-    <p>
-        Your data's security is handled by Auth0.
-        This includes suspicious IP throttling and brute-force protection.
-    </p>
+    <div class="my-3">
+        <h2 class="bg-gradient-2 text-gradient text-theme-primary" style="--color1: var(--primary-theme-color); --color2: grey;">
+            How is my data protected?
+        </h2>
+        <p>
+            Your account's security is handled by Auth0.
+            This includes suspicious IP throttling and brute-force protection.
+        </p>
+    </div>
 
-    <h2 class="my-3 text-gradient tg-grad-grey d-inline">
-        Who has access to my information?
-    </h2>
-    <p>
-        Other users using this application can see the information that is available on your Bug Tracker profile page.
-        In this case, the only personal information shown is your email. 
-        Otherwise, data is stored by Auth0, so please refer to their policy.
-        All Bug Tracker admins can access the information available from the Auth0 dashboard.
-        Rest assured that we do not share your information beyond what is necessary for the functioning of this application.
-    </p>
+    <div class="my-3">
+        <h2 class="bg-gradient-2 text-gradient text-theme-primary" style="--color1: var(--primary-theme-color); --color2: grey;">
+            Who has access to my information?
+        </h2>
+        <p>
+            Other users using this application can see the information that is available on your Bug Tracker profile page.
+            In this case, the only personal information shown is your email.
+            Otherwise, data is stored by Auth0, so please refer to their policy.
+            All Bug Tracker admins can access the information available from the Auth0 dashboard.
+            Rest assured that we do not share your information beyond what is necessary for the functioning of this application.
+        </p>
+    </div>
 
 </div>
