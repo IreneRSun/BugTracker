@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
 </head>
 
-<body class="flex">
+<body>
     <!-- glassmorphism background -->
     <div id="page-backdrop">
         <div id="page-backdrop-object"></div>
@@ -33,22 +33,22 @@
                     <ul class="navbar-nav flex-grow-1 justify-content-end">
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item mx-2">
+                            <li class="nav-item px-2">
                                 <a class="nav-link fw-500" asp-area="" asp-controller="Account" asp-action="Dashboard">
                                     My Dashboard
                                 </a>
                             </li>
-                            <li class="nav-item mx-2">
+                            <li class="nav-item px-2">
                                 <a class="nav-link fw-500" asp-area="" asp-controller="Account" asp-action="Profile">
                                     My Profile
                                 </a>
                             </li>
-                            <li class="nav-item mx-2">
+                            <li class="nav-item px-2">
                                 <a class="nav-link fw-500" asp-area="" asp-controller="Account" asp-action="Tasks">
                                     My Tasks
                                 </a>
                             </li>
-                            <li class="nav-item mx-3 btn-theme bg-theme-gradient border-theme-secondary border-1">
+                            <li class="nav-item px-2 btn-theme-gradient border-theme-secondary border-1">
                                 <a class="nav-link fw-500 text-theme-primary p-2"
                                     asp-area="" asp-controller="Login" asp-action="Logout">
                                     Logout
@@ -57,29 +57,29 @@
                         }
                         else
                         {
-                            <li class="nav-item mx-3">
+                            <li class="nav-item px-3">
                                 <a class="nav-link fw-500" asp-area="" asp-controller="Home" asp-action="Index">
                                     Home
                                 </a>
                             </li>
-                            <li class="nav-item mx-3">
+                            <li class="nav-item px-3">
                                 <a class="nav-link fw-500" asp-area="" asp-controller="Home" asp-action="About">
                                     About
                                 </a>
                             </li>
-                            <li class="nav-item mx-3">
+                            <li class="nav-item px-3">
                                 <a class="nav-link fw-500" asp-area="" asp-controller="Home" asp-action="Privacy">
                                     Privacy
                                 </a>
                             </li>
-                            <li class="nav-item mx-3">
+                            <li class="nav-item px-3">
                                 <a class="nav-link fw-500" asp-area="" asp-controller="Home" asp-action="Contact">
                                     Contacts
                                 </a>
                             </li>
-                            <li class="nav-item mx-3 btn-theme btn-theme-gradient border-theme-secondary border-1">
+                            <li class="nav-item px-3 btn-theme-gradient border-theme-secondary border-1">
                                 <a class="nav-link text-theme-primary fw-500 p-2"
-                                   asp-area="" asp-controller="Login" asp-action="Login">
+                                    asp-area="" asp-controller="Login" asp-action="Login">
                                     Login
                                 </a>
                             </li>
@@ -91,11 +91,9 @@
     </header>
 
     <!-- content -->
-    <div class="glassmorphism w-100 h-100">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <main role="main" class="glassmorphism pb-3">
+        @RenderBody()
+    </main>
 
     <!-- footer -->
     <footer class="border-top footer text-muted glassmorphism">
@@ -103,7 +101,7 @@
             &copy; 2023 - BugTracker
         </div>
     </footer>
-
+    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

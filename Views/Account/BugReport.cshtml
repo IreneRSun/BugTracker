@@ -1,252 +1,254 @@
 ﻿@model BugTracker.Models.ViewDataModels.BugReportViewModel
 
-<!-- bug report header -->
-<div class="row">
-	<div class="col-auto">
+<div class="flex flex-column w-100 h-100 justify-content-center align-items-center text-center gap-5 p-4">
+	<!-- bug report header -->
+	<div class="row">
+		<div class="col-auto">
 			<span class="material-symbols-outlined" style="color: @Model.BugReport.DisplayColor;">
 				bug_report
-		    </span>
+			</span>
+		</div>
+		<div class="col-auto ms-left-shift">
+			<p class="text-grey">@Model.BugReport.ID</p>
+		</div>
 	</div>
-	<div class="col-auto ms-left-shift">
-		<p class="text-grey">@Model.BugReport.ID</p>
-	</div>
-</div>
 
-<!-- bug report summary -->
-<h2>@Model.BugReport.Summary</h2>
+	<!-- bug report summary -->
+	<h2>@Model.BugReport.Summary</h2>
 
-<div class="row my-3">
-	<!-- bug report date -->
-	<div class="col-10">
-		<i class="text-grey">Reported on @Model.BugReport.Date</i>
-	</div>
-	
-	<!-- user upvoting -->
-	<div class="col-auto">
-		<form method="post" id="user-upvote-form" asp-controller="AccountActions" asp-action="UpdateUpvotes" asp-route-reportId=@Model.BugReport.ID>
-			<label class="toggle">
-				<input type="checkbox" name="user-upvote" checked=@Model.UserUpvoted onchange="submitForm('user-upvote-form')">
-				<span id="upvote-icon" class="material-symbols-outlined">
-					thumb_up
-				</span>
-			</label>
-		</form>
-	</div>
-	<div class="col-auto">
-		@Model.BugReport.Upvotes
-	</div>
-</div>
+	<div class="row my-3">
+		<!-- bug report date -->
+		<div class="col-10">
+			<i class="text-grey">Reported on @Model.BugReport.Date</i>
+		</div>
 
-<!-- help wanted status -->
-<div class="offset-10">
-	@if (Model.IsDeveloper)
-	{
-		<form method="post" id="help-wanted-form" asp-controller="AccountActions" asp-action="UpdateHelpWanted" asp-route-reportId=@Model.BugReport.ID>
-			<label id="help-wanted cursor-pointer">
-				<input type="checkbox" name="help-wanted" class="d-none"
-					   checked=@Model.BugReport.HelpWanted onchange="submitForm('help-wanted-form')">
-				@if (Model.BugReport.HelpWanted)
+		<!-- user upvoting -->
+		<div class="col-auto">
+			<form method="post" id="user-upvote-form" asp-controller="AccountActions" asp-action="UpdateUpvotes" asp-route-reportId=@Model.BugReport.ID>
+				<label class="toggle">
+					<input type="checkbox" name="user-upvote" checked=@Model.UserUpvoted onchange="submitForm('user-upvote-form')">
+					<span id="upvote-icon" class="material-symbols-outlined">
+						thumb_up
+					</span>
+				</label>
+			</form>
+		</div>
+		<div class="col-auto">
+			@Model.BugReport.Upvotes
+		</div>
+	</div>
+
+	<!-- help wanted status -->
+	<div class="offset-10">
+		@if (Model.IsDeveloper)
+		{
+			<form method="post" id="help-wanted-form" asp-controller="AccountActions" asp-action="UpdateHelpWanted" asp-route-reportId=@Model.BugReport.ID>
+				<label id="help-wanted cursor-pointer">
+					<input type="checkbox" name="help-wanted" class="d-none"
+						   checked=@Model.BugReport.HelpWanted onchange="submitForm('help-wanted-form')">
+					@if (Model.BugReport.HelpWanted)
+					{
+						<span class="rounded-pill bg-success text-white d-inline p-1">Help Wanted</span>
+					}
+					else
+					{
+						<span class="bg-grey text-white">Help Not Requested</span>
+					}
+				</label>
+			</form>
+
+		}
+		else if (Model.BugReport.HelpWanted)
+		{
+			<div class="rounded-pill bg-success text-white d-inline p-1">Help Wanted</div>
+		}
+	</div>
+
+	<!-- status change forms / status display -->
+	<div class="row my-3 ms-left-shift">
+
+		@if (Model.IsDeveloper)
+		{
+			<!-- status change form -->
+			<div class="col-auto mx-2">
+				<form id="status-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="status">
+					<label for="status-select">Status</label>
+					<select id="status-select" name="status-select" onchange="submitForm('status-change-form')">
+						<option selected hidden>@Model.BugReport.Status</option>
+						<option>Deferred</option>
+						<option>Rejected</option>
+						<option>Duplicate</option>
+						<option>Not a Bug</option>
+						<option>Open</option>
+						<option>Closed</option>
+					</select>
+				</form>
+			</div>
+
+			<!-- priority change form -->
+			<div class="col-auto mx-2">
+				<form id="priority-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="priority">
+					<label for="priority-select">Priority</label>
+					<select id="priority-select" name="priority-select" onchange="submitForm('priority-change-form')">
+						<option selected hidden>@Model.BugReport.Priority</option>
+						<option>Low</option>
+						<option>Medium</option>
+						<option>High</option>
+					</select>
+				</form>
+			</div>
+
+			<!-- severity change form -->
+			<div class="col-auto mx-2">
+				<form id="severity-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="severity">
+					<label for="severity-select">Severity</label>
+					<select id="severity-select" name="severity-select" onchange="submitForm('severity-change-form')">
+						<option selected hidden>@Model.BugReport.Severity</option>
+						<option>Low</option>
+						<option>Medium</option>
+						<option>High</option>
+					</select>
+				</form>
+			</div>
+		}
+		else
+		{
+			<div class="col-auto mx-2">
+
+				<label for="status">Status</label>
+				@if (Model.BugReport.Status != null && Model.BugReport.Status.Length != 0)
 				{
-					<span class="rounded-pill bg-success text-white d-inline p-1">Help Wanted</span>
+					<p id="status">@Model.BugReport.Status</p>
 				}
 				else
 				{
-					<span class="bg-grey text-white">Help Not Requested</span>
+					<p id="status">None</p>
 				}
-			</label>
-		</form>
+			</div>
 
-	}
-	else if (Model.BugReport.HelpWanted)
-	{
-		<div class="rounded-pill bg-success text-white d-inline p-1">Help Wanted</div>
-	}
-</div>
+			<div class="col-auto mx-2">
+				<label for="priority">Priority</label>
+				@if (Model.BugReport.Priority != null && Model.BugReport.Priority.Length != 0)
+				{
+					<p id="priority">@Model.BugReport.Priority</p>
+				}
+				else
+				{
+					<p id="priority">None</p>
+				}
+			</div>
 
-<!-- status change forms / status display -->
-<div class="row my-3 ms-left-shift">
-	
+			<div class="col-auto mx-2">
+				<label for="severity">Severity</label>
+				@if (Model.BugReport.Severity != null && Model.BugReport.Severity.Length != 0)
+				{
+					<p id="severity">@Model.BugReport.Severity</p>
+				}
+				else
+				{
+					<p id="severity">None</p>
+				}
+			</div>
+		}
+	</div>
+
+	<!-- bug information -->
+	<h3 class="mt-5">Operating System</h3>
+	<p id="os">@Model.BugReport.OS</p>
+
+	<h3>Device</h3>
+	<p id="device">@Model.BugReport.Device</p>
+
+	<h3>Details</h3>
+	<p id="bug-details">@Model.BugReport.Details</p>
+
+	<!-- bug report assignee information -->
+	<h3 class="mt-5">Assignees</h3>
+	<ul id="assignee-list" class="list-unstyled">
+		@foreach (var developer in Model.Assignees)
+		{
+			<li>
+				<form method="post" asp-controller="AccountActions" asp-action="DeleteAssignment" asp-route-reportId=@Model.BugReport.ID asp-route-developerId=@developer.ID>
+					<div class="row">
+						<div class="col-auto">
+							@if (developer.ID != null)
+							{
+								<a asp-controller="Account" asp-action="Profile" asp-route-uid=@developer.ID class="text-decoration-none userlink">
+									<img src="@developer.Avatar" alt="" class="avatar-size-30 rounded-circle outline-grey" />
+									@developer.Name
+								</a>
+							}
+							else
+							{
+								<span class="material-symbols-outlined avatar-size-30 rounded-circle">account_circle</span>
+								@developer.Name
+							}
+						</div>
+						@if (Model.IsDeveloper)
+						{
+							<div class="col-auto ms-left-shift mt-upward-shift">
+								<button type="submit" class="border-0 avatar-size-30" onsubmit="showLoading()">-</button>
+							</div>
+						}
+					</div>
+				</form>
+			</li>
+		}
+	</ul>
+
+	<!-- developer assignment -->
 	@if (Model.IsDeveloper)
 	{
-		<!-- status change form -->
-		<div class="col-auto mx-2">
-			<form id="status-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="status">
-				<label for="status-select">Status</label>
-				<select id="status-select" name="status-select" onchange="submitForm('status-change-form')">
-					<option selected hidden>@Model.BugReport.Status</option>
-					<option>Deferred</option>
-					<option>Rejected</option>
-					<option>Duplicate</option>
-					<option>Not a Bug</option>
-					<option>Open</option>
-					<option>Closed</option>
-				</select>
-			</form>
-		</div>
-
-		<!-- priority change form -->
-		<div class="col-auto mx-2">
-			<form id="priority-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="priority">
-				<label for="priority-select">Priority</label>
-				<select id="priority-select" name="priority-select" onchange="submitForm('priority-change-form')">
-					<option selected hidden>@Model.BugReport.Priority</option>
-					<option>Low</option>
-					<option>Medium</option>
-					<option>High</option>
-				</select>
-			</form>
-		</div>
-
-		<!-- severity change form -->
-		<div class="col-auto mx-2">
-			<form id="severity-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="severity">
-				<label for="severity-select">Severity</label>
-				<select id="severity-select" name="severity-select" onchange="submitForm('severity-change-form')">
-					<option selected hidden>@Model.BugReport.Severity</option>
-					<option>Low</option>
-					<option>Medium</option>
-					<option>High</option>
-				</select>
-			</form>
-		</div>
+		<form id="assign-developer-form" method="post" asp-controller="AccountActions" asp-action="AddAssignment" asp-route-reportId=@Model.BugReport.ID
+			  class="my-3">
+			<select id="developer-select" name="developer-select" class="developer-select half-screen-width" onchange="submitForm('assign-developer-form')">
+				<option selected hidden disabled></option>
+				@foreach (var developer in Model.AvailableDevelopers)
+				{
+					@if (developer.Status != "Busy")
+					{
+						<option value=@developer.ID data-avatar=@developer.Avatar data-name=@developer.Name>@developer.Name</option>
+					}
+				}
+			</select>
+		</form>
 	}
-	else
-	{
-		<div class="col-auto mx-2">
 
-			<label for="status">Status</label>
-			@if (Model.BugReport.Status != null && Model.BugReport.Status.Length != 0)
-			{
-				<p id="status">@Model.BugReport.Status</p>
-			}
-			else
-			{
-				<p id="status">None</p>
-			}
+	<!-- comment section -->
+	<h3 class="mt-5">Comments</h3>
+
+	<form method="post" asp-controller="AccountActions" asp-action="Comment" asp-route-reportId=@Model.BugReport.ID>
+		<div class="submit-box">
+			<input type="text" name="user-comment" placeholder="Enter a comment here ..." />
+			<button type="submit" onsubmit="showLoading()" class="border-0 bg-white text-black">
+				<i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+			</button>
 		</div>
+	</form>
 
-		<div class="col-auto mx-2">
-			<label for="priority">Priority</label>
-			@if (Model.BugReport.Priority != null && Model.BugReport.Priority.Length != 0)
-			{
-				<p id="priority">@Model.BugReport.Priority</p>
-			}
-			else
-			{
-				<p id="priority">None</p>
-			}
-		</div>
-
-		<div class="col-auto mx-2">
-			<label for="severity">Severity</label>
-			@if (Model.BugReport.Severity != null && Model.BugReport.Severity.Length != 0)
-			{
-				<p id="severity">@Model.BugReport.Severity</p>
-			}
-			else
-			{
-				<p id="severity">None</p>
-			}
-		</div>
-	}
-</div>
-
-<!-- bug information -->
-<h3 class="mt-5">Operating System</h3>
-<p id="os">@Model.BugReport.OS</p>
-
-<h3>Device</h3>
-<p id="device">@Model.BugReport.Device</p>
-
-<h3>Details</h3>
-<p id="bug-details">@Model.BugReport.Details</p>
-
-<!-- bug report assignee information -->
-<h3 class="mt-5">Assignees</h3>
-<ul id="assignee-list" class="list-unstyled">
-	@foreach (var developer in Model.Assignees)
-	{
-		<li>
-			<form method="post" asp-controller="AccountActions" asp-action="DeleteAssignment" asp-route-reportId=@Model.BugReport.ID asp-route-developerId=@developer.ID>
-				<div class="row">
-					<div class="col-auto">
-						@if (developer.ID != null)
+	<ul class="list-unstyled mt-2">
+		@foreach (var comment in Model.Comments)
+		{
+			<li>
+				<div class="card outline-grey">
+					<div class="card-header">
+						@if (@comment.Commenter != null && comment.Commenter.ID != null)
 						{
-							<a asp-controller="Account" asp-action="Profile" asp-route-uid=@developer.ID class="text-decoration-none userlink">
-								<img src="@developer.Avatar" alt="" class="avatar-size-30 rounded-circle outline-grey" />
-								@developer.Name
+							<a asp-controller="Account" asp-action="Profile" asp-route-uid=@comment.Commenter.ID class="text-decoration-none userlink">
+								<img src=@comment.Commenter.Avatar alt="" class="avatar-size-30 rounded-circle outline-grey" />
+								<span class="mx-1">@comment.Commenter.Name</span>
 							</a>
 						}
 						else
 						{
 							<span class="material-symbols-outlined avatar-size-30 rounded-circle">account_circle</span>
-							@developer.Name
 						}
 					</div>
-					@if (Model.IsDeveloper)
-					{
-						<div class="col-auto ms-left-shift mt-upward-shift">
-							<button type="submit" class="border-0 avatar-size-30" onsubmit="showLoading()">-</button>
-						</div>
-					}
+					<div class="card-body">
+						@comment.Comment
+					</div>
 				</div>
-			</form>
-		</li>
-	}
-</ul>
-
-<!-- developer assignment -->
-@if (Model.IsDeveloper)
-{
-	<form id="assign-developer-form" method="post" asp-controller="AccountActions" asp-action="AddAssignment" asp-route-reportId=@Model.BugReport.ID
-	   class="my-3">
-		<select id="developer-select" name="developer-select" class="developer-select half-screen-width" onchange="submitForm('assign-developer-form')">
-			<option selected hidden disabled></option>
-			@foreach (var developer in Model.AvailableDevelopers)
-			{
-				@if (developer.Status != "Busy")
-				{
-					<option value=@developer.ID data-avatar=@developer.Avatar data-name=@developer.Name>@developer.Name</option>
-				}
-			}
-		</select>
-	</form>
-}
-
-<!-- comment section -->
-<h3 class="mt-5">Comments</h3>
-
-<form method="post" asp-controller="AccountActions" asp-action="Comment" asp-route-reportId=@Model.BugReport.ID>
-	<div class="submit-box">
-		<input type="text" name="user-comment" placeholder="Enter a comment here ..." />
-		<button type="submit" onsubmit="showLoading()" class="border-0 bg-white text-black">
-			<i class="fa fa-paper-plane-o" aria-hidden="true"></i>
-		</button>
-	</div>
-</form>
-
-<ul class="list-unstyled mt-2">
-	@foreach (var comment in Model.Comments)
-	{
-		<li>
-			<div class="card outline-grey">
-				<div class="card-header">
-					@if (@comment.Commenter != null && comment.Commenter.ID != null)
-					{
-						<a asp-controller="Account" asp-action="Profile" asp-route-uid=@comment.Commenter.ID class="text-decoration-none userlink">
-							<img src=@comment.Commenter.Avatar alt="" class="avatar-size-30 rounded-circle outline-grey" />
-							<span class="mx-1">@comment.Commenter.Name</span>
-						</a>
-					}
-					else
-					{
-						<span class="material-symbols-outlined avatar-size-30 rounded-circle">account_circle</span>
-					}
-				</div>
-				<div class="card-body">
-					@comment.Comment
-				</div>
-			</div>
-		</li>
-	}
-</ul>
+			</li>
+		}
+	</ul>
+</div>

@@ -1,139 +1,142 @@
 ﻿@model BugTracker.Models.ViewDataModels.ProjectViewModel
 
-<!-- project information -->
-<div class="row">
-    <div class="col-auto">
-        <img src=@Model.Project.Avatar class="avatar-size-100 rounded-circle outline-grey" />
-    </div>
-    <div class="col-5 mt-5">
-        <h1 class="text-gradient tg-dull-gold">@Model.Project.Name</h1>
-    </div>
-    <div class="col-auto ms-5 me-1">
-        <h3>
-            <span class="text-gradient tg-grad-grey">New</span>
-            <sup class="mode-text">@Model.NewBugs</sup>
-        </h3>
-    </div>
-    <div class="col-auto mx-1">
-        <h3>
-            <span class="text-gradient tg-grad-grey">Pending</span>
-            <sup class="mode-text">@Model.PendingBugs</sup>
-        </h3>
-    </div>
-    <div class="col-auto mx-1">
-        <h3>
-            <span class="text-gradient tg-grad-grey">Fixed</span>
-            <sup class="mode-text">@Model.FixedBugs</sup>
-        </h3>
-    </div>
-    <div class="col-12">
-        <i class="text-gradient tg-grad-grey">Created at @Model.Project.Date</i>
-    </div>
-</div>
-
-<div class="btn-toolbar my-3">
-
-    <!-- report bug button -->
-    <button type="button" class="btn btn-primary bg-grad-standard-blue text-white"
-            id="create-report-btn" data-bs-toggle="modal" data-bs-target="#create-report-dialog">
-        Report a Bug
-    </button>
-
-    <!-- project bug reports link -->
-    <a asp-controller="Account" asp-action="Reports" asp-route-projectId=@Model.Project.ID
-       class="mx-5 mt-1 shift-obj-container text-decoration-none fs-5 fw-500">
-        <div class="row">
-            <div class="col-auto">
-                See Bug Reports
-            </div>
-            <div class="col-auto ms-left-shift right-shift-obj">
-                &#8618;
-            </div>
+<div class="flex flex-column w-100 h-100 justify-content-center align-items-center text-center gap-5 p-4">
+    <!-- project information -->
+    <div class="row">
+        <div class="col-auto">
+            <img src=@Model.Project.Avatar class="avatar-size-100 rounded-circle outline-grey" />
         </div>
-    </a>
-
-</div>
-
-<!-- bug report modal dialog -->
-<div class="modal fade" id="create-report-dialog" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <form method="post" asp-controller="AccountActions" asp-action="ReportBug" asp-route-projectId=@Model.Project.ID>
-
-                <div class="modal-header">
-                    <h5 class="modal-title">Report Bug</h5>
-                </div>
-
-                <div class="modal-body">
-                    <label for="report-summary">Summary</label>
-                    <textarea id="report-summary" name="report-summary" rows="2" cols="50"
-                              placeholder="Enter a summary of the bug here ..." class="full-width" maxlength="150" required></textarea>
-                    <br />
-                    <label for="software-version" class="my-2">Software Version</label>
-                    <input type="number" id="software-version" name="software-version" min="1" step="0.001"
-                           placeholder="1.0" class="full-width" required />
-                    <br />
-                    <label for="device" class="my-2">Device</label>
-                    <input type="text" id="device" name="device" placeholder="Enter your device type ..." maxlength="50"
-                           class="full-width" />
-                    <br />
-                    <label for="os" class="my-2 width-90">Operating System</label>
-                    <input type="text" id="os" name="os" placeholder="Enter you operating system ..."
-                           class="full-width" maxlength="50" required />
-                    <br />
-                    <label for="details" class="my-2">Details</label>
-                    <textarea id="details" name="details" rows="5" cols="50"
-                        class="full-width" placeholder="Add details here ..." required></textarea>
-                    <br />
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary bg-grad-grey text-white" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary bg-grad-standard-blue text-white">Submit</button>
-                </div>
-
-            </form>
-
+        <div class="col-5 mt-5">
+            <h1 class="text-gradient tg-dull-gold">@Model.Project.Name</h1>
+        </div>
+        <div class="col-auto ms-5 me-1">
+            <h3>
+                <span class="text-gradient tg-grad-grey">New</span>
+                <sup class="mode-text">@Model.NewBugs</sup>
+            </h3>
+        </div>
+        <div class="col-auto mx-1">
+            <h3>
+                <span class="text-gradient tg-grad-grey">Pending</span>
+                <sup class="mode-text">@Model.PendingBugs</sup>
+            </h3>
+        </div>
+        <div class="col-auto mx-1">
+            <h3>
+                <span class="text-gradient tg-grad-grey">Fixed</span>
+                <sup class="mode-text">@Model.FixedBugs</sup>
+            </h3>
+        </div>
+        <div class="col-12">
+            <i class="text-gradient tg-grad-grey">Created at @Model.Project.Date</i>
         </div>
     </div>
-</div>
 
-<!-- collaborators list -->
-<h3 class="mt-5">Developers</h3>
-<div class="row">
-    @foreach (var developer in Model.Developers)
-    {
-        <div class="col-2 m-1">
-            @if (developer.ID != null)
-            {
-                <a asp-controller="Account" asp-action="Profile" asp-route-uid=@developer.ID class="text-decoration-none userlink">
-                    <img src=@developer.Avatar class="avatar-size-50 rounded-circle outline-grey" />
+    <div class="btn-toolbar my-3">
+
+        <!-- report bug button -->
+        <button type="button" class="btn btn-primary bg-grad-standard-blue text-white"
+                id="create-report-btn" data-bs-toggle="modal" data-bs-target="#create-report-dialog">
+            Report a Bug
+        </button>
+
+        <!-- project bug reports link -->
+        <a asp-controller="Account" asp-action="Reports" asp-route-projectId=@Model.Project.ID
+           class="mx-5 mt-1 shift-obj-container text-decoration-none fs-5 fw-500">
+            <div class="row">
+                <div class="col-auto">
+                    See Bug Reports
+                </div>
+                <div class="col-auto ms-left-shift right-shift-obj">
+                    &#8618;
+                </div>
+            </div>
+        </a>
+
+    </div>
+
+    <!-- bug report modal dialog -->
+    <div class="modal fade" id="create-report-dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <form method="post" asp-controller="AccountActions" asp-action="ReportBug" asp-route-projectId=@Model.Project.ID>
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Report Bug</h5>
+                    </div>
+
+                    <div class="modal-body">
+                        <label for="report-summary">Summary</label>
+                        <textarea id="report-summary" name="report-summary" rows="2" cols="50"
+                                  placeholder="Enter a summary of the bug here ..." class="full-width" maxlength="150" required></textarea>
+                        <br />
+                        <label for="software-version" class="my-2">Software Version</label>
+                        <input type="number" id="software-version" name="software-version" min="1" step="0.001"
+                               placeholder="1.0" class="full-width" required />
+                        <br />
+                        <label for="device" class="my-2">Device</label>
+                        <input type="text" id="device" name="device" placeholder="Enter your device type ..." maxlength="50"
+                               class="full-width" />
+                        <br />
+                        <label for="os" class="my-2 width-90">Operating System</label>
+                        <input type="text" id="os" name="os" placeholder="Enter you operating system ..."
+                               class="full-width" maxlength="50" required />
+                        <br />
+                        <label for="details" class="my-2">Details</label>
+                        <textarea id="details" name="details" rows="5" cols="50"
+                                  class="full-width" placeholder="Add details here ..." required></textarea>
+                        <br />
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary bg-grad-grey text-white" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary bg-grad-standard-blue text-white">Submit</button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- collaborators list -->
+    <h3 class="mt-5">Developers</h3>
+    <div class="row">
+        @foreach (var developer in Model.Developers)
+        {
+            <div class="col-2 m-1">
+                @if (developer.ID != null)
+                {
+                    <a asp-controller="Account" asp-action="Profile" asp-route-uid=@developer.ID class="text-decoration-none userlink">
+                        <img src=@developer.Avatar class="avatar-size-50 rounded-circle outline-grey" />
+                        @developer.Name
+                    </a>
+                }
+                else
+                {
+                    <span class="material-symbols-outlined avatar-size-50 rounded-circle">account_circle</span>
                     @developer.Name
-                </a>
-            }
-            else
-            {
-                <span class="material-symbols-outlined avatar-size-50 rounded-circle">account_circle</span>
-                @developer.Name
-            }
-        </div>
+                }
+            </div>
+        }
+    </div>
+
+    @if (Model.IsDeveloper)
+    {
+
+        <!-- collaborator addition -->
+        <form id="add-developer-form" method="post" class="my-1"
+              asp-controller="AccountActions" asp-action="AddDeveloper" asp-route-projectId=@Model.Project.ID>
+            <select name="user-search" class="user-search half-screen-width" onchange="submitForm('add-developer-form')"></select>
+        </form>
+
+        <!-- project deletion -->
+        <form method="post" class="mt-5" asp-controller="AccountActions" asp-action="DeleteProject" asp-route-projectId=@Model.Project.ID
+              onSubmit="return confirm('This action is not cannot be undone. Are you sure you wish to proceed?');">
+            <button type="submit" class="danger-btn-invert" onsubmit="showLoading()">Delete Project</button>
+        </form>
+
     }
 </div>
 
-@if (Model.IsDeveloper) 
-{
-
-    <!-- collaborator addition -->
-    <form id="add-developer-form" method="post" class="my-1"
-      asp-controller="AccountActions" asp-action="AddDeveloper" asp-route-projectId=@Model.Project.ID>
-        <select name="user-search" class="user-search half-screen-width" onchange="submitForm('add-developer-form')"></select>
-    </form>
-
-    <!-- project deletion -->
-    <form method="post" class="mt-5" asp-controller="AccountActions" asp-action="DeleteProject" asp-route-projectId=@Model.Project.ID
-          onSubmit="return confirm('This action is not cannot be undone. Are you sure you wish to proceed?');">
-        <button type="submit" class="danger-btn-invert" onsubmit="showLoading()">Delete Project</button>
-    </form>
-
-}

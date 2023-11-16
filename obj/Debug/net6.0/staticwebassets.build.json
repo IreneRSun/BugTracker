@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "vp1SP45diHGJZYrV8MIJ2/T6mkFMDDKvKBZRChTYBps=",
+  "Hash": "ECOmAzWNAV1W+3NFChm1UzwSaG4QGZCv+WuqXAr91EE=",
   "Source": "BugTracker",
   "BasePath": "_content/BugTracker",
   "Mode": "Default",
@@ -85,12 +85,12 @@
       "OriginalItemSpec": "wwwroot\\favicon.ico"
     },
     {
-      "Identity": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\BugReport.png",
+      "Identity": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\Done.svg",
       "SourceId": "BugTracker",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\",
       "BasePath": "_content/BugTracker",
-      "RelativePath": "images/BugReport.png",
+      "RelativePath": "images/Done.svg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -99,7 +99,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\BugReport.png"
+      "OriginalItemSpec": "wwwroot\\images\\Done.svg"
     },
     {
       "Identity": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\Feedback&Discussion.svg",
@@ -119,23 +119,6 @@
       "OriginalItemSpec": "wwwroot\\images\\Feedback&Discussion.svg"
     },
     {
-      "Identity": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\Login.png",
-      "SourceId": "BugTracker",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\",
-      "BasePath": "_content/BugTracker",
-      "RelativePath": "images/Login.png",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\Login.png"
-    },
-    {
       "Identity": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\ProgressTracking.svg",
       "SourceId": "BugTracker",
       "SourceType": "Discovered",
@@ -151,23 +134,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\ProgressTracking.svg"
-    },
-    {
-      "Identity": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\ProjectDashboard.png",
-      "SourceId": "BugTracker",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\",
-      "BasePath": "_content/BugTracker",
-      "RelativePath": "images/ProjectDashboard.png",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\ProjectDashboard.png"
     },
     {
       "Identity": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\QualityAssurance.svg",
@@ -219,40 +185,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\Team.svg"
-    },
-    {
-      "Identity": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\UserDashboard.png",
-      "SourceId": "BugTracker",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\",
-      "BasePath": "_content/BugTracker",
-      "RelativePath": "images/UserDashboard.png",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\UserDashboard.png"
-    },
-    {
-      "Identity": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\images\\UserTasks.png",
-      "SourceId": "BugTracker",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\",
-      "BasePath": "_content/BugTracker",
-      "RelativePath": "images/UserTasks.png",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\UserTasks.png"
     },
     {
       "Identity": "C:\\Users\\irene\\VS\\repos\\BugTracker\\wwwroot\\js\\site.js",

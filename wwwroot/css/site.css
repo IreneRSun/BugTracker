@@ -8,6 +8,9 @@
     --light-theme-color: #f1f4dc;
     --neutral-theme-color: #f5deb3;
     --theme-gradient: linear-gradient(rgb(77,95,95), rgb(255,224,160));
+    --body-gradient: linear-gradient(rgb(32,36,40), rgb(2,4,22));
+    --standard-gradient: linear-gradient(to right, rgb(34,0,188), rgb(74,177,255));
+    --neutral-gradient: linear-gradient(to right, rgb(101,101,101), rgb(186,186,186));
 }
 
 html {
@@ -28,8 +31,10 @@ html {
 body {
     margin-bottom: 60px;
     font-family: 'Montserrat', sans-serif !important;
-    background: linear-gradient(rgb(32,36,40), rgba(2,4,22));
+    background: var(--body-gradient);
     color: white;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 /** theme color utilities */
@@ -49,7 +54,7 @@ body {
 }
 
 .bg-theme-gradient, .btn-theme-gradient {
-    background: var(--theme-gradient) !important;
+    background-image: var(--theme-gradient) !important;
     color: black;
 }
 
@@ -68,7 +73,22 @@ body {
     color: black;
 }
 
-[class*="btn-theme"] {
+.bg-body-gradient, .btn-body-gradient {
+    background-image: var(--body-gradient) !important;
+    color: white;
+}
+
+.bg-standard-gradient, .btn-standard-gradient {
+    background-image: var(--standard-gradient) !important;
+    color: white;
+}
+
+.bg-neutral-gradient, .btn-neutral-gradient {
+    background-image: var(--neutral-gradient) !important;
+    color: white;
+}
+
+[class*="btn-theme"], .btn-body-gradient, .btn-standard-gradient, .btn-neutral-gradient {
     cursor: pointer;
     text-transform: none;
     font-family: inherit;
@@ -79,12 +99,12 @@ body {
     -webkit-appearance: button;
 }
 
-.btn-theme:hover {
+[class*="btn-theme"]:hover {
     filter: brightness(95%);
 }
 
-.btn-theme:active {
-    transform: scale(0.90);
+[class*="btn-theme"]:active {
+    transform: scale(0.95);
 }
 
 .text-theme-primary {
@@ -142,7 +162,7 @@ body {
 
 /** gradient utilities */
 .bg-gradient-2 {
-    background: linear-gradient(var(--color1), var(--color2));
+    background-image: linear-gradient(var(--color1), var(--color2));
 }
 
 .text-gradient {
@@ -178,6 +198,66 @@ body {
 /** content resizing */
 .object-contain {
     object-fit: contain;
+}
+
+/** custom hover effects */
+.userlink:hover {
+    color: #0a58ca !important;
+}
+
+.hover-push:hover {
+    transform: translateY(5px);
+    -moz-transform: translateY(5px);
+    -webkit-transform: translateY(5px);
+    transition: 0.8s;
+}
+
+.shift-obj-container:hover .right-shift-obj {
+    transform: translateX(5px);
+    -moz-transform: translateX(5px);
+    -webkit-transform: translateX(5px);
+    transition: 1s;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/** custom avatar sizes */
+.avatar-size-30 {
+    width: 30px;
+    height: 30px;
+    font-size: 30px !important;
+}
+
+.avatar-size-50 {
+    width: 50px;
+    height: 50px;
+    font-size: 50px !important;
+}
+
+.avatar-size-100 {
+    width: 100px;
+    height: 100px;
+    font-size: 100px !important;
+}
+
+.avatar-size-150 {
+    width: 150px;
+    height: 150px;
+    font-size: 150px !important;
+}
+
+/** specific element styling */
+.task-top {
+    display: block;
+    width: inherit;
+    height: 0.25rem;
+    background: linear-gradient(to right, rgb(28,121,159), rgb(94,196,219), rgb(245,222,179));
+}
+
+.modal-backdrop.fade.show {
+    display: none !important;
 }
 
 /** screen size specific styling */
@@ -304,10 +384,6 @@ body {
     background-image: linear-gradient(90deg, rgba(154,254,255,1) 0%, rgba(0,2,78,1) 50%, rgba(154,254,255,1) 100%);
 }
 
-.bg-grad-sunset {
-    background-image: linear-gradient(to right, rgb(63,94,251), rgb(252,70,107));
-}
-
 .bg-grad-dull-gold {
     background-image: linear-gradient(to bottom, rgb(77,95,95), rgb(255,224,160));
 }
@@ -365,67 +441,12 @@ body {
     color: wheat;
 }
 
-/** custom hover effects */
-.userlink:hover {
-    color: #0a58ca !important;
-}
-
-.hover-push:hover {
-    transform: translateY(5px);
-    -moz-transform: translateY(5px);
-    -webkit-transform: translateY(5px);
-    box-shadow: none;
-    transition: 0.8s;
-}
-
-.shift-obj-container:hover .right-shift-obj {
-    transform: translateX(5px);
-    -moz-transform: translateX(5px);
-    -webkit-transform: translateX(5px);
-    transition: 1s;
-}
-
-.cursor-pointer {
-    cursor: pointer;
-}
-
 /** custom objects */
 .danger-btn-invert {
     color: #dc3545;
     background: white;
     border-color: #dc3545;
     border-radius: 0.25rem;
-}
-
-.block-strip {
-    display: block;
-    width: inherit;
-    height: 0.25rem;
-}
-
-/** custom sizes and shapes */
-.avatar-size-30 {
-    width: 30px;
-    height: 30px;
-    font-size: 30px !important;
-}
-
-.avatar-size-50 {
-    width: 50px;
-    height: 50px;
-    font-size: 50px !important;
-}
-
-.avatar-size-100 {
-    width: 100px;
-    height: 100px;
-    font-size: 100px !important;
-}
-
-.avatar-size-150 {
-    width: 150px;
-    height: 150px;
-    font-size: 150px !important;
 }
 
 .half-screen-width {

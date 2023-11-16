@@ -1,102 +1,110 @@
 ﻿@model BugTracker.Models.ViewDataModels.ProfileViewModel
 
-<!-- edit profile -->
-<form method="post" enctype="multipart/form-data" asp-controller="AccountActions" asp-action="UpdateProfile">
 
-    <!-- avatar image upload / avatar view -->
-    <div class="row my-2">
-        <div class="col-auto">
-            <img id="avatar" src=@Model.User.Avatar class="rounded-circle avatar-size-100 outline-grey" />
-        </div>
-        @if (Model.IsCurrentUser)
-        {
-            <div class="col-auto mt-5 ms-3">
-                <div class="row">
-                    <input type="file" id="image-file-upload" name="image-file" onchange="previewImage()" />
-                </div>
-                <div class="row">
-                    <label id="file-size-warning" class="d-none text-danger">File size too large. Select a file smaller than 64KB.</label>
-                </div>
+<div class="flex flex-column w-100 h-100 justify-content-start align-items-start text-start gap-5 p-4">
+    <!-- edit profile -->
+    <form method="post" enctype="multipart/form-data" asp-controller="AccountActions" asp-action="UpdateProfile">
+
+        <!-- avatar image upload / avatar view -->
+        <div class="row py-3 align-items-center">
+            <div class="col-auto">
+                <img id="avatar" src=@Model.User.Avatar class="rounded-circle avatar-size-100 border-theme-light border-2" />
             </div>
-        }
-    </div>
-
-    <!-- email -->
-    <div class="row mt-4 ms-2 mb-4">
-        <h5>Email</h5>
-        <label name="email">@Model.User.Email</label>
-    </div>
-    
-    <div class="row my-3 ms-2">
-
-        <!-- username edit -->
-        <div class="col-auto">
-            <h5>Username</h5>
             @if (Model.IsCurrentUser)
             {
-                <input type="text" name="username-input" value=@Model.User.Name class="rounded-3" minlength="3" maxlength="15" required />
-            }
-            else
-            {
-                <label name="username">@Model.User.Name</label>
+                <div class="col-auto px-md-5 px-lg-5 pt-5">
+                    <div class="row">
+                        <input type="file" id="image-file-upload" name="image-file" onchange="previewImage()" class="form-control bg-body-gradient" />
+                    </div>
+                    <div class="row">
+                        <label id="file-size-warning" class="d-none text-danger">File size too large. Select a file smaller than 64KB.</label>
+                    </div>
+                </div>
             }
         </div>
 
-        <!-- status edit -->
-        <div class="col-auto ms-2">
-            <h5>Status</h5>
-            @if (Model.IsCurrentUser)
-            {
-                <select name="user-status-select">
-                    <option selected hidden>@Model.User.Status</option>
-                    <option>Free</option>
-                    <option>Busy</option>
-                </select>
-            }
-            else
-            {
-                @if (Model.User.Status != null && Model.User.Status.Length != 0)
+        <!-- email -->
+        <div class="row py-3">
+            <h5>Email</h5>
+            <label name="email">@Model.User.Email</label>
+        </div>
+
+        <div class="row py-3">
+
+            <!-- username edit -->
+            <div class="col-auto">
+                <h5>Username</h5>
+                @if (Model.IsCurrentUser)
                 {
-                    <label name="user-status">@Model.User.Status</label>
+                    <input type="text" name="username-input" value=@Model.User.Name class="form-control bg-body-gradient" minlength="3" maxlength="15" required />
                 }
                 else
                 {
-                    <label name="user-status">None</label>
+                    <label name="username">@Model.User.Name</label>
                 }
-            }
+            </div>
+
+            <!-- status edit -->
+            <div class="col-auto px-3">
+                <h5>Status</h5>
+                @if (Model.IsCurrentUser)
+                {
+                    <select name="user-status-select" class="form-select-sm bg-body-gradient rounded-3">
+                        <option selected hidden>@Model.User.Status</option>
+                        <option class="text-black">Free</option>
+                        <option class="text-black">Busy</option>
+                    </select>
+                }
+                else
+                {
+                    @if (Model.User.Status != null && Model.User.Status.Length != 0)
+                    {
+                        <label name="user-status">@Model.User.Status</label>
+                    }
+                    else
+                    {
+                        <label name="user-status">None</label>
+                    }
+                }
+            </div>
+
         </div>
 
-    </div>
+        @if (Model.IsCurrentUser)
+        {
+            <!-- update profile button -->
+            <div class="py-3">
+                <button type="submit" class="btn-body-gradient border-1 border-theme-secondary" onsubmit="showLoading()">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    <span>Save</span>
+                </button>
+            </div>
+        }
+
+    </form>
 
     @if (Model.IsCurrentUser)
     {
-        <!-- update profile button -->
-        <button type="submit" class="border-light rounded-pill mt-3 ms-3" onsubmit="showLoading()">
-            <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Save
-        </button>
-    }
-
-</form>
-
-@if (Model.IsCurrentUser)
-{
-    <!-- account deletion form -->
-    <form method="post" class="mt-5 ms-3" asp-controller="AccountActions" asp-action="DeleteAccount"
-          onSubmit="return confirm('This action is not cannot be undone. Are you sure you wish to proceed?');">
-        <button type="submit" class="danger-btn-invert" onsubmit="showLoading()">Delete Account</button>
-    </form>
-}
-else
-{
-    <!-- user dashboard link -->
-    <a asp-controller="Account" asp-action="Dashboard" asp-route-uid=@Model.User.ID class="mx-3 shift-obj-container text-decoration-none">
-        <div class="row ms-2">
-            <div class="col-auto">
-                See User Dashboard
-            </div>
-            <div class="col-auto ms-left-shift right-shift-obj">
-                &#8618;
-            </div>
+        <!-- account deletion form -->
+        <div class="row">
+            <form method="post" class="py-3" asp-controller="AccountActions" asp-action="DeleteAccount"
+                  onSubmit="return confirm('This action is not cannot be undone. Are you sure you wish to proceed?');">
+                <button type="submit" class="btn-theme bg-body-gradient border-2 border-danger text-danger" onsubmit="showLoading()">Delete Account</button>
+            </form>
         </div>
-    </a>
-}
+    }
+    else
+    {
+        <!-- user dashboard link -->
+        <a asp-controller="Account" asp-action="Dashboard" asp-route-uid=@Model.User.ID class="px-3 shift-obj-container text-decoration-none">
+            <div class="row py-2">
+                <div class="col-auto">
+                    See User Dashboard
+                </div>
+                <div class="col-auto right-shift-obj">
+                    &#8618;
+                </div>
+            </div>
+        </a>
+    }
+</div>
