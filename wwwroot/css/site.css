@@ -74,21 +74,29 @@ body {
 }
 
 .bg-body-gradient, .btn-body-gradient {
+    background-color: rgb(2,4,22);
     background-image: var(--body-gradient) !important;
     color: white;
 }
 
 .bg-standard-gradient, .btn-standard-gradient {
+    background-color: rgb(74,177,255);
     background-image: var(--standard-gradient) !important;
     color: white;
 }
 
 .bg-neutral-gradient, .btn-neutral-gradient {
+    background-color: grey;
     background-image: var(--neutral-gradient) !important;
     color: white;
 }
 
-[class*="btn-theme"], .btn-body-gradient, .btn-standard-gradient, .btn-neutral-gradient {
+.bg-transparent, .btn-transparent {
+    background-color: rgba(0,0,0,0);
+    color: inherit;
+}
+
+[class*="btn-theme"], .btn-body-gradient, .btn-standard-gradient, .btn-neutral-gradient, .btn-transparent {
     cursor: pointer;
     text-transform: none;
     font-family: inherit;
@@ -170,9 +178,13 @@ body {
     -webkit-text-fill-color: transparent;
 }
 
-/** borders, shadows, outlines, text colors utilities */
+/** borders, shadows, text colors utilities */
 .shadow-grey {
     box-shadow: 0px 3px 10px grey;
+}
+
+.text-grey {
+    color: grey !important;
 }
 
 /** glassmorphism effects */
@@ -201,7 +213,11 @@ body {
 }
 
 /** custom hover effects */
-.userlink:hover {
+.whitelink {
+    color: white !important;
+}
+
+.whitelink:hover {
     color: #0a58ca !important;
 }
 
@@ -257,7 +273,7 @@ body {
 }
 
 .modal-backdrop.fade.show {
-    display: none !important;
+    z-index: -1;
 }
 
 /** screen size specific styling */

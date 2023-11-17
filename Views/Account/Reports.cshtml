@@ -7,9 +7,9 @@
 
 		<div class="row">
 			<!-- filter option -->
-			<div class="col-auto">
+			<div class="col-12 col-md-4 col-lg-4 p-2">
 				<label for="filter">Filter Type</label>
-				<select id="filter" name="filter" onchange="submitForm('sort-form')">
+				<select id="filter" name="filter" onchange="submitForm('sort-form')" class="form-select-sm bg-body-gradient rounded-3">
 					<option selected hidden>@Model.FilterType</option>
 					<option>All</option>
 					<option>NEW</option>
@@ -23,9 +23,9 @@
 			</div>
 
 			<!-- sort type option -->
-			<div class="col-auto">
+			<div class="col-12 col-md-4 col-lg-4 p-2">
 				<label for="sortType">Sort Type</label>
-				<select name="sortType" onchange="submitForm('sort-form')">
+				<select name="sortType" onchange="submitForm('sort-form')" class="form-select-sm bg-body-gradient rounded-3">
 					<option selected hidden>@Model.SortType</option>
 					<option>Date</option>
 					<option>Severity</option>
@@ -35,9 +35,9 @@
 			</div>
 
 			<!-- sort order option -->
-			<div class="col-auto">
+			<div class="col-12 col-md-4 col-lg-4 p-2">
 				<label for="sortOrder">Sort Order</label>
-				<select id="sortOrder" name="sortOrder" onchange="submitForm('sort-form')">
+				<select id="sortOrder" name="sortOrder" onchange="submitForm('sort-form')" class="form-select-sm bg-body-gradient rounded-3">
 					<option selected hidden>@Model.SortOrder</option>
 					<option>Descending</option>
 					<option>Ascending</option>
@@ -48,24 +48,27 @@
 	</form>
 
 	<!-- bug reports list -->
-	<h1 class="my-3">@Model.FilterType Bug Reports</h1>
-	<div class="row">
+	<div class="py-3">
+		<h1 class="bg-gradient-2 text-gradient text-theme-secondary" style="--color1: var(--secondary-theme-color); --color2: grey;">
+			@Model.FilterType Bug Reports
+		</h1>
+	</div>
+	<div class="row py-3">
 		@if (Model.BugReports.Count > 0)
 		{
 			@foreach (var report in Model.BugReports)
 			{
-				<div class="col-3 m-1">
-					<a asp-controller="Account" asp-action="BugReport" asp-route-reportId=@report.ID class="text-decoration-none">
-						<div class="card hover-push shadow-grey">
+				<div class="col-12 col-md-6 col-lg-4 px-3">
 
-							<div class="card-img-top block-strip bg-grad-sunset"></div>
+					<a asp-controller="Account" asp-action="BugReport" asp-route-reportId=@report.ID class="text-decoration-none">
+						<div class="card hover-push bg-body-gradient border-1 border-theme-light">
+
+							<div class="card-img-top task-top"></div>
 
 							<div class="card-body">
-								<div class="row mb-3">
-									<div class="col-auto">
-										<span class="material-symbols-outlined col-auto" style="color: @report.DisplayColor;">bug_report</span>
-									</div>
-									<div class="col-auto">
+								<div class="row p-3">
+									<div class="col-12">
+										<span class="material-symbols-outlined" style="color: @report.DisplayColor;">bug_report</span>
 										<h5 class="card-title col-auto">@report.Summary</h5>
 									</div>
 									<div class="col-12">
@@ -75,19 +78,20 @@
 
 								@if (report.HelpWanted)
 								{
-									<div class="rounded-pill bg-success text-white d-inline p-1">Help Wanted</div>
+									<div class="rounded-pill bg-theme-on-primary text-white d-inline p-1">Help Wanted</div>
 								}
 
 							</div>
 
 						</div>
 					</a>
+
 				</div>
 			}
 		}
 		else
 		{
-			<div class="mt-3 text-grey">
+			<div class="py-3 bg-neutral-gradient text-gradient text-theme-primary">
 				No bug reports available. Go to the project's page to make a report.
 			</div>
 		}

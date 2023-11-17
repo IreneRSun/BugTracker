@@ -51,8 +51,8 @@
                 {
                     <select name="user-status-select" class="form-select-sm bg-body-gradient rounded-3">
                         <option selected hidden>@Model.User.Status</option>
-                        <option class="text-black">Free</option>
-                        <option class="text-black">Busy</option>
+                        <option>Free</option>
+                        <option>Busy</option>
                     </select>
                 }
                 else
@@ -96,7 +96,7 @@
     else
     {
         <!-- user dashboard link -->
-        <a asp-controller="Account" asp-action="Dashboard" asp-route-uid=@Model.User.ID class="px-3 shift-obj-container text-decoration-none">
+        <a asp-controller="Account" asp-action="Dashboard" asp-route-uid=@Model.User.ID class="px-3 shift-obj-container text-decoration-none whitelink">
             <div class="row py-2">
                 <div class="col-auto">
                     See User Dashboard

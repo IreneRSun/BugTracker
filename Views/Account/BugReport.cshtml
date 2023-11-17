@@ -1,79 +1,75 @@
 ﻿@model BugTracker.Models.ViewDataModels.BugReportViewModel
 
 <div class="flex flex-column w-100 h-100 justify-content-center align-items-center text-center gap-5 p-4">
-	<!-- bug report header -->
-	<div class="row">
-		<div class="col-auto">
-			<span class="material-symbols-outlined" style="color: @Model.BugReport.DisplayColor;">
-				bug_report
-			</span>
-		</div>
-		<div class="col-auto ms-left-shift">
-			<p class="text-grey">@Model.BugReport.ID</p>
-		</div>
-	</div>
 
 	<!-- bug report summary -->
-	<h2>@Model.BugReport.Summary</h2>
-
-	<div class="row my-3">
-		<!-- bug report date -->
-		<div class="col-10">
-			<i class="text-grey">Reported on @Model.BugReport.Date</i>
-		</div>
-
+	<div class="row py-3">
+		<h2 class="col-12 bg-gradient-2 text-gradient text-theme-accent" style="--color1: var(--accent-theme-color); --color2: var(--neutral-theme-color);">
+			@Model.BugReport.Summary
+		</h2>
+	</div>
+	
+	<!-- bug report upvotes and help wanted status -->
+	<div class="row">
 		<!-- user upvoting -->
-		<div class="col-auto">
-			<form method="post" id="user-upvote-form" asp-controller="AccountActions" asp-action="UpdateUpvotes" asp-route-reportId=@Model.BugReport.ID>
-				<label class="toggle">
-					<input type="checkbox" name="user-upvote" checked=@Model.UserUpvoted onchange="submitForm('user-upvote-form')">
-					<span id="upvote-icon" class="material-symbols-outlined">
-						thumb_up
-					</span>
-				</label>
-			</form>
+		<div class="col-12 p-1">
+			<div class="flex">
+				<form method="post" id="user-upvote-form" asp-controller="AccountActions" asp-action="UpdateUpvotes" asp-route-reportId=@Model.BugReport.ID>
+					<label class="toggle">
+						<input type="checkbox" name="user-upvote" checked=@Model.UserUpvoted onchange="submitForm('user-upvote-form')">
+						<span id="upvote-icon" class="material-symbols-outlined">
+							thumb_up
+						</span>
+					</label>
+				</form>
+				@Model.BugReport.Upvotes
+			</div>
 		</div>
-		<div class="col-auto">
-			@Model.BugReport.Upvotes
+
+		<!-- help wanted status -->
+		<div class="col-12 p-1">
+			@if (Model.IsDeveloper)
+			{
+				<form method="post" id="help-wanted-form" asp-controller="AccountActions" asp-action="UpdateHelpWanted" asp-route-reportId=@Model.BugReport.ID>
+					<label id="help-wanted cursor-pointer">
+						<input type="checkbox" name="help-wanted" class="d-none"
+								checked=@Model.BugReport.HelpWanted onchange="submitForm('help-wanted-form')">
+						@if (Model.BugReport.HelpWanted)
+						{
+							<div class="rounded-pill bg-theme-on-primary text-white d-inline p-1">Help Wanted</div>
+						}
+						else
+						{
+							<span class="bg-grey text-white">Help Not Requested</span>
+						}
+					</label>
+				</form>
+
+			}
+			else if (Model.BugReport.HelpWanted)
+			{
+				<div class="rounded-pill bg-theme-on-primary text-white d-inline p-1">Help Wanted</div>
+			}
 		</div>
 	</div>
 
-	<!-- help wanted status -->
-	<div class="offset-10">
-		@if (Model.IsDeveloper)
-		{
-			<form method="post" id="help-wanted-form" asp-controller="AccountActions" asp-action="UpdateHelpWanted" asp-route-reportId=@Model.BugReport.ID>
-				<label id="help-wanted cursor-pointer">
-					<input type="checkbox" name="help-wanted" class="d-none"
-						   checked=@Model.BugReport.HelpWanted onchange="submitForm('help-wanted-form')">
-					@if (Model.BugReport.HelpWanted)
-					{
-						<span class="rounded-pill bg-success text-white d-inline p-1">Help Wanted</span>
-					}
-					else
-					{
-						<span class="bg-grey text-white">Help Not Requested</span>
-					}
-				</label>
-			</form>
-
-		}
-		else if (Model.BugReport.HelpWanted)
-		{
-			<div class="rounded-pill bg-success text-white d-inline p-1">Help Wanted</div>
-		}
+	<div class="row py-3">
+		<!-- bug report date -->
+			<div class="col-12">
+				<i class="text-grey">Reported on @Model.BugReport.Date</i>
+			</div>
 	</div>
 
 	<!-- status change forms / status display -->
-	<div class="row my-3 ms-left-shift">
+	<div class="row py-3">
 
 		@if (Model.IsDeveloper)
 		{
 			<!-- status change form -->
-			<div class="col-auto mx-2">
+			<div class="col-12 col-md-4 col-lg-4 p-2">
 				<form id="status-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="status">
 					<label for="status-select">Status</label>
-					<select id="status-select" name="status-select" onchange="submitForm('status-change-form')">
+					<select id="status-select" name="status-select" onchange="submitForm('status-change-form')" class="form-select-sm bg-body-gradient rounded-3">
 						<option selected hidden>@Model.BugReport.Status</option>
 						<option>Deferred</option>
 						<option>Rejected</option>
@@ -86,10 +82,10 @@
 			</div>
 
 			<!-- priority change form -->
-			<div class="col-auto mx-2">
+			<div class="col-12 col-md-4 col-lg-4 p-2">
 				<form id="priority-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="priority">
 					<label for="priority-select">Priority</label>
-					<select id="priority-select" name="priority-select" onchange="submitForm('priority-change-form')">
+						<select id="priority-select" name="priority-select" onchange="submitForm('priority-change-form')" class="form-select-sm bg-body-gradient rounded-3">
 						<option selected hidden>@Model.BugReport.Priority</option>
 						<option>Low</option>
 						<option>Medium</option>
@@ -99,10 +95,10 @@
 			</div>
 
 			<!-- severity change form -->
-			<div class="col-auto mx-2">
+			<div class="col-12 col-md-4 col-lg-4 p-2">
 				<form id="severity-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="severity">
 					<label for="severity-select">Severity</label>
-					<select id="severity-select" name="severity-select" onchange="submitForm('severity-change-form')">
+						<select id="severity-select" name="severity-select" onchange="submitForm('severity-change-form')" class="form-select-sm bg-body-gradient rounded-3">
 						<option selected hidden>@Model.BugReport.Severity</option>
 						<option>Low</option>
 						<option>Medium</option>
@@ -113,7 +109,7 @@
 		}
 		else
 		{
-			<div class="col-auto mx-2">
+			<div class="col-12 col-md-4 col-lg-4">
 
 				<label for="status">Status</label>
 				@if (Model.BugReport.Status != null && Model.BugReport.Status.Length != 0)
@@ -126,7 +122,7 @@
 				}
 			</div>
 
-			<div class="col-auto mx-2">
+			<div class="col-12 col-md-4 col-lg-4">
 				<label for="priority">Priority</label>
 				@if (Model.BugReport.Priority != null && Model.BugReport.Priority.Length != 0)
 				{
@@ -138,7 +134,7 @@
 				}
 			</div>
 
-			<div class="col-auto mx-2">
+			<div class="col-12 col-md-4 col-lg-4">
 				<label for="severity">Severity</label>
 				@if (Model.BugReport.Severity != null && Model.BugReport.Severity.Length != 0)
 				{
@@ -153,102 +149,115 @@
 	</div>
 
 	<!-- bug information -->
-	<h3 class="mt-5">Operating System</h3>
-	<p id="os">@Model.BugReport.OS</p>
+	<div class="row px-5 py-3 text-start">
+		<h3>Operating System</h3>
+		<p id="os">@Model.BugReport.OS</p>
+	</div>
 
-	<h3>Device</h3>
-	<p id="device">@Model.BugReport.Device</p>
+	<div class="row px-5 py-3 text-start">
+		<h3>Device</h3>
+		<p id="device">@Model.BugReport.Device</p>
+	</div>
+	
+	<div class="row px-5 py-3 text-start">
+		<h3>Details</h3>
+		<p id="bug-details">@Model.BugReport.Details</p>
+	</div>
 
-	<h3>Details</h3>
-	<p id="bug-details">@Model.BugReport.Details</p>
-
-	<!-- bug report assignee information -->
-	<h3 class="mt-5">Assignees</h3>
-	<ul id="assignee-list" class="list-unstyled">
-		@foreach (var developer in Model.Assignees)
-		{
-			<li>
-				<form method="post" asp-controller="AccountActions" asp-action="DeleteAssignment" asp-route-reportId=@Model.BugReport.ID asp-route-developerId=@developer.ID>
-					<div class="row">
-						<div class="col-auto">
-							@if (developer.ID != null)
-							{
-								<a asp-controller="Account" asp-action="Profile" asp-route-uid=@developer.ID class="text-decoration-none userlink">
-									<img src="@developer.Avatar" alt="" class="avatar-size-30 rounded-circle outline-grey" />
+	<!-- bug report assignment -->
+	<div class="row px-5 py-3 text-start">
+		<!-- assignee info -->
+		<h3>Assignees</h3>
+		<ul id="assignee-list" class="list-unstyled">
+			@foreach (var developer in Model.Assignees)
+			{
+				<li class="d-inline-block">
+					<form method="post" asp-controller="AccountActions" asp-action="DeleteAssignment" asp-route-reportId=@Model.BugReport.ID asp-route-developerId=@developer.ID>
+						<div class="row">
+							<div class="col-auto">
+								@if (developer.ID != null)
+								{
+									<a asp-controller="Account" asp-action="Profile" asp-route-uid=@developer.ID class="text-decoration-none whitelink">
+										<img src="@developer.Avatar" alt="" class="avatar-size-30 rounded-circle border-theme-light border-1" />
+										@developer.Name
+									</a>
+								}
+								else
+								{
+									<span class="material-symbols-outlined avatar-size-30 rounded-circle border-theme-light border-1">account_circle</span>
 									@developer.Name
+								}
+							</div>
+							@if (Model.IsDeveloper)
+							{
+								<div class="col-auto">
+									<button type="submit" class="btn-transparent border-0" onsubmit="showLoading()">-</button>
+								</div>
+							}
+						</div>
+					</form>
+				</li>
+			}
+		</ul>
+		<!-- developer assignment -->
+		@if (Model.IsDeveloper)
+		{
+			<div class="col-12">
+				<form id="assign-developer-form" method="post" asp-controller="AccountActions" asp-action="AddAssignment" asp-route-reportId=@Model.BugReport.ID
+						class="py-1">
+					<select id="developer-select" name="developer-select" class="developer-select form-select" onchange="submitForm('assign-developer-form')">
+						<option selected hidden disabled></option>
+						@foreach (var developer in Model.AvailableDevelopers)
+						{
+							@if (developer.Status != "Busy")
+							{
+								<option value=@developer.ID data-avatar=@developer.Avatar data-name=@developer.Name>@developer.Name</option>
+							}
+						}
+					</select>
+				</form>
+			</div>
+		}
+	</div>
+
+	<!-- comment section -->
+	<div class="row px-5 py-3 text-start">
+		<h3>Comments</h3>
+
+		<form method="post" asp-controller="AccountActions" asp-action="Comment" asp-route-reportId=@Model.BugReport.ID>
+			<div class="submit-box">
+				<input type="text" name="user-comment" placeholder="Enter a comment here ..." class="bg-body-gradient border-1 border-theme-light rounded-3" />
+				<button type="submit" onsubmit="showLoading()" class="btn-transparent border-0">
+					<i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+				</button>
+			</div>
+		</form>
+
+		<ul class="list-unstyled py-2">
+			@foreach (var comment in Model.Comments)
+			{
+				<li>
+					<div class="card bg-body-gradient">
+						<div class="card-header">
+							@if (@comment.Commenter != null && comment.Commenter.ID != null)
+							{
+								<a asp-controller="Account" asp-action="Profile" asp-route-uid=@comment.Commenter.ID class="text-decoration-none whitelink">
+									<img src=@comment.Commenter.Avatar alt="" class="avatar-size-30 rounded-circle border-theme-light border-1" />
+									<span class="mx-1">@comment.Commenter.Name</span>
 								</a>
 							}
 							else
 							{
-								<span class="material-symbols-outlined avatar-size-30 rounded-circle">account_circle</span>
-								@developer.Name
+								<span class="material-symbols-outlined avatar-size-30 rounded-circle border-theme-light border-1">account_circle</span>
 							}
 						</div>
-						@if (Model.IsDeveloper)
-						{
-							<div class="col-auto ms-left-shift mt-upward-shift">
-								<button type="submit" class="border-0 avatar-size-30" onsubmit="showLoading()">-</button>
-							</div>
-						}
+						<div class="card-body">
+							@comment.Comment
+						</div>
 					</div>
-				</form>
-			</li>
-		}
-	</ul>
-
-	<!-- developer assignment -->
-	@if (Model.IsDeveloper)
-	{
-		<form id="assign-developer-form" method="post" asp-controller="AccountActions" asp-action="AddAssignment" asp-route-reportId=@Model.BugReport.ID
-			  class="my-3">
-			<select id="developer-select" name="developer-select" class="developer-select half-screen-width" onchange="submitForm('assign-developer-form')">
-				<option selected hidden disabled></option>
-				@foreach (var developer in Model.AvailableDevelopers)
-				{
-					@if (developer.Status != "Busy")
-					{
-						<option value=@developer.ID data-avatar=@developer.Avatar data-name=@developer.Name>@developer.Name</option>
-					}
-				}
-			</select>
-		</form>
-	}
-
-	<!-- comment section -->
-	<h3 class="mt-5">Comments</h3>
-
-	<form method="post" asp-controller="AccountActions" asp-action="Comment" asp-route-reportId=@Model.BugReport.ID>
-		<div class="submit-box">
-			<input type="text" name="user-comment" placeholder="Enter a comment here ..." />
-			<button type="submit" onsubmit="showLoading()" class="border-0 bg-white text-black">
-				<i class="fa fa-paper-plane-o" aria-hidden="true"></i>
-			</button>
-		</div>
-	</form>
-
-	<ul class="list-unstyled mt-2">
-		@foreach (var comment in Model.Comments)
-		{
-			<li>
-				<div class="card outline-grey">
-					<div class="card-header">
-						@if (@comment.Commenter != null && comment.Commenter.ID != null)
-						{
-							<a asp-controller="Account" asp-action="Profile" asp-route-uid=@comment.Commenter.ID class="text-decoration-none userlink">
-								<img src=@comment.Commenter.Avatar alt="" class="avatar-size-30 rounded-circle outline-grey" />
-								<span class="mx-1">@comment.Commenter.Name</span>
-							</a>
-						}
-						else
-						{
-							<span class="material-symbols-outlined avatar-size-30 rounded-circle">account_circle</span>
-						}
-					</div>
-					<div class="card-body">
-						@comment.Comment
-					</div>
-				</div>
-			</li>
-		}
-	</ul>
+				</li>
+			}
+		</ul>
+	</div>
+	
 </div>

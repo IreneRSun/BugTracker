@@ -91,16 +91,20 @@
     </header>
 
     <!-- content -->
-    <main role="main" class="glassmorphism pb-3">
-        @RenderBody()
-    </main>
+    <div class="glassmorphism py-3">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
 
     <!-- footer -->
-    <footer class="border-top footer text-muted glassmorphism">
-        <div class="container">
-            &copy; 2023 - BugTracker
-        </div>
-    </footer>
+    <div class="py-3">
+        <footer class="border-top footer text-muted glassmorphism">
+            <div class="container">
+                &copy; 2023 - BugTracker
+            </div>
+        </footer>
+    </div>
     
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
