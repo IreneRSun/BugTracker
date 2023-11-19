@@ -1,6 +1,6 @@
 ﻿@model BugTracker.Models.ViewDataModels.BugReportViewModel
 
-<div class="flex flex-column w-100 h-100 justify-content-center align-items-center text-center gap-5 p-4">
+<div class="flex flex-column w-100 h-100 justify-content-start align-items-start text-start gap-5 p-4">
 
 	<!-- bug report summary -->
 	<div class="row py-3">
@@ -12,12 +12,12 @@
 	<!-- bug report upvotes and help wanted status -->
 	<div class="row">
 		<!-- user upvoting -->
-		<div class="col-12 p-1">
+		<div class="col-12">
 			<div class="flex">
 				<form method="post" id="user-upvote-form" asp-controller="AccountActions" asp-action="UpdateUpvotes" asp-route-reportId=@Model.BugReport.ID>
 					<label class="toggle">
 						<input type="checkbox" name="user-upvote" checked=@Model.UserUpvoted onchange="submitForm('user-upvote-form')">
-						<span id="upvote-icon" class="material-symbols-outlined">
+						<span id="upvote-icon" class="material-symbols-outlined bg-neutral-gradient text-gradient text-grey">
 							thumb_up
 						</span>
 					</label>
@@ -27,7 +27,7 @@
 		</div>
 
 		<!-- help wanted status -->
-		<div class="col-12 p-1">
+		<div class="col-12">
 			@if (Model.IsDeveloper)
 			{
 				<form method="post" id="help-wanted-form" asp-controller="AccountActions" asp-action="UpdateHelpWanted" asp-route-reportId=@Model.BugReport.ID>
@@ -36,11 +36,15 @@
 								checked=@Model.BugReport.HelpWanted onchange="submitForm('help-wanted-form')">
 						@if (Model.BugReport.HelpWanted)
 						{
-							<div class="rounded-pill bg-theme-on-primary text-white d-inline p-1">Help Wanted</div>
+							<div class="rounded-pill bg-gradient-2 text-white d-inline p-1" style="--color1: var(--on-primary-theme-color); --color2: grey;">
+								Help Wanted
+							</div>
 						}
 						else
 						{
-							<span class="bg-grey text-white">Help Not Requested</span>
+							<span class="bg-gradient-2 text-black d-inline p-1" style="--color1: gainsboro; --color2: oldlace;">
+								Help Not Requested
+							</span>
 						}
 					</label>
 				</form>
@@ -48,7 +52,9 @@
 			}
 			else if (Model.BugReport.HelpWanted)
 			{
-				<div class="rounded-pill bg-theme-on-primary text-white d-inline p-1">Help Wanted</div>
+				<div class="rounded-pill bg-gradient-2 text-white d-inline p-1" style="--color1: var(--on-primary-theme-color); --color2: grey;">
+					Help Wanted
+				</div>
 			}
 		</div>
 	</div>
@@ -66,9 +72,11 @@
 		@if (Model.IsDeveloper)
 		{
 			<!-- status change form -->
-			<div class="col-12 col-md-4 col-lg-4 p-2">
+			<div class="col-12 col-md-4 col-lg-4 py-2">
 				<form id="status-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="status">
-					<label for="status-select">Status</label>
+					<label for="status-select" class="bg-gradient-2 text-gradient text-theme-light" style="--color1: lightsteelblue; --color2: var(--neutral-theme-color);">
+						Status
+					</label>
 					<select id="status-select" name="status-select" onchange="submitForm('status-change-form')" class="form-select-sm bg-body-gradient rounded-3">
 						<option selected hidden>@Model.BugReport.Status</option>
 						<option>Deferred</option>
@@ -82,10 +90,12 @@
 			</div>
 
 			<!-- priority change form -->
-			<div class="col-12 col-md-4 col-lg-4 p-2">
+			<div class="col-12 col-md-4 col-lg-4 py-2">
 				<form id="priority-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="priority">
-					<label for="priority-select">Priority</label>
-						<select id="priority-select" name="priority-select" onchange="submitForm('priority-change-form')" class="form-select-sm bg-body-gradient rounded-3">
+					<label for="priority-select" class="bg-gradient-2 text-gradient text-theme-light" style="--color1: lightsteelblue; --color2: var(--neutral-theme-color);">
+						Priority
+					</label>
+					<select id="priority-select" name="priority-select" onchange="submitForm('priority-change-form')" class="form-select-sm bg-body-gradient rounded-3">
 						<option selected hidden>@Model.BugReport.Priority</option>
 						<option>Low</option>
 						<option>Medium</option>
@@ -95,10 +105,12 @@
 			</div>
 
 			<!-- severity change form -->
-			<div class="col-12 col-md-4 col-lg-4 p-2">
+			<div class="col-12 col-md-4 col-lg-4 py-2">
 				<form id="severity-change-form" method="post" asp-controller="AccountActions" asp-action="UpdateBugTag" asp-route-reportId=@Model.BugReport.ID asp-route-tagType="severity">
-					<label for="severity-select">Severity</label>
-						<select id="severity-select" name="severity-select" onchange="submitForm('severity-change-form')" class="form-select-sm bg-body-gradient rounded-3">
+					<label for="severity-select" class="bg-gradient-2 text-gradient text-theme-light" style="--color1: lightsteelblue; --color2: var(--neutral-theme-color);">
+						Severity
+					</label>
+					<select id="severity-select" name="severity-select" onchange="submitForm('severity-change-form')" class="form-select-sm bg-body-gradient rounded-3">
 						<option selected hidden>@Model.BugReport.Severity</option>
 						<option>Low</option>
 						<option>Medium</option>
@@ -109,7 +121,7 @@
 		}
 		else
 		{
-			<div class="col-12 col-md-4 col-lg-4">
+			<div class="col-12 col-md-4 col-lg-4 py-2">
 
 				<label for="status">Status</label>
 				@if (Model.BugReport.Status != null && Model.BugReport.Status.Length != 0)
@@ -122,7 +134,7 @@
 				}
 			</div>
 
-			<div class="col-12 col-md-4 col-lg-4">
+			<div class="col-12 col-md-4 col-lg-4 py-2">
 				<label for="priority">Priority</label>
 				@if (Model.BugReport.Priority != null && Model.BugReport.Priority.Length != 0)
 				{
@@ -134,7 +146,7 @@
 				}
 			</div>
 
-			<div class="col-12 col-md-4 col-lg-4">
+			<div class="col-12 col-md-4 col-lg-4 py-2">
 				<label for="severity">Severity</label>
 				@if (Model.BugReport.Severity != null && Model.BugReport.Severity.Length != 0)
 				{
@@ -149,25 +161,33 @@
 	</div>
 
 	<!-- bug information -->
-	<div class="row px-5 py-3 text-start">
-		<h3>Operating System</h3>
+	<div class="row py-3">
+		<h3 class="bg-gradient-2 text-gradient text-theme-light" style="--color1: lightsteelblue; --color2: var(--neutral-theme-color);">
+			Operating System
+		</h3>
 		<p id="os">@Model.BugReport.OS</p>
 	</div>
 
-	<div class="row px-5 py-3 text-start">
-		<h3>Device</h3>
+	<div class="row py-3">
+		<h3 class="bg-gradient-2 text-gradient text-theme-light" style="--color1: lightsteelblue; --color2: var(--neutral-theme-color);">
+			Device
+		</h3>
 		<p id="device">@Model.BugReport.Device</p>
 	</div>
 	
-	<div class="row px-5 py-3 text-start">
-		<h3>Details</h3>
+	<div class="row py-3">
+		<h3 class="bg-gradient-2 text-gradient text-theme-light" style="--color1: lightsteelblue; --color2: var(--neutral-theme-color);">
+			Details
+		</h3>
 		<p id="bug-details">@Model.BugReport.Details</p>
 	</div>
 
 	<!-- bug report assignment -->
-	<div class="row px-5 py-3 text-start">
+	<div class="row py-3">
 		<!-- assignee info -->
-		<h3>Assignees</h3>
+		<h3 class="bg-gradient-2 text-gradient text-theme-light" style="--color1: lightsteelblue; --color2: var(--neutral-theme-color);">
+			Assignees
+		</h3>
 		<ul id="assignee-list" class="list-unstyled">
 			@foreach (var developer in Model.Assignees)
 			{
@@ -221,8 +241,10 @@
 	</div>
 
 	<!-- comment section -->
-	<div class="row px-5 py-3 text-start">
-		<h3>Comments</h3>
+	<div class="row py-3">
+		<h3 class="bg-gradient-2 text-gradient text-theme-light" style="--color1: lightsteelblue; --color2: var(--neutral-theme-color);">
+			Comments
+		</h3>
 
 		<form method="post" asp-controller="AccountActions" asp-action="Comment" asp-route-reportId=@Model.BugReport.ID>
 			<div class="submit-box">

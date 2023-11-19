@@ -58,7 +58,7 @@
 		{
 			@foreach (var report in Model.BugReports)
 			{
-				<div class="col-12 col-md-6 col-lg-4 px-3">
+				<div class="col-12 col-md-6 col-lg-4 p-3">
 
 					<a asp-controller="Account" asp-action="BugReport" asp-route-reportId=@report.ID class="text-decoration-none">
 						<div class="card hover-push bg-body-gradient border-1 border-theme-light">
@@ -78,7 +78,9 @@
 
 								@if (report.HelpWanted)
 								{
-									<div class="rounded-pill bg-theme-on-primary text-white d-inline p-1">Help Wanted</div>
+									<div class="rounded-pill bg-gradient-2 text-white d-inline p-1" style="--color1: var(--on-primary-theme-color); --color2: grey;">
+										Help Wanted
+									</div>
 								}
 
 							</div>

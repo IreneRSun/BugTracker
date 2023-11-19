@@ -6,7 +6,7 @@
         <h1 class="bg-gradient-2 text-gradient text-theme-secondary" style="--color1: var(--secondary-theme-color); --color2: grey;">Tasks</h1>
     </div>
 
-    <div class="row py-3">
+    <div class="row py-3 gap-3">
         @if (Model.BugReports.Count > 0)
         {
             @foreach (var report in Model.BugReports)
@@ -31,7 +31,9 @@
 
                                 @if (report.HelpWanted)
                                 {
-                                    <div class="rounded-pill bg-theme-on-primary text-white d-inline p-1">Help Wanted</div>
+                                    <div class="rounded-pill bg-gradient-2 text-white d-inline p-1" style="--color1: var(--on-primary-theme-color); --color2: grey;">
+                                        Help Wanted
+                                    </div>
                                 }
 
                             </div>

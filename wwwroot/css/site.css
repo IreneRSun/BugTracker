@@ -187,6 +187,19 @@ body {
     color: grey !important;
 }
 
+/** fonts and symbols */
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48
+}
+
+.font-digital {
+    font-family: 'Handjet', cursive !important;
+}
+
+.fw-500 {
+    font-weight: 500;
+}
+
 /** glassmorphism effects */
 .glassmorphism {
     backdrop-filter: blur(70px);
@@ -274,6 +287,54 @@ body {
 
 .modal-backdrop.fade.show {
     z-index: -1;
+}
+
+/** select2 custom styling */
+.select2-selection.select2-selection--single {
+    background-color: rgb(2,4,22);
+    background-image: var(--body-gradient);
+    min-height: 35px;
+}
+
+.select2.select2-container.select2-container--default {
+    width: 100%;
+}
+
+/** upvote toggle */
+.toggle {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.toggle input {
+    display: none;
+}
+
+#upvote-icon {
+    color: grey;
+}
+
+.toggle input:checked + #upvote-icon {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+}
+
+/** submit box (an input with a submit button inside) */
+.submit-box {
+    position: relative;
+}
+
+.submit-box input {
+    width: 100%;
+}
+
+.submit-box button {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
 }
 
 /** screen size specific styling */
@@ -369,265 +430,3 @@ body {
     }
 }
 
-/** fonts and symbols */
-.material-symbols-outlined {
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48
-}
-
-.font-digital {
-    font-family: 'Handjet', cursive !important;
-}
-
-.fw-500 {
-    font-weight: 500;
-}
-
-/** backgrounds */
-.bg-grad-hover {
-    background-size: 200% auto;
-    transition: 0.4s;
-}
-
-.bg-grad-hover:hover {
-    background-position: right center;
-}
-
-.bg-grad-dusk-rose {
-    background-image: linear-gradient(to right, rgb(237,207,207), rgb(255,255,255), rgb(122,130,123));
-}
-
-.bg-grad-neo-blue {
-    background-image: linear-gradient(90deg, rgba(154,254,255,1) 0%, rgba(0,2,78,1) 50%, rgba(154,254,255,1) 100%);
-}
-
-.bg-grad-dull-gold {
-    background-image: linear-gradient(to bottom, rgb(77,95,95), rgb(255,224,160));
-}
-
-.bg-grad-standard-blue {
-    background-image: linear-gradient(to right, rgb(34,0,188), rgb(74,177,255));
-}
-
-.bg-grad-grey {
-    background-image: linear-gradient(to right, rgb(101,101,101), rgb(186,186,186));
-}
-
-.bg-grey {
-    background-color: grey;
-}
-
-.tg-digital-blue {
-    background-image: linear-gradient(to right, rgb(111,136,255), rgb(64,243,210));
-    color: rgb(88,190,233);
-}
-
-.tg-cool-blue {
-    background-image: linear-gradient(to right, rgb(0,73,113), rgb(99,144,168));
-    color: rgb(26,96,134);
-}
-
-.tg-dull-gold {
-    background-image: linear-gradient(to right, rgb(77,95,95), rgb(255,224,160));
-    color: rgb(166,159,128);
-}
-
-.tg-grad-grey {
-    background-image: linear-gradient(to right, rgb(101,101,101), rgb(186,186,186));
-    color: grey;
-}
-
-/** borders, shadows, outlines, text colors */
-.brd-white {
-    border: 2px solid white;
-}
-
-.outline-grey {
-    box-shadow: 1px 1px 2px grey;
-}
-
-.text-shadow-grey {
-    text-shadow: -5px 5px 3px rgb(190,190,190,0.5);
-}
-
-.text-grey {
-    color: darkgrey;
-}
-
-.text-wheat {
-    color: wheat;
-}
-
-/** custom objects */
-.danger-btn-invert {
-    color: #dc3545;
-    background: white;
-    border-color: #dc3545;
-    border-radius: 0.25rem;
-}
-
-.half-screen-width {
-    width: 50vw;
-}
-
-.width-90 {
-    width: 90%;
-}
-
-.full-width {
-    width: 100%;
-}
-
-.fill-height-60 {
-    height: 60%;
-}
-
-.rounded-30 {
-    border-radius: 30%;
-}
-
-/** custom margins */
-.ms-left-shift {
-    margin-left: -1rem;
-}
-
-.mt-upward-shift {
-    margin-top: -1rem;
-}
-
-.mt-40 {
-    margin-top: 40%;
-}
-
-/** select2 */
-.select2-container--default {
-    color: black !important;
-}
-
-.select2-container--default .select2-selection--single {
-    min-height: 35px;
-}
-
-/** toggle using hidden checkbox */
-.toggle {
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
-}
-
-.toggle input {
-    display: none;
-}
-
-.toggle .slider {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-.toggle .slider::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-.toggle input:checked + .slider::before {
-    transform: translateX(calc(var(--width) - var(--height)));
-    -moz-transform: translateX(calc(var(--width) - var(--height)));
-    -webkit-transform: translateX(calc(var(--width) - var(--height)));
-}
-
-/** upvote toggle */
-#upvote-icon {
-    color: grey;
-}
-
-.toggle input:checked + #upvote-icon {
-    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
-}
-
-/** light and dark mode toggle */
-#light-dark-container {
-    position: relative;
-}
-
-#light-dark {
-    --width: 60px;
-    --height: 30px;
-
-    position: absolute;
-    top: 0;
-    right: 1rem;
-    width: var(--width);
-    height: var(--height);
-}
-
-#light-dark .slider {
-    background-image: linear-gradient(180deg, rgba(24,196,201,1) 0%, rgba(154,254,255,1) 100%);
-    padding: 0.25rem;
-    border-radius: 50rem;
-    transition: 0.5s ease-in-out;
-}
-
-#light-dark .slider::before {
-    width: 50%;
-    height: 100%;
-    border-radius: 50%;
-    background: url("https://api.dicebear.com/6.x/icons/svg?icon=sun&backgroundColor=transparent");
-    transition: 0.5s ease-in-out;
-}
-
-#light-dark input:checked + .slider {
-background-image: linear-gradient(180deg, rgba(0,2,78,1) 0%, rgba(119,131,207,1) 100%);
-}
-
-#light-dark input:checked + .slider::before {
-    background-image: url("https://api.dicebear.com/6.x/icons/svg?icon=moonStars&backgroundColor=transparent");
-}
-
-#light-dark .slider.no-transition, #light-dark .slider::before.no-transition {
-    transition: 0s;
-}
-
-/** submit box (an input with a submit button inside) */
-.submit-box {
-    position: relative;
-}
-
-.submit-box input {
-    width: 100%;
-}
-
-.submit-box button {
-    position: absolute;
-    right: 5px;
-    top: 50%;
-    transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -webkit-transform: translateY(-50%);
-}
-
-/** app exhibit slideshow */
-#app-exhibit {
-    position: relative;
-    width: 50vw;
-    left: 50%;
-    transform: translateX(-50%);
-    -moz-transform: translateX(-50%);
-    -webkit-transform: translateX(-50%);
-    border: 5px inset grey;
-    border-radius: 1rem;
-}
-
-#app-exhibit img {
-    width: 100%;
-    height: auto;
-    display: none;
-    border-radius: 1rem;
-}
-
-#app-exhibit img.visible {
-    display: block;
-}

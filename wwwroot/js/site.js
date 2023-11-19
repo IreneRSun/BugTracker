@@ -55,7 +55,7 @@ function formatProject(result) {
     if (result.avatar) {
         return $(`<div><img src="${result.avatar}" class="avatar-size-30 rounded-circle" /> ${result.name} <div class="text-grey">${result.date}</div> </div>`);
     } else {
-        return $(`<div class="mt-1"><i class="fa fa-search" aria-hidden="true"></i> Search for a project ...</div>`);
+        return $(`<div class="py-1"><i class="fa fa-search" aria-hidden="true"></i> Search for a project ...</div>`);
     }
 }
 
@@ -63,7 +63,7 @@ function formatProjectSelection(result) {
     if (result.avatar) {
         return $(`<div><img src="${result.avatar}" class="avatar-size-30 rounded-circle" /> ${result.name}</div>`) || result.text;
     } else {
-        return $(`<div class="mt-1"><i class="fa fa-search" aria-hidden="true"></i> Search for a project ...</div>`);
+        return $(`<div class="py-1"><i class="fa fa-search" aria-hidden="true"></i> Search for a project ...</div>`);
     }
 }
 
@@ -76,7 +76,7 @@ function formatUser(result) {
     if (result.avatar) {
         return $(`<div><img src="${result.avatar}" class="avatar-size-30 rounded-circle" /> ${result.name}</div>`);
     } else {
-        return $(`<div class="mt-1"><i class="fa fa-user-plus" aria-hidden="true"></i> Search for a user to add ...</div>`);
+        return $(`<div class="py-1"><i class="fa fa-user-plus" aria-hidden="true"></i> Search for a user to add ...</div>`);
     }
 }
 
@@ -84,7 +84,7 @@ function formatUserSelection(result) {
     if (result.avatar) {
         return $(`<div><img src="${result.avatar}" class="avatar-size-30 rounded-circle" /> ${result.name}</div>`) || result.text;
     } else {
-        return $(`<div class="mt-1"><i class="fa fa-user-plus" aria-hidden="true"></i> Search for a user to add ...</div>`);
+        return $(`<div class="py-1"><i class="fa fa-user-plus" aria-hidden="true"></i> Search for a user to add ...</div>`);
     }
 }
 
@@ -98,7 +98,7 @@ function formatUserFromData(result) {
     if (data.avatar) {
         return $(`<div><img src="${data.avatar}" class="avatar-size-30 rounded-circle" /> ${data.name}</div>`);
     } else {
-        return $(`<div class="mt-1">Select an available user to assign to this bug report ...</div>`);
+        return $(`<div class="py-1">Select an available user to assign to this bug report ...</div>`);
     }
 }
 
@@ -108,27 +108,8 @@ function formatUserFromDataSelection(result) {
     if (data.avatar) {
         return $(`<div><img src="${data.avatar}" class="avatar-size-30 rounded-circle" /> ${data.name}</div>`) || data.text;
     } else {
-        return $(`<div class="mt-1">Select an available user to assign to this bug report ...</div>`);
+        return $(`<div class="py-1">Select an available user to assign to this bug report ...</div>`);
     }
-}
-
-// Function to loop through app exhibit photos
-function exhibitCarousel() {
-    var curr = 0;
-    var numPhotos = 5;
-
-    // remove visibility of previous visible element
-    $("#app-exhibit img").each(function (index, element) {
-        if (element.classList.contains("visible")) {
-            curr = (index == numPhotos - 1) ? 0 : index + 1;
-            element.classList.remove("visible");
-        }
-    });
-
-    // show next element
-    $("#app-exhibit img").eq(curr).addClass("visible");
-
-    setTimeout(exhibitCarousel, 2000);
 }
 
 // Actions when document is ready
@@ -221,8 +202,4 @@ $(document).ready(function () {
         templateSelection: formatUserFromDataSelection
     });
 
-    // Handle app exhibit slideshow
-    if ($("#app-exhibit img").length) {
-        exhibitCarousel();
-    }
 });
