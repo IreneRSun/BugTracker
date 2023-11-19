@@ -5,7 +5,7 @@
 
 // Function that shows the loading screen
 function showLoading() {
-    $(".load-screen").removeClass("d-none");
+    $(".load-screen").addClass("visible");
 }
 
 // Function that submits a given form
