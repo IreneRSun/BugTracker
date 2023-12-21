@@ -96,9 +96,9 @@ function formatUserFromData(result) {
 
     var data = $(result.element).data();
     if (data.avatar) {
-        return $(`<div><img src="${data.avatar}" class="avatar-size-30 rounded-circle" /> ${data.name}</div>`);
+        return $(`<div class="text-black"><img src="${data.avatar}" class="avatar-size-30 rounded-circle" /> ${data.name}</div>`);
     } else {
-        return $(`<div class="py-1">Select an available user to assign to this bug report ...</div>`);
+        return $(`<div class="py-1 text-black">Select an available user to assign to this bug report ...</div>`);
     }
 }
 

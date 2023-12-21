@@ -290,9 +290,13 @@ body {
 }
 
 /** select2 custom styling */
-.select2-selection.select2-selection--single {
+.select2-dropdown, .select2-search.select2-search--dropdown input, .select2-selection.select2-selection--single {
     background-color: rgb(2,4,22);
     background-image: var(--body-gradient);
+    color: white;
+}
+
+.select2-selection.select2-selection--single {
     min-height: 35px;
 }
 
