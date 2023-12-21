@@ -108,7 +108,7 @@
 
     <!-- bug report modal dialog -->
     <div class="modal fade" id="create-report-dialog" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content bg-body-gradient border-1 border-theme-light">
 
                 <form method="post" asp-controller="AccountActions" asp-action="ReportBug" asp-route-projectId=@Model.Project.ID>
@@ -119,12 +119,12 @@
 
                     <div class="modal-body">
                         <label for="report-summary" class="py-2 text-start text-theme-light">Summary</label>
-                        <textarea id="report-summary" name="report-summary" rows="2" cols="50"
+                        <textarea id="report-summary" name="report-summary"
                                   placeholder="Enter a summary of the bug here ..." class="form-control bg-body-gradient border-1 border-theme-light" maxlength="150" required></textarea>
                         <br />
                         <label for="software-version" class="py-2 text-start text-theme-light">Software Version</label>
                         <input type="number" id="software-version" name="software-version" min="1" step="0.001"
-                               placeholder="1.0" class="form-control bg-body-gradient border-1 border-theme-light" required />
+                               placeholder="1.0" value="1.0" class="form-control bg-body-gradient border-1 border-theme-light" required />
                         <br />
                         <label for="device" class="py-2 text-start text-theme-light">Device</label>
                         <input type="text" id="device" name="device" placeholder="Enter your device type ..." maxlength="50"
@@ -135,7 +135,7 @@
                                class="form-control bg-body-gradient border-1 border-theme-light" maxlength="50" required />
                         <br />
                         <label for="details" class="py-2 text-start text-theme-light">Details</label>
-                        <textarea id="details" name="details" rows="5" cols="50"
+                        <textarea id="details" name="details"
                                   class="form-control bg-body-gradient border-1 border-theme-light" placeholder="Add details here ..." required></textarea>
                         <br />
                     </div>
