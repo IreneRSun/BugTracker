@@ -14,6 +14,8 @@ Ensure your Auth0 account has the Callback URLs and Logout URLs for your applica
 4. Under Allowed Logout URLs, add https://{YOUR_SERVER}/Account/LoggedOut.
 
 ### MySQL Database Setup
+This application assumes a MySQL database of version 8.0. App functionalities cannot be guaranteed for other database versions.</br>
+
 Use the following commands to set up your MySQL database: </br>
 [BugTrackerSQL.txt](https://github.com/IreneRSun/BugTracker/files/12271477/BugTrackerSQL.txt) </br>
 
@@ -30,9 +32,8 @@ Name: Data Types in MySQL: Tutorial and Full List with Examples of Data Formats 
 Author: dbForge Team </br>
 Source: https://blog.devart.com/mysql-data-types.html </br>
 
-Name: A Complete Guide to Dark Mode on the Web </br>
-Author: Adhuham <br/>
-Source: https://css-tricks.com/a-complete-guide-to-dark-mode-on-the-web/ </br>
+Name: Quickstart: Deploy an ASP.NET web app
+Source: https://learn.microsoft.com/en-us/azure/app-service/quickstart-dotnetcore?tabs=net70&pivots=development-environment-vs
 
 Name: CSS Gradient Text </br>
 Source: https://cssgradient.io/blog/css-gradient-text/ </br>
@@ -72,3 +73,7 @@ License: MIT </br>
 Source: https://select2.org/ </br>
 Usage: Dropdown Select Elements </br>
 License: MIT </br>
+
+Source: https://undraw.co/illustrations </br>
+Usage: Website Illustrations </br>
+License: Open Source </br>

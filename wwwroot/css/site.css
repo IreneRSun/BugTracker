@@ -236,15 +236,11 @@ body {
 
 .hover-push:hover {
     transform: translateY(5px);
-    -moz-transform: translateY(5px);
-    -webkit-transform: translateY(5px);
     transition: 0.8s;
 }
 
 .shift-obj-container:hover .right-shift-obj {
     transform: translateX(5px);
-    -moz-transform: translateX(5px);
-    -webkit-transform: translateX(5px);
     transition: 1s;
 }
 
@@ -337,8 +333,6 @@ body {
     right: 5px;
     top: 50%;
     transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -webkit-transform: translateY(-50%);
 }
 
 /** screen size specific styling */
