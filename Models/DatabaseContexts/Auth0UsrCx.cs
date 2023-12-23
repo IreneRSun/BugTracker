@@ -4,6 +4,8 @@ using RestSharp;
 using Auth0.ManagementApi;
 using BugTracker.Models.EntityModels;
 using Auth0.ManagementApi.Models;
+using System.Security.Principal;
+using System.Diagnostics;
 
 namespace BugTracker.Models.DatabaseContexts
 {
@@ -173,13 +175,18 @@ namespace BugTracker.Models.DatabaseContexts
                             var userId = userJObject["user_id"]?.ToString();
                             if (userId != null)
                             {
-                                var user = new UserModel(userId)
+                                // add the user if username contains the search string
+                                var userNameLower = userJObject["nickname"]?.ToString().ToLower();
+                                if (userNameLower != null && userNameLower.Contains(searchQuery.ToLower()))
                                 {
-                                    Email = userJObject["email"]?.ToString(),
-                                    Name = userJObject["nickname"]?.ToString(),
-                                    Avatar = userJObject["picture"]?.ToString()
-                                };
-                                users.Add(user);
+                                    var user = new UserModel(userId)
+                                    {
+                                        Email = userJObject["email"]?.ToString(),
+                                        Name = userJObject["nickname"]?.ToString(),
+                                        Avatar = userJObject["picture"]?.ToString()
+                                    };
+                                    users.Add(user);
+                                }
                             }
                         }
                     }

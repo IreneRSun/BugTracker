@@ -14,9 +14,10 @@
             {
                 <div class="col-auto px-md-5 px-lg-5 pt-5">
                     <div class="row">
-                        <input type="file" id="image-file-upload" name="image-file" onchange="previewImage()" class="form-control bg-body-gradient" />
+                        <input type="file" id="image-file-upload" name="image-file" onchange="previewImage()" accept="image/*" class="form-control bg-body-gradient" />
                     </div>
                     <div class="row">
+                        <label id="file-type-warning" class="d-none text-danger">Invalid file type. Please upload an image file.</label>
                         <label id="file-size-warning" class="d-none text-danger">File size too large. Select a file smaller than 64KB.</label>
                     </div>
                 </div>

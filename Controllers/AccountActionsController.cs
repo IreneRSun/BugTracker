@@ -371,7 +371,7 @@ namespace BugTracker.Controllers
             await dbCx.DeleteUser(userId);
 
             // log the user out
-            return RedirectToAction("LoggedOut", "Account");
+            return RedirectToAction("Logout", "Login");
         }
     }
 }

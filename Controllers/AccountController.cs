@@ -200,14 +200,5 @@ namespace BugTracker.Controllers
             var viewModel = new BugReportViewModel(report, assignees, userUpvoted, comments, developers, userId, isDeveloper);
             return View(viewModel);
         }
-
-		/// <summary>
-		/// Method <c>LoggedOut</c> gets the ViewResult for the page indicating that the user has logged out.
-		/// </summary>
-		/// <returns>The ViewResult of the logged out page.</returns>
-		public IActionResult LoggedOut()
-		{
-			return View();
-		}
 	}
 }

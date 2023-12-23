@@ -16,9 +16,11 @@ function submitForm(formId) {
 
 // Function that updates the profile image on the profile page to the uploaded image for previewing when called
 function previewImage() {
-    const inputFiles = $("#image-file-upload").prop("files");
+    const fileInput = $("#image-file-upload")
+    const inputFiles = fileInput.prop("files");
     const avatar = $("#avatar");
-    const warning = $("#file-size-warning");
+    const sizeWarning = $("#file-size-warning");
+    const typeWarning = $("#file-type-warning");
 
     // set up file reader
     const reader = new FileReader();
@@ -30,13 +32,23 @@ function previewImage() {
     if (inputFiles && inputFiles.length) {
         const selectedFile = inputFiles[0];
 
+        // check the file type
+        if (!selectedFile.type.match("image.*")) {
+            typeWarning.removeClass("d-none");
+            fileInput.val("");
+            return;
+        } else {
+            typeWarning.addClass("d-none");
+        }
+
         // check the file size
         const fileSizeKB = selectedFile.size / (1024);
         if (fileSizeKB >= 64) {
-            warning.removeClass("d-none");
+            sizeWarning.removeClass("d-none");
+            fileInput.val("");
             return;
         } else {
-            warning.addClass("d-none");
+            sizeWarning.addClass("d-none");
         }
 
         // read the file
@@ -132,9 +144,10 @@ $(document).ready(function () {
 
                 var datalist = JSON.parse(data);
                 var items = datalist.map(function (item) {
+                    const safeName = item.Name.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
                     return {
                         id: item.ID,
-                        name: item.Name,
+                        name: safeName,
                         date: item.Date,
                         avatar: item.Avatar
                     };
@@ -174,9 +187,10 @@ $(document).ready(function () {
 
                 var datalist = JSON.parse(data);
                 var items = datalist.map(function (item) {
+                    const safeName = item.Name.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
                     return {
                         id: item.ID,
-                        name: item.Name,
+                        name: safeName,
                         avatar: item.Avatar
                     };
                 });

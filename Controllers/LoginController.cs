@@ -54,7 +54,7 @@ namespace BugTracker.Controllers
         public async Task Logout()
         {
             var authenticationProperties = new LogoutAuthenticationPropertiesBuilder()
-              .WithRedirectUri(Url.Action("LoggedOut", "Account"))
+              .WithRedirectUri(Url.Action("LoggedOut", "Home"))
               .Build();
 
             await HttpContext.SignOutAsync(
